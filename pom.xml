@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <groupId>com.devops4j.io</groupId>
     <artifactId>devops4j-io</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1-alpha</version>
     <name>DevOps4j IO Utilities library</name>
     <description>DevOps4j IO Utilities library</description>
     <url>https://github.com/devops4j/devops4j-io.git</url>
