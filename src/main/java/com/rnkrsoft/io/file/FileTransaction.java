@@ -1,6 +1,6 @@
-package com.devops4j.io.file;
+package com.rnkrsoft.io.file;
 
-import com.devops4j.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuf;
 
 import java.io.File;
 import java.io.IOException;

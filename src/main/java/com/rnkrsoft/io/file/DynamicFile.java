@@ -1,7 +1,7 @@
-package com.devops4j.io.file;
+package com.rnkrsoft.io.file;
 
-import com.devops4j.io.buffer.ByteBuf;
-import com.devops4j.io.file.impl.DynamicFileImpl;
+import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.file.impl.DynamicFileImpl;
 import com.devops4j.message.MessageFormatter;
 import lombok.Getter;
 
@@ -68,6 +68,9 @@ public abstract class DynamicFile {
         return new DynamicFileImpl(file, backupSize);
     }
 
+    public static DynamicFile file(File directory, String fileName) {
+        return new DynamicFileImpl(new File(directory, fileName), DEFAULT_BACKUP_SIZE);
+    }
     public static DynamicFile file(String directory, String fileName) {
         return new DynamicFileImpl(directory, fileName, DEFAULT_BACKUP_SIZE);
     }

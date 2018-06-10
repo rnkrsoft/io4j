@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <groupId>com.devops4j.io</groupId>
-    <artifactId>devops4j-io</artifactId>
-    <version>0.0.1-alpha</version>
+    <groupId>com.rnkrsoft.io</groupId>
+    <artifactId>io</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <name>DevOps4j IO Utilities library</name>
     <description>DevOps4j IO Utilities library</description>
-    <url>https://github.com/devops4j/devops4j-io.git</url>
+    <url>https://git.rnkrsoft.com/io.git</url>
     <licenses>
         <license>
             <name>Apache License Version 2.0</name>
@@ -30,11 +30,6 @@
         <groundwork.version>1.0.1</groundwork.version>
         <commons-codec.version>1.9</commons-codec.version>
     </properties>
-    <scm>
-        <connection>git@github.com:devops4j/devops4j-io.git</connection>
-        <developerConnection>https://github.com/devops4j/devops4j-io.git</developerConnection>
-        <url>https://github.com/devops4j/devops4j-io.git</url>
-    </scm>
     <dependencies>
         <dependency>
             <groupId>commons-io</groupId>
@@ -227,16 +222,28 @@
                     </plugin>
                 </plugins>
             </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-                <repository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-                </repository>
-            </distributionManagement>
         </profile>
     </profiles>
+    <scm>
+        <connection>http://admin@git.rnkrsoft.com/r/io.git </connection>
+        <developerConnection>http://admin@git.rnkrsoft.com/r/io.git </developerConnection>
+        <url>https://www.rnkrsoft.com</url>
+    </scm>
+    <repositories>
+        <repository>
+            <id>rnkrsoft</id>
+            <name>RnKrSoft Repository</name>
+            <url>http://nexus.rnkrsoft.com/content/groups/public/</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>rnkrsoft</id>
+            <url>http://nexus.rnkrsoft.com/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>rnkrsoft</id>
+            <url>http://nexus.rnkrsoft.com/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
 </project>

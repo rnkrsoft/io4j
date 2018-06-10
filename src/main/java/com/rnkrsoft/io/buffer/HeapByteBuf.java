@@ -1,4 +1,4 @@
-package com.devops4j.io.buffer;
+package com.rnkrsoft.io.buffer;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -132,11 +132,11 @@ class HeapByteBuf extends ByteBuf {
             throw new IllegalArgumentException("buffer is readonly!");
         }
         if (bigEndian) {
-            put(Bits.short1(v));
-            put(Bits.short0(v));
+            put(com.rnkrsoft.io.buffer.Bits.short1(v));
+            put(com.rnkrsoft.io.buffer.Bits.short0(v));
         } else {
-            put(Bits.short0(v));
-            put(Bits.short1(v));
+            put(com.rnkrsoft.io.buffer.Bits.short0(v));
+            put(com.rnkrsoft.io.buffer.Bits.short1(v));
         }
         return this;
     }
@@ -147,15 +147,15 @@ class HeapByteBuf extends ByteBuf {
             throw new IllegalArgumentException("buffer is readonly!");
         }
         if (bigEndian) {
-            put(Bits.int3(v));
-            put(Bits.int2(v));
-            put(Bits.int1(v));
-            put(Bits.int0(v));
+            put(com.rnkrsoft.io.buffer.Bits.int3(v));
+            put(com.rnkrsoft.io.buffer.Bits.int2(v));
+            put(com.rnkrsoft.io.buffer.Bits.int1(v));
+            put(com.rnkrsoft.io.buffer.Bits.int0(v));
         } else {
-            put(Bits.int0(v));
-            put(Bits.int1(v));
-            put(Bits.int2(v));
-            put(Bits.int3(v));
+            put(com.rnkrsoft.io.buffer.Bits.int0(v));
+            put(com.rnkrsoft.io.buffer.Bits.int1(v));
+            put(com.rnkrsoft.io.buffer.Bits.int2(v));
+            put(com.rnkrsoft.io.buffer.Bits.int3(v));
         }
         return this;
     }
@@ -166,23 +166,23 @@ class HeapByteBuf extends ByteBuf {
             throw new IllegalArgumentException("buffer is readonly!");
         }
         if (bigEndian) {
-            put(Bits.long7(v));
-            put(Bits.long6(v));
-            put(Bits.long5(v));
-            put(Bits.long4(v));
-            put(Bits.long3(v));
-            put(Bits.long2(v));
-            put(Bits.long1(v));
-            put(Bits.long0(v));
+            put(com.rnkrsoft.io.buffer.Bits.long7(v));
+            put(com.rnkrsoft.io.buffer.Bits.long6(v));
+            put(com.rnkrsoft.io.buffer.Bits.long5(v));
+            put(com.rnkrsoft.io.buffer.Bits.long4(v));
+            put(com.rnkrsoft.io.buffer.Bits.long3(v));
+            put(com.rnkrsoft.io.buffer.Bits.long2(v));
+            put(com.rnkrsoft.io.buffer.Bits.long1(v));
+            put(com.rnkrsoft.io.buffer.Bits.long0(v));
         } else {
-            put(Bits.long0(v));
-            put(Bits.long1(v));
-            put(Bits.long2(v));
-            put(Bits.long3(v));
-            put(Bits.long4(v));
-            put(Bits.long5(v));
-            put(Bits.long6(v));
-            put(Bits.long7(v));
+            put(com.rnkrsoft.io.buffer.Bits.long0(v));
+            put(com.rnkrsoft.io.buffer.Bits.long1(v));
+            put(com.rnkrsoft.io.buffer.Bits.long2(v));
+            put(com.rnkrsoft.io.buffer.Bits.long3(v));
+            put(com.rnkrsoft.io.buffer.Bits.long4(v));
+            put(com.rnkrsoft.io.buffer.Bits.long5(v));
+            put(com.rnkrsoft.io.buffer.Bits.long6(v));
+            put(com.rnkrsoft.io.buffer.Bits.long7(v));
         }
         return this;
     }
@@ -392,8 +392,8 @@ class HeapByteBuf extends ByteBuf {
         byte[] temp = new byte[2];
         get(temp);
         return bigEndian
-                ? Bits.makeShort(temp[0], temp[1])
-                : Bits.makeShort(temp[1], temp[0]);
+                ? com.rnkrsoft.io.buffer.Bits.makeShort(temp[0], temp[1])
+                : com.rnkrsoft.io.buffer.Bits.makeShort(temp[1], temp[0]);
     }
 
     @Override
@@ -401,8 +401,8 @@ class HeapByteBuf extends ByteBuf {
         byte[] temp = new byte[4];
         get(temp);
         return bigEndian
-                ? Bits.makeInt(temp[0], temp[1], temp[2], temp[3])
-                : Bits.makeInt(temp[3], temp[2], temp[1], temp[0]);
+                ? com.rnkrsoft.io.buffer.Bits.makeInt(temp[0], temp[1], temp[2], temp[3])
+                : com.rnkrsoft.io.buffer.Bits.makeInt(temp[3], temp[2], temp[1], temp[0]);
     }
 
     @Override
@@ -410,8 +410,8 @@ class HeapByteBuf extends ByteBuf {
         byte[] temp = new byte[8];
         get(temp);
         return bigEndian
-                ? Bits.makeLong(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7])
-                : Bits.makeLong(temp[7], temp[6], temp[5], temp[4], temp[3], temp[2], temp[1], temp[0]);
+                ? com.rnkrsoft.io.buffer.Bits.makeLong(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7])
+                : com.rnkrsoft.io.buffer.Bits.makeLong(temp[7], temp[6], temp[5], temp[4], temp[3], temp[2], temp[1], temp[0]);
     }
 
 

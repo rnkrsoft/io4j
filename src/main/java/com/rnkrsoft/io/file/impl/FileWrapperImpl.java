@@ -1,7 +1,7 @@
-package com.devops4j.io.file.impl;
+package com.rnkrsoft.io.file.impl;
 
-import com.devops4j.io.buffer.ByteBuf;
-import com.devops4j.io.file.FileWrapper;
+import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.file.FileWrapper;
 import lombok.Getter;
 
 import java.io.File;
@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  * Created by woate on 2018/2/16.
  */
-class FileWrapperImpl implements FileWrapper{
+class FileWrapperImpl implements FileWrapper {
 
     @Getter
     File file;

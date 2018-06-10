@@ -1,17 +1,15 @@
-package com.devops4j.io.file.impl;
+package com.rnkrsoft.io.file.impl;
 
-import com.devops4j.io.buffer.ByteBuf;
-import com.devops4j.io.file.DynamicFile;
-import com.devops4j.io.file.FileTransaction;
-import com.devops4j.io.file.FileWrapper;
+import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.file.DynamicFile;
+import com.rnkrsoft.io.file.FileTransaction;
+import com.rnkrsoft.io.file.FileWrapper;
 import com.devops4j.time.DateStyle;
 import com.devops4j.time.FastDate;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by devops4j on 2018/2/15.
