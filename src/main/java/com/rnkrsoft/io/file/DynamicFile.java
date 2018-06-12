@@ -2,7 +2,7 @@ package com.rnkrsoft.io.file;
 
 import com.rnkrsoft.io.buffer.ByteBuf;
 import com.rnkrsoft.io.file.impl.DynamicFileImpl;
-import com.devops4j.message.MessageFormatter;
+import com.rnkrsoft.message.MessageFormatter;
 import lombok.Getter;
 
 import java.io.File;
