@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <groupId>com.rnkrsoft.io</groupId>
-    <artifactId>io</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>RNKRSOFT IO Utilities library</name>
-    <description>RNKRSOFT IO Utilities library</description>
-    <url>https://git.rnkrsoft.com/io.git</url>
+    <groupId>com.rnkrsoft.io4j</groupId>
+    <artifactId>io4j</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <name>Rnkrsoft IO For Java Utilities library</name>
+    <description>Rnkrsoft IO For Java Utilities library</description>
+    <url>https://git.rnkrsoft.com/io4j.git</url>
     <licenses>
         <license>
             <name>Apache License Version 2.0</name>
@@ -225,8 +225,8 @@
         </profile>
     </profiles>
     <scm>
-        <connection>http://admin@git.rnkrsoft.com/r/io.git </connection>
-        <developerConnection>http://admin@git.rnkrsoft.com/r/io.git </developerConnection>
+        <connection>http://admin@git.rnkrsoft.com/r/io4j.git </connection>
+        <developerConnection>http://admin@git.rnkrsoft.com/r/io4j.git </developerConnection>
         <url>https://www.rnkrsoft.com</url>
     </scm>
     <repositories>
