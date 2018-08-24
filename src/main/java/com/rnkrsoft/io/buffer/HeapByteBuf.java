@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 /**
- * Created by devops4j on 2017/11/30.
+ * Created by renkrsoft.com on 2017/11/30.
  */
 class HeapByteBuf extends ByteBuf {
     byte[] data = null;
@@ -275,6 +275,17 @@ class HeapByteBuf extends ByteBuf {
         }
         System.arraycopy(this.data, this.readBegin, data, 0, length);
         this.readBegin += length;
+        return this;
+    }
+
+    @Override
+    public boolean readyRead() {
+        return this.readEnd > this.readBegin;
+    }
+
+    @Override
+    public ByteBuf resetWrite() {
+        this.writeBegin = 0;
         return this;
     }
 

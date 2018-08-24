@@ -36,7 +36,7 @@ class FileTransactionImpl implements FileTransaction {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        this.tempFile = new File(dir, MessageFormatter.format("{}.temp.{}", dynamicFile.getFileName(), UUID.randomUUID().toString()));
+        this.tempFile = new File(dir, dynamicFile.getFileName() + ".temp." + UUID.randomUUID().toString());
         this.tempFile.createNewFile();
         this.lastActiveTime = System.currentTimeMillis();
     }
@@ -82,7 +82,7 @@ class FileTransactionImpl implements FileTransaction {
     public ByteBuf read() throws IOException {
         InputStream is = null;
         try {
-            is =new FileInputStream(getFile());
+            is = new FileInputStream(getFile());
             ByteBuf byteBuf = ByteBuf.allocate(1024).autoExpand(true);
             byteBuf.read(is);
             return byteBuf;
@@ -166,7 +166,7 @@ class FileTransactionImpl implements FileTransaction {
     public File getFile() throws IOException {
         if (isFinished()) {
             //访问文件的真实文件
-            if(rollback){
+            if (rollback) {
                 throw new FileNotFoundException(MessageFormatter.format("file {} has rollback!", tempFile));
             }
             return realFile;

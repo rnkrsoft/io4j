@@ -4,13 +4,15 @@ import com.rnkrsoft.io.buffer.ByteBuf;
 import com.rnkrsoft.io.file.DynamicFile;
 import com.rnkrsoft.io.file.FileTransaction;
 import com.rnkrsoft.io.file.FileWrapper;
-import com.rnkrsoft.message.MessageFormatter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @ToString
@@ -54,7 +56,7 @@ public final class DynamicFileImpl extends DynamicFile {
     public void delete() throws IOException {
         File dir = new File(directory + File.separator + fileName);
         FileUtils.deleteDirectory(dir);
-        if(dir.exists()){
+        if (dir.exists()) {
             File deleteDir = new File(directory + File.separator + "~" + fileName + System.currentTimeMillis());
             dir.renameTo(deleteDir);
             FileUtils.deleteDirectory(deleteDir);
@@ -194,7 +196,7 @@ public final class DynamicFileImpl extends DynamicFile {
     long lookupMaxVersion(boolean notFoundThrowEx) throws IOException {
         if (maxVersion <= 0) {
             if (notFoundThrowEx) {
-                throw new FileNotFoundException(MessageFormatter.format("open dynamicFile '{}{}{}' not found!", directory, "\\", fileName));
+                throw new FileNotFoundException("open dynamicFile '" + directory + "\\" + fileName + "' not found!");
             } else {
                 return -1;
             }

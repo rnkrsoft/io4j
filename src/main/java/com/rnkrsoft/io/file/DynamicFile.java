@@ -2,7 +2,6 @@ package com.rnkrsoft.io.file;
 
 import com.rnkrsoft.io.buffer.ByteBuf;
 import com.rnkrsoft.io.file.impl.DynamicFileImpl;
-import com.rnkrsoft.message.MessageFormatter;
 import lombok.Getter;
 
 import java.io.File;
@@ -57,9 +56,11 @@ public abstract class DynamicFile {
     public static DynamicFile file(String file) {
         return new DynamicFileImpl(file, DEFAULT_BACKUP_SIZE);
     }
+
     public static DynamicFile file(String file, int backupSize) {
         return new DynamicFileImpl(file, backupSize);
     }
+
     public static DynamicFile file(File file) {
         return new DynamicFileImpl(file, DEFAULT_BACKUP_SIZE);
     }
@@ -71,6 +72,7 @@ public abstract class DynamicFile {
     public static DynamicFile file(File directory, String fileName) {
         return new DynamicFileImpl(new File(directory, fileName), DEFAULT_BACKUP_SIZE);
     }
+
     public static DynamicFile file(String directory, String fileName) {
         return new DynamicFileImpl(directory, fileName, DEFAULT_BACKUP_SIZE);
     }
@@ -114,9 +116,11 @@ public abstract class DynamicFile {
 
     /**
      * 发现最大的文件版本号
+     *
      * @return 文件版本号，日期格式
      */
     public abstract long lookupMaxVersion() throws IOException;
+
     /**
      * 读取文件的所有已提交本版号
      *
@@ -124,23 +128,27 @@ public abstract class DynamicFile {
      * @throws IOException IO异常
      */
     public abstract List<Long> versions() throws IOException;
+
     /**
      * 获取指定版本号的文件，如果指定的版本号不存在，则抛出异常，指定版本号不存在
+     *
      * @param version 版本号
      * @return
      * @throws IOException
      */
     public abstract FileWrapper getFile(long version) throws IOException;
+
     /**
      * 获取当前文件的最新版本文件
      *
      * @return File包装
      * @throws IOException IO异常
      */
-    public FileWrapper getFile() throws IOException{
+    public FileWrapper getFile() throws IOException {
         long maxVersion = lookupMaxVersion();
         return getFile(maxVersion);
     }
+
     /**
      * 创建当前文件的新版本
      *
@@ -151,28 +159,29 @@ public abstract class DynamicFile {
 
     /**
      * 根据事务号获取事务
+     *
      * @param transactionId 事务号
      * @return 事务对象
      * @throws IOException 异常
      */
     public FileTransaction getTransaction(String transactionId) throws IOException {
         //遍历事务，检查是否超时
-       Iterator<FileTransaction> iterator = transactions.values().iterator();
-        while (iterator.hasNext()){
+        Iterator<FileTransaction> iterator = transactions.values().iterator();
+        while (iterator.hasNext()) {
             FileTransaction fileTransaction = iterator.next();
-            if(System.currentTimeMillis() - fileTransaction.getLastActiveTime() > timeoutSec * 1000){
+            if (System.currentTimeMillis() - fileTransaction.getLastActiveTime() > timeoutSec * 1000) {
                 destroy(transactionId);
             }
-            if(fileTransaction.isFinished()){
+            if (fileTransaction.isFinished()) {
                 destroy(transactionId);
             }
         }
         FileTransaction transaction = transactions.get(transactionId);
-        if(transaction == null){
-            throw new TransactionNotFound(MessageFormatter.format("transaction id '{}' is not found", transactionId));
+        if (transaction == null) {
+            throw new TransactionNotFound("transaction id '" + transactionId + "' is not found");
         }
-        if(transaction.isFinished()){
-            throw new TransactionAlreadyFinished(MessageFormatter.format("transaction id '{}' has already finished", transactionId));
+        if (transaction.isFinished()) {
+            throw new TransactionAlreadyFinished("transaction id '" + transactionId + "' has already finished");
         }
         return transaction;
     }
