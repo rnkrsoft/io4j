@@ -9,13 +9,6 @@
     <version>1.0.1-beta1</version>
     <name>Rnkrsoft IO For Java Utilities library</name>
     <description>Rnkrsoft IO For Java Utilities library</description>
-    <url>https://git.rnkrsoft.com/io4j.git</url>
-    <licenses>
-        <license>
-            <name>Apache License Version 2.0</name>
-            <url>http://www.apache.org/licenses</url>
-        </license>
-    </licenses>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
@@ -61,38 +54,7 @@
             <groupId>com.rnkrsoft.groundwork</groupId>
             <artifactId>groundwork</artifactId>
             <version>${groundwork.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${log4j-over-slf4j.version}</version>
-        </dependency>
-        <!--Apache Commons Logging instead of slf4j logger -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <!--java util logger insteas of slf4j logger -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
+            <optional>true</optional>
         </dependency>
         <!--slf4j logger api-->
         <dependency>
@@ -100,11 +62,50 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${log4j-over-slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--Apache Commons Logging instead of slf4j logger -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--java util logger insteas of slf4j logger -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
         <!--异步写入框架-->
         <dependency>
             <groupId>com.lmax</groupId>
             <artifactId>disruptor</artifactId>
             <version>${disruptor.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
@@ -169,15 +170,6 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.16</version>
-                        <configuration>
-                            <forkMode>always</forkMode>
-                            <argLine>-Dfile.encoding=UTF-8</argLine>
-                        </configuration>
-                    </plugin>
                     <!-- Javadoc -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -238,12 +230,12 @@
     </repositories>
     <distributionManagement>
         <snapshotRepository>
-            <id>rnkrsoft</id>
-            <url>http://nexus.rnkrsoft.com/content/repositories/snapshots/</url>
+            <id>open-source-snapshots</id>
+            <url>http://nexus.rnkrsoft.com/content/repositories/open-source-snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>rnkrsoft</id>
-            <url>http://nexus.rnkrsoft.com/content/repositories/releases/</url>
+            <id>open-source-releases</id>
+            <url>http://nexus.rnkrsoft.com/content/repositories/open-source-releases/</url>
         </repository>
     </distributionManagement>
 </project>
