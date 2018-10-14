@@ -5,8 +5,8 @@ import java.io.IOException;
 /**
  * Created by devops4j on 2018/2/16.
  */
-public class TransactionNotFound extends IOException{
-    public TransactionNotFound(String message) {
+public class TransactionNotFoundException extends IOException{
+    public TransactionNotFoundException(String message) {
         super(message);
     }
 }

@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by woate on 2018/2/16.
+ * Created by rnkrsoft.com on 2018/2/16.
+ * 文件包装类实现
  */
 class FileWrapperImpl implements FileWrapper {
 

@@ -14,7 +14,8 @@ import java.io.*;
 import java.util.UUID;
 
 /**
- * Created by woate on 2018/2/15.
+ * Created by rnkrsoft.com on 2018/2/15.
+ * 文件事务实现类
  */
 @Slf4j
 class FileTransactionImpl implements FileTransaction {

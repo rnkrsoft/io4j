@@ -4,7 +4,7 @@ package com.rnkrsoft.io.buffer;
 /**
  * Created by rnkrsoft.com on 2017/11/30.
  */
-public class Bits {
+class Bits {
 
     static short makeShort(byte b1, byte b0) {
         return (short) ((b1 << 8) | (b0 & 0xff));

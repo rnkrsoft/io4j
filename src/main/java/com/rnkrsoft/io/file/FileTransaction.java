@@ -7,10 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by devops4j on 2018/2/15.
+ * Created by rnkrsoft.com on 2018/2/15.
  * 文件事务
  */
 public interface FileTransaction {
+    /**
+     * 获取动态文件对象
+     * @return
+     */
     DynamicFile getDynamicFile();
     /**
      * 获取事务编号

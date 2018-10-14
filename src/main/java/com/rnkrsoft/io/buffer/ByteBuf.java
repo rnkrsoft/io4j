@@ -11,10 +11,20 @@ import java.nio.ByteBuffer;
  * 字节缓冲区
  */
 public abstract class ByteBuf {
+    /**
+     * 创建一个指定容量大小的缓冲区
+     * @param capacity 容量
+     * @return 缓冲区
+     */
     public static ByteBuf allocate(int capacity) {
         return new HeapByteBuf(capacity);
     }
 
+    /**
+     * 根据字节数组创建缓冲区
+     * @param data 字节数组
+     * @return 缓冲区
+     */
     public static ByteBuf allocate(byte[] data) {
         return new HeapByteBuf(data);
     }
@@ -54,6 +64,8 @@ public abstract class ByteBuf {
     public abstract ByteBuf put(byte[] v);
 
     public abstract ByteBuf put(String charset, String... strings);
+    public abstract ByteBuf putUTF_8(String... strings);
+    public abstract ByteBuf putGBK(String... strings);
 
     public abstract ByteBuf put(ByteBuffer buffer);
 
@@ -102,6 +114,11 @@ public abstract class ByteBuf {
      */
     public abstract int write(OutputStream os) throws IOException;
 
+    /**
+     * 使用ByteBuffer获取ByteBuf的内容
+     * @param buffer java缓冲区对象
+     * @return 缓冲区对象
+     */
     public abstract ByteBuf get(ByteBuffer buffer);
 
     /**

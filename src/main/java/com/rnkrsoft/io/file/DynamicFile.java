@@ -13,10 +13,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by devops4j on 2018/2/15.
+ * Created by rnkrsoft.com on 2018/2/15.
  * 动态文件格式
  */
 public abstract class DynamicFile {
+    /**
+     * 默认提交超时间秒数10秒
+     */
+    public static final int DEFAULT_COMMIT_TIMEOUT_SEC = 10;
+    /**
+     * 默认备份数10
+     */
+    public static final int DEFAULT_BACKUP_SIZE = 10;
     /**
      * 文件所在目录
      */
@@ -37,34 +45,49 @@ public abstract class DynamicFile {
      */
     @Getter
     protected int backupSize = DEFAULT_BACKUP_SIZE;
+
     @Getter
     protected int timeoutSec = DEFAULT_COMMIT_TIMEOUT_SEC;
 
     /**
-     * 默认备份数10
-     */
-    public static final int DEFAULT_BACKUP_SIZE = 10;
-    /**
      * 保存所有文件事务
      */
     protected Map<String, FileTransaction> transactions = new ConcurrentHashMap();
-    /**
-     * 默认提交超时间秒数10秒
-     */
-    public static final int DEFAULT_COMMIT_TIMEOUT_SEC = 10;
 
+    /**
+     * 根据包含文件名的路径创建动态文件，默认备份数10
+     * @param file 文件路径
+     * @return 动态文件
+     */
     public static DynamicFile file(String file) {
         return new DynamicFileImpl(file, DEFAULT_BACKUP_SIZE);
     }
 
+    /**
+     * 根据包含文件名的路径创建动态文件，设置保存的备份数
+     * @param file 文件路径
+     * @param backupSize 备份数
+     * @return 动态文件
+     */
     public static DynamicFile file(String file, int backupSize) {
         return new DynamicFileImpl(file, backupSize);
     }
 
+    /**
+     * 根据包含文件对象创建动态文件，默认备份数10
+     * @param file 文件对象
+     * @return 动态文件
+     */
     public static DynamicFile file(File file) {
         return new DynamicFileImpl(file, DEFAULT_BACKUP_SIZE);
     }
 
+    /**
+     *
+     * @param file
+     * @param backupSize
+     * @return
+     */
     public static DynamicFile file(File file, int backupSize) {
         return new DynamicFileImpl(file, backupSize);
     }
@@ -178,10 +201,10 @@ public abstract class DynamicFile {
         }
         FileTransaction transaction = transactions.get(transactionId);
         if (transaction == null) {
-            throw new TransactionNotFound("transaction id '" + transactionId + "' is not found");
+            throw new TransactionNotFoundException("transaction id '" + transactionId + "' is not found");
         }
         if (transaction.isFinished()) {
-            throw new TransactionAlreadyFinished("transaction id '" + transactionId + "' has already finished");
+            throw new TransactionAlreadyFinishedException("transaction id '" + transactionId + "' has already finished");
         }
         return transaction;
     }

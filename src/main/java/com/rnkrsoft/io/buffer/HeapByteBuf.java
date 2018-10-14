@@ -244,6 +244,16 @@ class HeapByteBuf extends ByteBuf {
     }
 
     @Override
+    public ByteBuf putUTF_8(String... strings) {
+        return put("UTF-8", strings);
+    }
+
+    @Override
+    public ByteBuf putGBK(String... strings) {
+        return put("GBK", strings);
+    }
+
+    @Override
     public ByteBuf put(ByteBuffer buffer) {
         if(readonly){
             throw new IllegalArgumentException("buffer is readonly!");

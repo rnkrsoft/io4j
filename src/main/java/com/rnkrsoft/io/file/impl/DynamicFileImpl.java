@@ -14,6 +14,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by rnkrsoft.com on 2018/2/15.
+ * 动态文件实现类
+ */
 @Slf4j
 @ToString
 public final class DynamicFileImpl extends DynamicFile {
@@ -43,7 +47,6 @@ public final class DynamicFileImpl extends DynamicFile {
      * @throws IOException 异常
      */
     public boolean exists() throws IOException {
-
         versions();
         return lookupMaxVersion(false) > 0;
     }
