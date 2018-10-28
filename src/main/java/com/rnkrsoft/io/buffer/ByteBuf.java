@@ -69,6 +69,7 @@ public abstract class ByteBuf {
 
     public abstract ByteBuf put(ByteBuffer buffer);
 
+    public abstract ByteBuf append(String charset, String line);
     public abstract ByteBuf get(byte[] data);
 
     /**

@@ -210,6 +210,9 @@ class HeapByteBuf extends ByteBuf {
         if(readonly){
             throw new IllegalArgumentException("buffer is readonly!");
         }
+        if (bytes == null) {
+            return this;
+        }
         int length = bytes.length;
         //检测是否越界
         if (writableLength() < length) {
@@ -232,9 +235,12 @@ class HeapByteBuf extends ByteBuf {
         if(readonly){
             throw new IllegalArgumentException("buffer is readonly!");
         }
-        for (String str : strings) {
+        for (String line : lines) {
             try {
-                byte[] temp = str.getBytes(charset);
+                if (line == null) {
+                    break;
+                }
+                byte[] temp = line.getBytes(charset);
                 put(temp);
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
@@ -259,6 +265,18 @@ class HeapByteBuf extends ByteBuf {
             throw new IllegalArgumentException("buffer is readonly!");
         }
         put(buffer.array());
+        return this;
+    }
+	
+	    @Override
+    public ByteBuf append(String charset, String line) {
+        try {
+            byte[] temp = line.getBytes(charset);
+            put(temp);
+            put("\n");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         return this;
     }
 
