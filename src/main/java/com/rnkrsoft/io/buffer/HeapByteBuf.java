@@ -231,7 +231,7 @@ class HeapByteBuf extends ByteBuf {
     }
 
     @Override
-    public ByteBuf put(String charset, String... strings) {
+    public ByteBuf put(String charset, String... lines) {
         if(readonly){
             throw new IllegalArgumentException("buffer is readonly!");
         }
