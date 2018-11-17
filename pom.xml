@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <groupId>com.rnkrsoft.io4j</groupId>
     <artifactId>io4j</artifactId>
-    <version>1.0.1-beta2</version>
+    <version>1.0.1</version>
     <name>Rnkrsoft IO For Java Utilities library</name>
     <description>Rnkrsoft IO For Java Utilities library</description>
     <properties>
@@ -20,7 +20,7 @@
         <disruptor.version>3.3.5</disruptor.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <groundwork.version>1.0.1-beta2</groundwork.version>
+        <groundwork.version>1.0.1</groundwork.version>
         <commons-codec.version>1.9</commons-codec.version>
     </properties>
     <dependencies>
@@ -28,11 +28,13 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -44,11 +46,13 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.10</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.rnkrsoft.groundwork</groupId>
@@ -61,6 +65,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -111,6 +116,7 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>${commons-codec.version}</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     <developers>
