@@ -7,12 +7,26 @@
     <groupId>com.rnkrsoft.io4j</groupId>
     <artifactId>io4j</artifactId>
     <version>1.0.1</version>
-    <name>Rnkrsoft IO For Java Utilities library</name>
-    <description>Rnkrsoft IO For Java Utilities library</description>
+    <name>IO For Java Utilities library</name>
+    <description>IO For Java Utilities library</description>
+    <url>https://github.com/rnkrsoft/io4j.git</url>
+    <licenses>
+        <license>
+            <name>RNKRSOFT OPEN SOURCE SOFTWARE LICENSE TERMS 1.0</name>
+            <url>http://www.rnkrsoft.com/open-source-licenses</url>
+        </license>
+    </licenses>
+    <scm>
+        <connection>https://github.com/rnkrsoft/io4j.git</connection>
+        <developerConnection>https://github.com/rnkrsoft/io4j.git</developerConnection>
+        <url>https://www.rnkrsoft.com</url>
+    </scm>
     <properties>
+        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <java.version>1.6</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.7</jdk.version>
-        <sourceEncoding>UTF-8</sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <slf4j.version>1.7.21</slf4j.version>
         <log4jdbc.version>1.15</log4jdbc.version>
         <log4j2.version>2.7</log4j2.version>
@@ -121,12 +135,12 @@
     </dependencies>
     <developers>
         <developer>
-            <id>devops4j</id>
-            <name>devops4j</name>
-            <email>devops4j@devops4j.com</email>
-            <url>http://www.devops4j.com</url>
-            <organization>devops4j</organization>
-            <organizationUrl>http://www.devops4j.com</organizationUrl>
+            <id>rnkrsoft.com</id>
+            <name>rnkrsoft.com</name>
+            <email>devops@rnkrsoft.com</email>
+            <url>http://www.rnkrsoft.com</url>
+            <organization>rnkrsoft.com</organization>
+            <organizationUrl>http://www.rnkrsoft.com</organizationUrl>
             <roles>
                 <role>architect</role>
                 <role>developer</role>
@@ -141,9 +155,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                    <encoding>${sourceEncoding}</encoding>
                 </configuration>
             </plugin>
             <!-- Source -->
@@ -220,28 +231,16 @@
                     </plugin>
                 </plugins>
             </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
-    <scm>
-        <connection>http://admin@git.rnkrsoft.com/r/io4j.git </connection>
-        <developerConnection>http://admin@git.rnkrsoft.com/r/io4j.git </developerConnection>
-        <url>https://www.rnkrsoft.com</url>
-    </scm>
-    <repositories>
-        <repository>
-            <id>rnkrsoft</id>
-            <name>RnKrSoft Repository</name>
-            <url>http://nexus.rnkrsoft.com/content/groups/public/</url>
-        </repository>
-    </repositories>
-    <distributionManagement>
-        <snapshotRepository>
-            <id>open-source-snapshots</id>
-            <url>http://nexus.rnkrsoft.com/content/repositories/open-source-snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>open-source-releases</id>
-            <url>http://nexus.rnkrsoft.com/content/repositories/open-source-releases/</url>
-        </repository>
-    </distributionManagement>
 </project>
