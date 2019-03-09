@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <groupId>com.rnkrsoft.io4j</groupId>
     <artifactId>io4j</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <name>IO For Java Utilities library</name>
     <description>IO For Java Utilities library</description>
     <url>https://github.com/rnkrsoft/io4j.git</url>
@@ -239,6 +239,25 @@
                 <repository>
                     <id>oss</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>rnkrsoft</id>
+            <repositories>
+                <repository>
+                    <id>rnkrsoft</id>
+                    <url>http://nexus.rnkrsoft.com/content/repositories/public/</url>
+                </repository>
+            </repositories>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>rnkrsoft</id>
+                    <url>http://nexus.rnkrsoft.com/content/repositories/open-source-snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>rnkrsoft</id>
+                    <url>http://nexus.rnkrsoft.com/content/repositories/open-source-releases/</url>
                 </repository>
             </distributionManagement>
         </profile>

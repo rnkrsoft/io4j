@@ -77,7 +77,7 @@ public final class DynamicFileImpl extends DynamicFile {
      * @throws IOException 异常
      */
     public boolean exists() throws IOException {
-        versions();
+        versions(false);
         return lookupMaxVersion(false) > 0;
     }
 
@@ -121,16 +121,17 @@ public final class DynamicFileImpl extends DynamicFile {
 
     @Override
     public long lookupMaxVersion() throws IOException {
-        versions();
+        versions(false);
         return lookupMaxVersion(true);
     }
 
-    @Override
-    public List<Long> versions() throws IOException {
+    public List<Long> versions(boolean create) throws IOException {
         final String filePath = directory + File.separator + fileName;
         final File dir = new File(filePath);
         if (!dir.exists()) {
-            dir.mkdirs();
+            if (create) {
+                dir.mkdirs();
+            }
             return Collections.emptyList();
         }
         File[] files = dir.listFiles(new FilenameFilter() {
@@ -198,6 +199,11 @@ public final class DynamicFileImpl extends DynamicFile {
             }
         }
         return Arrays.asList(fileTsArray);
+    }
+
+    @Override
+    public List<Long> versions() throws IOException {
+        return versions(false);
     }
 
     @Override

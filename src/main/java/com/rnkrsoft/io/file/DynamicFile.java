@@ -177,6 +177,15 @@ public abstract class DynamicFile {
     /**
      * 读取文件的所有已提交本版号
      *
+     * @param create 自动创建目录
+     * @return 版本号列表
+     * @throws IOException IO异常
+     */
+    public abstract List<Long> versions(boolean create) throws IOException;
+
+    /**
+     * 读取文件的所有已提交本版号
+     *
      * @return 版本号列表
      * @throws IOException IO异常
      */
