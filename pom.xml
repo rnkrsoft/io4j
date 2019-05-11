@@ -12,8 +12,8 @@
     <url>https://github.com/rnkrsoft/io4j.git</url>
     <licenses>
         <license>
-            <name>RNKRSOFT OPEN SOURCE SOFTWARE LICENSE TERMS 1.0</name>
-            <url>http://www.rnkrsoft.com/open-source-licenses</url>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
     <scm>
@@ -24,13 +24,12 @@
     <properties>
         <maven.compiler.target>1.6</maven.compiler.target>
         <maven.compiler.source>1.6</maven.compiler.source>
-        <java.version>1.6</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <disruptor.version>3.3.5</disruptor.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <groundwork.version>1.0.1</groundwork.version>
+        <groundwork.version>1.0.2</groundwork.version>
         <commons-codec.version>1.9</commons-codec.version>
     </properties>
     <dependencies>
