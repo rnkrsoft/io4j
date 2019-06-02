@@ -213,7 +213,7 @@ import java.nio.ByteBuffer;
 class HeapByteBuf extends ByteBuf {
     byte[] data = null;
     int writeBegin = 0;
-    int writeEnd = 0;
+    int writeEnd = data.length;
     int readBegin = 0;
     int readEnd = 0;
     boolean readonly = false;
