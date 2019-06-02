@@ -211,14 +211,14 @@ import java.nio.ByteBuffer;
  * Created by renkrsoft.com on 2017/11/30.
  */
 class HeapByteBuf extends ByteBuf {
-    byte[] data = null;
-    int writeBegin = 0;
-    int writeEnd = data.length;
-    int readBegin = 0;
-    int readEnd = 0;
-    boolean readonly = false;
-    boolean autoExpand = false;
-    boolean bigEndian = false;
+    byte[] data;
+    int writeBegin;
+    int writeEnd;
+    int readBegin;
+    int readEnd;
+    boolean readonly;
+    boolean autoExpand;
+    boolean bigEndian;
 
     public HeapByteBuf(byte[] data) {
         this.data = data;
@@ -226,6 +226,9 @@ class HeapByteBuf extends ByteBuf {
         this.writeEnd = data.length;
         this.readBegin = 0;
         this.readEnd = data.length;
+        this.readonly = false;
+        this.autoExpand = false;
+        this.bigEndian = false;
     }
 
     public HeapByteBuf(int size) {
@@ -234,6 +237,9 @@ class HeapByteBuf extends ByteBuf {
         this.writeEnd = data.length;
         this.readBegin = 0;
         this.readEnd = 0;
+        this.readonly = false;
+        this.autoExpand = false;
+        this.bigEndian = false;
     }
 
 

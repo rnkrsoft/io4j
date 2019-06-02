@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <groupId>com.rnkrsoft.io4j</groupId>
     <artifactId>io4j</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <name>IO For Java Utilities library</name>
     <description>IO For Java Utilities library</description>
     <url>https://github.com/rnkrsoft/io4j.git</url>
@@ -29,8 +29,11 @@
         <disruptor.version>3.3.5</disruptor.version>
         <commons-io.version>2.5</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <groundwork.version>1.0.2</groundwork.version>
+        <groundwork.version>1.0.3</groundwork.version>
         <commons-codec.version>1.9</commons-codec.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
+        <lombok.version>1.16.16</lombok.version>
+        <logger4j.version>1.0.0</logger4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -54,13 +57,13 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>${javax.servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
+            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
@@ -72,7 +75,7 @@
         <dependency>
             <groupId>com.rnkrsoft.logger4j</groupId>
             <artifactId>logger4j</artifactId>
-            <version>1.0.0</version>
+            <version>${logger4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
