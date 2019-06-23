@@ -237,7 +237,7 @@ class FileTransactionImpl implements FileTransaction {
     public FileTransactionImpl(String transactionId, DynamicFile dynamicFile) throws IOException {
         this.transactionId = transactionId;
         this.dynamicFile = dynamicFile;
-        File dir = new File(dynamicFile.getDirectory() + File.separator + dynamicFile.getFileName());
+        File dir = new File(dynamicFile.getDirectory() + "/" + dynamicFile.getFileName());
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -313,7 +313,7 @@ class FileTransactionImpl implements FileTransaction {
 
     @Override
     public boolean commit() throws IOException {
-        File dir = new File(dynamicFile.getDirectory() + File.separator + dynamicFile.getFileName());
+        File dir = new File(dynamicFile.getDirectory() + "/" + dynamicFile.getFileName());
         try {
             if (!tempFile.exists()) {
                 log.error("temp file '{}' not exist", tempFile);

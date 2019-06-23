@@ -261,10 +261,10 @@ public final class DynamicFileImpl extends DynamicFile {
      * @throws IOException
      */
     public void delete() throws IOException {
-        File dir = new File(directory + File.separator + fileName);
+        File dir = new File(directory + "/" + fileName);
         FileUtils.deleteDirectory(dir);
         if (dir.exists()) {
-            File deleteDir = new File(directory + File.separator + "~" + fileName + System.currentTimeMillis());
+            File deleteDir = new File(directory + "/" + "~" + fileName + System.currentTimeMillis());
             dir.renameTo(deleteDir);
             FileUtils.deleteDirectory(deleteDir);
         }
@@ -300,7 +300,7 @@ public final class DynamicFileImpl extends DynamicFile {
     }
 
     public List<Long> versions(boolean create) throws IOException {
-        final String filePath = directory + File.separator + fileName;
+        final String filePath = directory + "/" + fileName;
         final File dir = new File(filePath);
         if (!dir.exists()) {
             if (create) {
@@ -394,7 +394,7 @@ public final class DynamicFileImpl extends DynamicFile {
     }
 
     File openVersion(long version) {
-        File dir = new File(directory + File.separator + fileName);
+        File dir = new File(directory + "/" + fileName);
         File file = new File(dir, fileName + "." + version);
         return file;
     }
