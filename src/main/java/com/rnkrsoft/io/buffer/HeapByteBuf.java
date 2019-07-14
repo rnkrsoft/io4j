@@ -442,7 +442,7 @@ class HeapByteBuf extends ByteBuf {
 
     @Deprecated
     public ByteBuf put(String charset, String... lines) {
-        throw new RuntimeException("Deprecated method put(String,String...), please call put(Charset,String...)");
+        return put(Charset.forName(charset), lines);
     }
 
     public ByteBuf put(Charset charset, String... lines) {
