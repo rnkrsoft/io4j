@@ -369,16 +369,18 @@ public abstract class ByteBuf {
      * @return 字符串
      */
     public String asString() {
-        return asString(System.getProperty("file.encoding"));
+        return asString(Charset.forName(System.getProperty("file.encoding")));
     }
 
+    @Deprecated
+    public abstract String asString(String charset);
     /**
      * 将所有内容作为字符串输出
      *
      * @param charset 字符集
      * @return 字符串
      */
-    public abstract String asString(String charset);
+    public abstract String asString(Charset charset);
 
     /**
      * 根据默认字符集从当前读指针开始读取指定长度的字符串
@@ -397,7 +399,9 @@ public abstract class ByteBuf {
      * @param length  长度
      * @return 字符串
      */
+    @Deprecated
     public abstract String getString(String charset, int length);
+    public abstract String getString(Charset charset, int length);
 
     public abstract byte getByte();
 

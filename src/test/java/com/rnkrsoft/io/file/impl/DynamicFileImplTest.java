@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.charset.Charset;
 
 /**
  * Created by devops4j on 2018/2/15.
@@ -30,7 +31,7 @@ public class DynamicFileImplTest {
         fileTransaction.write("this is a test" + new FastDate().toString(DateStyle.CHINESE_FORMAT1));
         System.out.println("-------------------");
         ByteBuf byteBuf1 = fileTransaction.read();
-        System.out.println(byteBuf1.asString("UTF-8"));
+        System.out.println(byteBuf1.asString(Charset.forName("UTF-8")));
         txId = fileTransaction.getTransactionId();
         FileTransaction fileTransaction1 = dynamicFile.getTransaction(txId);
         Assert.assertEquals(false, fileTransaction1.isFinished());

@@ -442,7 +442,7 @@ class HeapByteBuf extends ByteBuf {
 
     @Deprecated
     public ByteBuf put(String charset, String... lines) {
-        throw new RuntimeException("不支持的方法");
+        throw new RuntimeException("Deprecated method put(String,String...), please call put(Charset,String...)");
     }
 
     public ByteBuf put(Charset charset, String... lines) {
@@ -643,21 +643,27 @@ class HeapByteBuf extends ByteBuf {
 
     @Override
     public String asString(String charset) {
+        return getString(Charset.forName(charset), readableLength());
+    }
+
+    @Override
+    public String asString(Charset charset) {
         return getString(charset, readableLength());
     }
 
 
+    @Deprecated
     @Override
     public String getString(String charset, int length) {
+        return getString(Charset.forName(charset), length);
+    }
+
+    @Override
+    public String getString(Charset charset, int length) {
         byte[] temp = new byte[length];
         get(temp);
-        String str = null;
-        try {
-            str = new String(temp, charset);
-            return str;
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        String str = new String(temp, charset);
+        return str;
     }
 
 
