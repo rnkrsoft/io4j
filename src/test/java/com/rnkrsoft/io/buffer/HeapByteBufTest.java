@@ -112,10 +112,10 @@ public class HeapByteBufTest {
     @Test
     public void testMaxCapacity() throws Exception {
         ByteBuf byteBuf = ByteBuf.allocate(1024);
-        byteBuf.put("UTF-8", "this is a test");
+        byteBuf.putUTF8("this is a test");
         String str = byteBuf.getString("UTF-8", byteBuf.readableLength());
         Assert.assertEquals("this is a test", str);
-        byteBuf.put("UTF-8", "this is a test");
+        byteBuf.putUTF8("this is a test");
         String str1 = byteBuf.getString("UTF-8", byteBuf.readableLength());
         Assert.assertEquals("this is a test", str1);
     }
@@ -133,7 +133,7 @@ public class HeapByteBufTest {
     @Test
     public void testWrite() throws Exception {
         ByteBuf byteBuf = ByteBuf.allocate(1024);
-        byteBuf.put("UTF-8", "this is a test");
+        byteBuf.putUTF8("this is a test");
         FileOutputStream outputStream = new FileOutputStream("./target/demo.txt");
         byteBuf.write(outputStream);
     }
@@ -141,7 +141,7 @@ public class HeapByteBufTest {
     @Test
     public void testRead() throws Exception {
         ByteBuf byteBuf = ByteBuf.allocate(1024).autoExpand(true).readOnly(false);
-        byteBuf.put("UTF-8", "this is a test");
+        byteBuf.putUTF8("this is a test");
         FileOutputStream outputStream = new FileOutputStream("./target/demo.txt");
         byteBuf.write(outputStream);
         byteBuf.clear();
