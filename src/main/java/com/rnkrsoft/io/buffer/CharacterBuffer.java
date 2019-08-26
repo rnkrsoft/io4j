@@ -1,5 +1,8 @@
 package com.rnkrsoft.io.buffer;
 
+/**
+ * 字符缓存
+ */
 public class CharacterBuffer {
     char[] data;
     int writeBegin;

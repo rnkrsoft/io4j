@@ -13,7 +13,7 @@ import java.io.File;
 import java.nio.charset.Charset;
 
 /**
- * Created by devops4j on 2018/2/15.
+ * Created by rnkrsoft.com on 2018/2/15.
  */
 public class DynamicFileImplTest {
 

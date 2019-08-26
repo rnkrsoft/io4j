@@ -1,6 +1,5 @@
 package com.rnkrsoft.io.buffer;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,7 +8,7 @@ import java.io.FileOutputStream;
 import java.math.BigDecimal;
 
 /**
- * Created by devops4j on 2018/1/21.
+ * Created by rnkrsoft.com on 2018/1/21.
  */
 public class HeapByteBufTest {
     @Test
