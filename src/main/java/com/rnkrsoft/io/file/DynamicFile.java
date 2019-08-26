@@ -287,23 +287,43 @@ public abstract class DynamicFile {
     }
 
     /**
-     *
-     * @param file
-     * @param backupSize
-     * @return
+     * 根据输入的文件对象和指定的备份数创建动态文件对象
+     * @param file 文件对象
+     * @param backupSize 备份数
+     * @return 动态文件对象
      */
     public static DynamicFile file(File file, int backupSize) {
         return new DynamicFileImpl(file, backupSize);
     }
-
+    /**
+     * 根据输入的文件路径和文件名创建动态文件对象，备份数使用默认值DEFAULT_BACKUP_SIZE
+     * @param directory 文件路径
+     * @param fileName 文件名
+     * @return 动态文件对象
+     * @see #DEFAULT_BACKUP_SIZE
+     */
     public static DynamicFile file(File directory, String fileName) {
         return new DynamicFileImpl(new File(directory, fileName), DEFAULT_BACKUP_SIZE);
     }
 
+    /**
+     * 根据输入的文件路径和文件名创建动态文件对象，备份数使用默认值DEFAULT_BACKUP_SIZE
+     * @param directory 文件路径
+     * @param fileName 文件名
+     * @return 动态文件对象
+     * @see #DEFAULT_BACKUP_SIZE
+     */
     public static DynamicFile file(String directory, String fileName) {
         return new DynamicFileImpl(directory, fileName, DEFAULT_BACKUP_SIZE);
     }
 
+    /**
+     * 根据输入的文件路径，文件名和备份数创建动态文件对象
+     * @param directory 文件路径
+     * @param fileName 文件名
+     * @param backupSize 备份数
+     * @return 动态文件对象
+     */
     public static DynamicFile file(String directory, String fileName, int backupSize) {
         return new DynamicFileImpl(directory, fileName, backupSize);
     }
@@ -311,15 +331,15 @@ public abstract class DynamicFile {
     /**
      * 检测是否存在文件
      *
-     * @return
-     * @throws IOException
+     * @return 存在返回真
+     * @throws IOException IO异常
      */
     public abstract boolean exists() throws IOException;
 
     /**
      * 删除当前文件
      *
-     * @throws IOException
+     * @throws IOException IO异常
      */
     public abstract void delete() throws IOException;
 
@@ -345,6 +365,7 @@ public abstract class DynamicFile {
      * 发现最大的文件版本号
      *
      * @return 文件版本号，日期格式
+     * @throws IOException IO异常
      */
     public abstract long lookupMaxVersion() throws IOException;
 
@@ -369,15 +390,15 @@ public abstract class DynamicFile {
      * 获取指定版本号的文件，如果指定的版本号不存在，则抛出异常，指定版本号不存在
      *
      * @param version 版本号
-     * @return
-     * @throws IOException
+     * @return 文件包装
+     * @throws IOException IO异常
      */
     public abstract FileWrapper getFile(long version) throws IOException;
 
     /**
      * 获取当前文件的最新版本文件
      *
-     * @return File包装
+     * @return 文件包装
      * @throws IOException IO异常
      */
     public FileWrapper getFile() throws IOException {
@@ -422,6 +443,12 @@ public abstract class DynamicFile {
         return transaction;
     }
 
+    /**
+     * 销毁事务
+     * @param transactionId 事务编号
+     * @return 返回当前动态文件对象
+     * @throws IOException 异常
+     */
     public DynamicFile destroy(String transactionId) throws IOException {
         transactions.remove(transactionId);
         return this;

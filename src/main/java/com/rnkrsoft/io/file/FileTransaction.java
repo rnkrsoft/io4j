@@ -222,7 +222,7 @@ public interface FileTransaction {
     DynamicFile getDynamicFile();
     /**
      * 获取事务编号
-     * @return
+     * @return 事务号
      */
     String getTransactionId();
     /**
@@ -275,7 +275,7 @@ public interface FileTransaction {
     /**
      * 是否已经已经提交
      *
-     * @return
+     * @return 是否完成
      * @throws IOException
      */
     boolean isFinished() throws IOException;

@@ -39,9 +39,9 @@ public class DynamicFileImplTest {
         Assert.assertEquals(true, fileTransaction1.isFinished());
         System.out.println("-------------------");
         ByteBuf byteBuf = fileTransaction.read();
-        System.out.println(byteBuf.asString("UTF-8"));
+        System.out.println(byteBuf.asString(Charset.forName("UTF-8")));
         FileWrapper fileWrapper = dynamicFile.getFile();
         System.out.println(fileWrapper.getVersion());
-        System.out.println(fileWrapper.read().asString("UTF-8"));
+        System.out.println(fileWrapper.read().asString(Charset.forName("UTF-8")));
     }
 }

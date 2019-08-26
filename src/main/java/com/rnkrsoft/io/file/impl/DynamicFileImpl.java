@@ -244,22 +244,13 @@ public final class DynamicFileImpl extends DynamicFile {
     }
 
 
-    /**
-     * 检查文件是否存在
-     *
-     * @return 返回真，则存在
-     * @throws IOException 异常
-     */
+    @Override
     public boolean exists() throws IOException {
         versions(false);
         return lookupMaxVersion(false) > 0;
     }
 
-    /**
-     * 删除文件
-     *
-     * @throws IOException
-     */
+    @Override
     public void delete() throws IOException {
         File dir = new File(directory + "/" + fileName);
         FileUtils.deleteDirectory(dir);
@@ -271,23 +262,13 @@ public final class DynamicFileImpl extends DynamicFile {
         maxVersion = -1;
     }
 
-    /**
-     * 读取文件内容
-     *
-     * @return 字节数组
-     * @throws IOException 异常
-     */
+    @Override
     public ByteBuf read(long version) throws IOException {
         FileWrapper fileWrapper = getFile(version);
         return fileWrapper.read();
     }
 
-    /**
-     * 打开文件
-     *
-     * @return 输入流
-     * @throws IOException 异常
-     */
+    @Override
     public InputStream stream(long version) throws IOException {
         FileWrapper fileWrapper = getFile(version);
         return fileWrapper.stream();
@@ -298,7 +279,7 @@ public final class DynamicFileImpl extends DynamicFile {
         versions(false);
         return lookupMaxVersion(true);
     }
-
+    @Override
     public List<Long> versions(boolean create) throws IOException {
         final String filePath = directory + "/" + fileName;
         final File dir = new File(filePath);

@@ -53,8 +53,6 @@ public class FileDetector {
     /**
      * @param filePath 文件路径
      * @return 文件头信息
-     * @author guoxk
-     * <p/>
      * 方法描述：根据文件路径获取文件头信息
      */
     public static String getFileType(String filePath) {
@@ -64,8 +62,6 @@ public class FileDetector {
     /**
      * @param filePath 文件路径
      * @return 文件头信息
-     * @author guoxk
-     * <p/>
      * 方法描述：根据文件路径获取文件头信息
      */
     public static String getFileHeader(String filePath) {
@@ -96,8 +92,6 @@ public class FileDetector {
     /**
      * @param src 要读取文件头信息的文件的byte数组
      * @return 文件头信息
-     * @author guoxk
-     * <p/>
      * 方法描述：将要读取文件头信息的文件的byte数组转换成string类型表示
      */
     private static String bytesToHexString(byte[] src) {
@@ -114,7 +108,6 @@ public class FileDetector {
             }
             builder.append(hv);
         }
-//		System.out.println(builder.toString());
         return builder.toString();
     }
 }
