@@ -28,7 +28,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <disruptor.version>3.3.5</disruptor.version>
         <commons-io.version>2.5</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version>
         <groundwork.version>1.0.3</groundwork.version>
         <commons-codec.version>1.9</commons-codec.version>
         <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
@@ -40,12 +39,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
             <optional>true</optional>
         </dependency>
         <dependency>
