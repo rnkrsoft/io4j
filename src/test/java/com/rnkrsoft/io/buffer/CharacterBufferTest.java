@@ -3,8 +3,6 @@ package com.rnkrsoft.io.buffer;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class CharacterBufferTest {
 
     @Test
