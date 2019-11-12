@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <groupId>com.rnkrsoft.io4j</groupId>
     <artifactId>io4j</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <name>IO For Java Utilities library</name>
     <description>IO For Java Utilities library</description>
     <url>https://github.com/rnkrsoft/io4j.git</url>

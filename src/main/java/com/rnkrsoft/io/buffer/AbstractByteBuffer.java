@@ -15,7 +15,7 @@ import java.nio.charset.Charset;
  * Created by rnkrsoft on 2019/10/30.
  */
 abstract class AbstractByteBuffer implements ByteBuffer {
-
+    protected boolean readonly;
     protected int readerIndex;
     protected int writerIndex;
     protected int markedReaderIndex;
@@ -697,10 +697,11 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public boolean isReadOnly() {
-        return false;
+        return this.readonly;
     }
 
     public ByteBuffer readOnly(boolean readOnly) {
+        this.readonly = readOnly;
         return this;
     }
 
@@ -753,7 +754,20 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public ByteBuffer discardReadBytes() {
-        return null;
+        if (readerIndex == 0) {
+            return this;
+        }
+        //如果有可读取的内容，则将其从可读取位置开始到已写入位置的内容重置为0，并将已写入游标重置为读取游标位置
+        if (readerIndex != writerIndex) {
+            setBytes(0, this, readerIndex, writerIndex - readerIndex);
+            writerIndex -= readerIndex;
+            adjustMarkers(readerIndex);
+            readerIndex = 0;
+        } else {
+            adjustMarkers(readerIndex);
+            writerIndex = readerIndex = 0;
+        }
+        return this;
     }
 
     public ByteBuffer discardSomeReadBytes() {
@@ -767,7 +781,7 @@ abstract class AbstractByteBuffer implements ByteBuffer {
 
     public ByteBuffer ensureWritable(int minWritableBytes) {
         if (minWritableBytes <= 0){
-            throw new IllegalArgumentException("新容量为0或者负数");
+            throw new IllegalArgumentException(MessageFormatter.format("new required size {} is zero or negative number!", minWritableBytes));
         }
         ensureWritable0(minWritableBytes);
         return this;
@@ -782,6 +796,7 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         //调整容量
         capacity(newCapacity);
     }
+
     public int indexOf(int fromIndex, int toIndex, byte value) {
         return ByteBufferFinder.indexOf(this, fromIndex, toIndex, value);
     }
@@ -930,8 +945,25 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return (index | length | (index + length) | (capacity - (index + length))) < 0;
     }
 
-
-
+    /**
+     * 调整标记点位置
+     * @param decrement
+     */
+    protected final void adjustMarkers(int decrement) {
+        int markedReaderIndex = this.markedReaderIndex;
+        if (markedReaderIndex <= decrement) {
+            this.markedReaderIndex = 0;
+            int markedWriterIndex = this.markedWriterIndex;
+            if (markedWriterIndex <= decrement) {
+                this.markedWriterIndex = 0;
+            } else {
+                this.markedWriterIndex = markedWriterIndex - decrement;
+            }
+        } else {
+            this.markedReaderIndex = markedReaderIndex - decrement;
+            markedWriterIndex -= decrement;
+        }
+    }
 
 
     /*=========================================================================================================*/
