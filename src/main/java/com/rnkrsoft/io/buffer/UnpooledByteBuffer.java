@@ -1,6 +1,5 @@
 package com.rnkrsoft.io.buffer;
 
-import java.nio.charset.Charset;
 
 /**
  * Created by rnkrsoft on 2019/10/30.
@@ -22,12 +21,8 @@ public abstract class UnpooledByteBuffer<T> extends AbstractReferenceCountedByte
         return null;
     }
 
-    public byte[] array() {
-        return new byte[0];
-    }
-
     public int arrayOffset() {
-        return 0;
+        return offset;
     }
 
     public boolean hasMemoryAddress() {
@@ -37,7 +32,5 @@ public abstract class UnpooledByteBuffer<T> extends AbstractReferenceCountedByte
     public long memoryAddress() {
         return 0;
     }
-
-
 
 }

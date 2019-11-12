@@ -204,7 +204,7 @@
  */
 package com.rnkrsoft.io.file;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuffer;
 import com.rnkrsoft.io.file.impl.DynamicFileImpl;
 import lombok.Getter;
 
@@ -350,7 +350,7 @@ public abstract class DynamicFile {
      * @return 字节缓冲区
      * @throws IOException IO异常
      */
-    public abstract ByteBuf read(long version) throws IOException;
+    public abstract ByteBuffer read(long version) throws IOException;
 
     /**
      * 打开当前文件为输入流

@@ -2,17 +2,17 @@
  * Apache License
  * Version 2.0, January 2004
  * http://www.apache.org/licenses/
- * <p/>
+ * <p>
  * TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
- * <p/>
+ * <p>
  * 1. Definitions.
- * <p/>
+ * <p>
  * "License" shall mean the terms and conditions for use, reproduction,
  * and distribution as defined by Sections 1 through 9 of this document.
- * <p/>
+ * <p>
  * "Licensor" shall mean the copyright owner or entity authorized by
  * the copyright owner that is granting the License.
- * <p/>
+ * <p>
  * "Legal Entity" shall mean the union of the acting entity and all
  * other entities that control, are controlled by, or are under common
  * control with that entity. For the purposes of this definition,
@@ -20,24 +20,24 @@
  * direction or management of such entity, whether by contract or
  * otherwise, or (ii) ownership of fifty percent (50%) or more of the
  * outstanding shares, or (iii) beneficial ownership of such entity.
- * <p/>
+ * <p>
  * "You" (or "Your") shall mean an individual or Legal Entity
  * exercising permissions granted by this License.
- * <p/>
+ * <p>
  * "Source" form shall mean the preferred form for making modifications,
  * including but not limited to software source code, documentation
  * source, and configuration files.
- * <p/>
+ * <p>
  * "Object" form shall mean any form resulting from mechanical
  * transformation or translation of a Source form, including but
  * not limited to compiled object code, generated documentation,
  * and conversions to other media types.
- * <p/>
+ * <p>
  * "Work" shall mean the work of authorship, whether in Source or
  * Object form, made available under the License, as indicated by a
  * copyright notice that is included in or attached to the work
  * (an example is provided in the Appendix below).
- * <p/>
+ * <p>
  * "Derivative Works" shall mean any work, whether in Source or Object
  * form, that is based on (or derived from) the Work and for which the
  * editorial revisions, annotations, elaborations, or other modifications
@@ -45,7 +45,7 @@
  * of this License, Derivative Works shall not include works that remain
  * separable from, or merely link (or bind by name) to the interfaces of,
  * the Work and Derivative Works thereof.
- * <p/>
+ * <p>
  * "Contribution" shall mean any work of authorship, including
  * the original version of the Work and any modifications or additions
  * to that Work or Derivative Works thereof, that is intentionally
@@ -59,18 +59,18 @@
  * Licensor for the purpose of discussing and improving the Work, but
  * excluding communication that is conspicuously marked or otherwise
  * designated in writing by the copyright owner as "Not a Contribution."
- * <p/>
+ * <p>
  * "Contributor" shall mean Licensor and any individual or Legal Entity
  * on behalf of whom a Contribution has been received by Licensor and
  * subsequently incorporated within the Work.
- * <p/>
+ * <p>
  * 2. Grant of Copyright License. Subject to the terms and conditions of
  * this License, each Contributor hereby grants to You a perpetual,
  * worldwide, non-exclusive, no-charge, royalty-free, irrevocable
  * copyright license to reproduce, prepare Derivative Works of,
  * publicly display, publicly perform, sublicense, and distribute the
  * Work and such Derivative Works in Source or Object form.
- * <p/>
+ * <p>
  * 3. Grant of Patent License. Subject to the terms and conditions of
  * this License, each Contributor hereby grants to You a perpetual,
  * worldwide, non-exclusive, no-charge, royalty-free, irrevocable
@@ -86,24 +86,24 @@
  * or contributory patent infringement, then any patent licenses
  * granted to You under this License for that Work shall terminate
  * as of the date such litigation is filed.
- * <p/>
+ * <p>
  * 4. Redistribution. You may reproduce and distribute copies of the
  * Work or Derivative Works thereof in any medium, with or without
  * modifications, and in Source or Object form, provided that You
  * meet the following conditions:
- * <p/>
+ * <p>
  * (a) You must give any other recipients of the Work or
  * Derivative Works a copy of this License; and
- * <p/>
+ * <p>
  * (b) You must cause any modified files to carry prominent notices
  * stating that You changed the files; and
- * <p/>
+ * <p>
  * (c) You must retain, in the Source form of any Derivative Works
  * that You distribute, all copyright, patent, trademark, and
  * attribution notices from the Source form of the Work,
  * excluding those notices that do not pertain to any part of
  * the Derivative Works; and
- * <p/>
+ * <p>
  * (d) If the Work includes a "NOTICE" text file as part of its
  * distribution, then any Derivative Works that You distribute must
  * include a readable copy of the attribution notices contained
@@ -120,14 +120,14 @@
  * or as an addendum to the NOTICE text from the Work, provided
  * that such additional attribution notices cannot be construed
  * as modifying the License.
- * <p/>
+ * <p>
  * You may add Your own copyright statement to Your modifications and
  * may provide additional or different license terms and conditions
  * for use, reproduction, or distribution of Your modifications, or
  * for any such Derivative Works as a whole, provided Your use,
  * reproduction, and distribution of the Work otherwise complies with
  * the conditions stated in this License.
- * <p/>
+ * <p>
  * 5. Submission of Contributions. Unless You explicitly state otherwise,
  * any Contribution intentionally submitted for inclusion in the Work
  * by You to the Licensor shall be under the terms and conditions of
@@ -135,12 +135,12 @@
  * Notwithstanding the above, nothing herein shall supersede or modify
  * the terms of any separate license agreement you may have executed
  * with Licensor regarding such Contributions.
- * <p/>
+ * <p>
  * 6. Trademarks. This License does not grant permission to use the trade
  * names, trademarks, service marks, or product names of the Licensor,
  * except as required for reasonable and customary use in describing the
  * origin of the Work and reproducing the content of the NOTICE file.
- * <p/>
+ * <p>
  * 7. Disclaimer of Warranty. Unless required by applicable law or
  * agreed to in writing, Licensor provides the Work (and each
  * Contributor provides its Contributions) on an "AS IS" BASIS,
@@ -150,7 +150,7 @@
  * PARTICULAR PURPOSE. You are solely responsible for determining the
  * appropriateness of using or redistributing the Work and assume any
  * risks associated with Your exercise of permissions under this License.
- * <p/>
+ * <p>
  * 8. Limitation of Liability. In no event and under no legal theory,
  * whether in tort (including negligence), contract, or otherwise,
  * unless required by applicable law (such as deliberate and grossly
@@ -162,7 +162,7 @@
  * work stoppage, computer failure or malfunction, or any and all
  * other commercial damages or losses), even if such Contributor
  * has been advised of the possibility of such damages.
- * <p/>
+ * <p>
  * 9. Accepting Warranty or Additional Liability. While redistributing
  * the Work or Derivative Works thereof, You may choose to offer,
  * and charge a fee for, acceptance of support, warranty, indemnity,
@@ -173,11 +173,11 @@
  * defend, and hold each Contributor harmless for any liability
  * incurred by, or claims asserted against, such Contributor by reason
  * of your accepting any such warranty or additional liability.
- * <p/>
+ * <p>
  * END OF TERMS AND CONDITIONS
- * <p/>
+ * <p>
  * APPENDIX: How to apply the Apache License to your work.
- * <p/>
+ * <p>
  * To apply the Apache License to your work, attach the following
  * boilerplate notice, with the fields enclosed by brackets "[]"
  * replaced with your own identifying information. (Don't include
@@ -186,15 +186,15 @@
  * file or class name and description of purpose be included on the
  * same "printed page" as the copyright notice for easier
  * identification within third-party archives.
- * <p/>
+ * <p>
  * Copyright 2018 rnkrsoft
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -203,223 +203,232 @@
  */
 package com.rnkrsoft.io.buffer;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by rnkrsoft.com on 2017/11/30.
- * 字节缓冲区
+ * Created by rnkrsoft on 2017/1/6.
+ * 该类参照Slf4j中的MessageFormatter
  */
-public abstract class ByteBuf {
+class MessageFormatter {
+    //定界符开始符
+    static final char DELIMITER_START = '{';
+    static final char DELIMITER_STOP = '}';
+    static final String DELIMITER_STR = "{}";
+    //转义字符
+    private static final char ESCAPE_CHAR = '\\';
+
     /**
-     * 创建一个指定容量大小的缓冲区
+     * 使用{}占位符的字符串，并进行替换
      *
-     * @param capacity 容量
-     * @return 缓冲区
+     * @param format 带占位符的字符串
+     * @param args   参数
+     * @return 替换完成的信息
      */
-    public static ByteBuf allocate(int capacity) {
-        return new HeapByteBuf(capacity);
+    public static String format(final String format, final Object... args) {
+        int i = 0;
+        int placeholderIdx;
+        StringBuilder builder = new StringBuilder(format.length() + 50);
+
+        int len;
+        for (len = 0; len < args.length; len++) {
+
+            placeholderIdx = format.indexOf(DELIMITER_STR, i);
+
+            if (placeholderIdx == -1) {
+                if (i == 0) {
+                    return format;
+                } else {
+                    builder.append(format, i, format.length());
+                    return builder.toString();
+                }
+            } else {
+                if (isEscapedDelimiter(format, placeholderIdx)) {
+                    if (!isDoubleEscaped(format, placeholderIdx)) {
+                        len--;
+                        builder.append(format, i, placeholderIdx - 1);
+                        builder.append(DELIMITER_START);
+                        i = placeholderIdx + 1;
+                    } else {
+                        builder.append(format, i, placeholderIdx - 1);
+                        deeplyAppendParameter(builder, args[len], new HashMap<Object[], Object>());
+                        i = placeholderIdx + 2;
+                    }
+                } else {
+                    builder.append(format, i, placeholderIdx);
+                    deeplyAppendParameter(builder, args[len], new HashMap<Object[], Object>());
+                    i = placeholderIdx + 2;
+                }
+            }
+        }
+        builder.append(format, i, format.length());
+        return builder.toString();
     }
 
-    /**
-     * 根据字节数组创建缓冲区
-     *
-     * @param data 字节数组
-     * @return 缓冲区
-     */
-    public static ByteBuf allocate(byte[] data) {
-        return new HeapByteBuf(data);
+
+    final static boolean isEscapedDelimiter(String messagePattern, int delimiterStartIndex) {
+        if (delimiterStartIndex == 0) {
+            return false;
+        }
+        char potentialEscape = messagePattern.charAt(delimiterStartIndex - 1);
+        if (potentialEscape == ESCAPE_CHAR) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public abstract boolean bigEndian();
-
-    public abstract ByteBuf bigEndian(boolean bigEndian);
-
-    public abstract int capacity();
-
-    public abstract ByteBuf capacity(int newCapacity);
-
-    public abstract int maxCapacity();
-
-    public abstract boolean isAutoExpand();
-
-    public abstract ByteBuf autoExpand(boolean autoExpand);
-
-    public abstract boolean isReadOnly();
-
-    public abstract ByteBuf readOnly(boolean readOnly);
-
-    public abstract ByteBuf clear();
-
-    public abstract ByteBuf put(byte v);
-
-    public abstract ByteBuf put(short v);
-
-    public abstract ByteBuf put(int v);
-
-    public abstract ByteBuf put(long v);
-
-    public abstract ByteBuf put(float v);
-
-    public abstract ByteBuf put(double v);
-
-    public abstract ByteBuf put(byte[] v);
-
-    @Deprecated
-    public abstract ByteBuf put(String charset, String... lines);
-
-    public abstract ByteBuf put(Charset charset, String... lines);
-
-    public abstract ByteBuf putUTF8(String... strings);
-
-    public abstract ByteBuf putGBK(String... strings);
-
-    public abstract ByteBuf put(ByteBuffer buffer);
-
-    public abstract ByteBuf append(String charset, String line);
-
-    public abstract ByteBuf get(byte[] data);
-
-    /**
-     * 检测缓存是否还有可读的
-     *
-     * @return 是否可读
-     */
-    public abstract boolean readyRead();
-
-    /**
-     * 重置写指针
-     *
-     * @return 缓冲区对象
-     */
-    public abstract ByteBuf resetWrite();
-
-    /**
-     * 重置读指针
-     *
-     * @return 缓冲区对象
-     */
-    public abstract ByteBuf resetRead();
-
-    /**
-     * 将缓冲区中的内容作为ByteBuffer缓冲区
-     *
-     * @return ByteBuffer缓冲区
-     */
-    public abstract ByteBuffer asByteBuffer();
-
-    /**
-     * 将缓冲区中的内容作为输入流
-     *
-     * @return 字节数组输入流
-     */
-    public abstract ByteArrayInputStream asInputStream();
-
-    /**
-     * 从输入流读取
-     *
-     * @param is 输入流
-     * @return 读取字节数
-     * @throws IOException 异常
-     */
-    public abstract int read(InputStream is) throws IOException;
-
-    /**
-     * 从文件读取
-     *
-     * @param fileName 文件名
-     * @return 读取字节数
-     * @throws IOException 异常
-     */
-    public abstract int read(String fileName) throws IOException;
-
-    /**
-     * 向输出流写入
-     *
-     * @param os 输入流
-     * @return 写入字节数
-     * @throws IOException 异常
-     */
-    public abstract int write(OutputStream os) throws IOException;
-
-    /**
-     * 像文件写入
-     *
-     * @param fileName 文件名
-     * @return 写入字节数
-     * @throws IOException 异常
-     */
-    public abstract int write(String fileName) throws IOException;
-
-    /**
-     * 使用ByteBuffer获取ByteBuf的内容
-     *
-     * @param buffer java缓冲区对象
-     * @return 缓冲区对象
-     */
-    public abstract ByteBuf get(ByteBuffer buffer);
-
-    /**
-     * 根据默认字符集将所有内容输出未字符串
-     *
-     * @return 字符串
-     */
-    public String asString() {
-        return asString(Charset.forName(System.getProperty("file.encoding")));
+    final static boolean isDoubleEscaped(String messagePattern, int delimeterStartIndex) {
+        if (delimeterStartIndex >= 2 && messagePattern.charAt(delimeterStartIndex - 2) == ESCAPE_CHAR) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    @Deprecated
-    public abstract String asString(String charset);
-    /**
-     * 将所有内容作为字符串输出
-     *
-     * @param charset 字符集
-     * @return 字符串
-     */
-    public abstract String asString(Charset charset);
-
-    /**
-     * 根据默认字符集从当前读指针开始读取指定长度的字符串
-     *
-     * @param length 长度
-     * @return 字符串
-     */
-    public String getString(int length) {
-        return getString(System.getProperty("file.encoding"), length);
+    private static void deeplyAppendParameter(StringBuilder sbuf, Object o, Map<Object[], Object> seenMap) {
+        if (o == null) {
+            sbuf.append("null");
+            return;
+        }
+        if (!o.getClass().isArray()) {
+            safeObjectAppend(sbuf, o);
+        } else {
+            if (o instanceof boolean[]) {
+                booleanArrayAppend(sbuf, (boolean[]) o);
+            } else if (o instanceof byte[]) {
+                byteArrayAppend(sbuf, (byte[]) o);
+            } else if (o instanceof char[]) {
+                charArrayAppend(sbuf, (char[]) o);
+            } else if (o instanceof short[]) {
+                shortArrayAppend(sbuf, (short[]) o);
+            } else if (o instanceof int[]) {
+                intArrayAppend(sbuf, (int[]) o);
+            } else if (o instanceof long[]) {
+                longArrayAppend(sbuf, (long[]) o);
+            } else if (o instanceof float[]) {
+                floatArrayAppend(sbuf, (float[]) o);
+            } else if (o instanceof double[]) {
+                doubleArrayAppend(sbuf, (double[]) o);
+            } else {
+                objectArrayAppend(sbuf, (Object[]) o, seenMap);
+            }
+        }
     }
 
-    /**
-     * 根据默认字符集从当前读指针开始读取指定长度的字符串
-     *
-     * @param charset 字符集
-     * @param length  长度
-     * @return 字符串
-     */
-    @Deprecated
-    public abstract String getString(String charset, int length);
-    public abstract String getString(Charset charset, int length);
+    private static void safeObjectAppend(StringBuilder builder, Object o) {
+        try {
+            String str = o.toString();
+            builder.append(str);
+        } catch (Throwable t) {
+            t.printStackTrace();
+            builder.append("[FAILED toString()]");
+        }
 
-    public abstract byte getByte();
+    }
 
-    public abstract short getShort();
+    private static void objectArrayAppend(StringBuilder sbuf, Object[] a, Map<Object[], Object> seenMap) {
+        sbuf.append('[');
+        if (!seenMap.containsKey(a)) {
+            seenMap.put(a, null);
+            final int len = a.length;
+            for (int i = 0; i < len; i++) {
+                deeplyAppendParameter(sbuf, a[i], seenMap);
+                if (i != len - 1)
+                    sbuf.append(", ");
+            }
+            seenMap.remove(a);
+        } else {
+            sbuf.append("...");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract int getInt();
+    private static void booleanArrayAppend(StringBuilder sbuf, boolean[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract long getLong();
+    private static void byteArrayAppend(StringBuilder sbuf, byte[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract float getFloat();
+    private static void charArrayAppend(StringBuilder sbuf, char[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract double getDouble();
+    private static void shortArrayAppend(StringBuilder sbuf, short[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract byte[] getBytes();
+    private static void intArrayAppend(StringBuilder sbuf, int[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract byte[] getBytes(int length);
+    private static void longArrayAppend(StringBuilder sbuf, long[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract int readableLength();
+    private static void floatArrayAppend(StringBuilder sbuf, float[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 
-    public abstract int writableLength();
+    private static void doubleArrayAppend(StringBuilder sbuf, double[] a) {
+        sbuf.append('[');
+        final int len = a.length;
+        for (int i = 0; i < len; i++) {
+            sbuf.append(a[i]);
+            if (i != len - 1)
+                sbuf.append(", ");
+        }
+        sbuf.append(']');
+    }
 }

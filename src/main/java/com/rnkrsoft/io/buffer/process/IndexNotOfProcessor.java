@@ -8,6 +8,6 @@ public class IndexNotOfProcessor implements ByteProcessor {
     }
 
     public boolean process(byte value) {
-        return value == byteToNotFind;
+        return value != byteToNotFind;
     }
 }

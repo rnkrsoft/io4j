@@ -20,7 +20,7 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     protected int writerIndex;
     protected int markedReaderIndex;
     protected int markedWriterIndex;
-    protected int maxCapacity;
+    protected final int maxCapacity;
 
     protected AbstractByteBuffer(int maxCapacity) {
         if (maxCapacity < 0) {
@@ -30,6 +30,8 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
     @Override
     public int writeString(String string, Charset charset) {
+        int length = (int) (string.length() * charset.newEncoder().maxBytesPerChar());
+        ensureWritable0(length);
         int written = setCharSequence(writerIndex, string, charset);
         writerIndex += written;
         return written;
@@ -51,6 +53,15 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return readString(length, Charset.forName("UTF-8"));
     }
 
+    @Override
+    public java.nio.ByteBuffer nioBuffer() {
+        return nioBuffer(readerIndex, readableBytesLength());
+    }
+
+    @Override
+    public java.nio.ByteBuffer[] nioBuffers() {
+        return nioBuffers(readerIndex, readableBytesLength());
+    }
 
     @Override
     public int writelnString(String string, Charset charset) {
@@ -88,19 +99,22 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public boolean getBoolean(int index) {
-        return false;
+        return getByte(index) == 1;
     }
 
     public byte getByte(int index) {
-        return 0;
+        checkIndex(index);
+        return getByte0(index);
     }
+
 
     public short getUnsignedByte(int index) {
         return 0;
     }
 
     public short getShort(int index) {
-        return 0;
+        checkIndex(index);
+        return getShort0(index);
     }
 
     public short getShortLE(int index) {
@@ -116,14 +130,14 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public int getMedium(int index) {
-        return 0;
+        int value = getUnsignedMedium(index);
+        if ((value & 0x800000) != 0) {
+            value |= 0xff000000;
+        }
+        return value;
     }
 
     public int getMediumLE(int index) {
-        return 0;
-    }
-
-    public int getUnsignedMedium(int index) {
         return 0;
     }
 
@@ -132,7 +146,8 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public int getInt(int index) {
-        return 0;
+        checkIndex(index);
+        return getInt0(index);
     }
 
     public int getIntLE(int index) {
@@ -148,7 +163,8 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public long getLong(int index) {
-        return 0;
+        checkIndex(index);
+        return getLong0(index);
     }
 
     public long getLongLE(int index) {
@@ -156,63 +172,59 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public char getChar(int index) {
-        return 0;
+        return (char) getShort(index);
     }
 
     public float getFloat(int index) {
-        return 0;
+        return Float.intBitsToFloat(getInt(index));
     }
 
     public double getDouble(int index) {
-        return 0;
+        return Double.longBitsToDouble(getLong(index));
     }
 
     public ByteBuffer getBytes(int index, ByteBuffer dst) {
-        return null;
+        getBytes(index, dst, dst.writableBytesLength());
+        return this;
     }
 
     public ByteBuffer getBytes(int index, ByteBuffer dst, int length) {
-        return null;
-    }
-
-    public ByteBuffer getBytes(int index, ByteBuffer dst, int dstIndex, int length) {
-        return null;
+        getBytes(index, dst, dst.writerIndex(), length);
+        dst.writerIndex(dst.writerIndex() + length);
+        return this;
     }
 
     public ByteBuffer getBytes(int index, byte[] dst) {
-        return null;
+        getBytes(index, dst, 0, dst.length);
+        return this;
     }
 
-    public ByteBuffer getBytes(int index, byte[] dst, int dstIndex, int length) {
-        return null;
+
+
+    public int getBytes(int index, OutputStream out, int length) throws IOException {
+        out.write(array(), index, length);
+        return length;
     }
 
-    public ByteBuffer getBytes(int index, java.nio.ByteBuffer dst) {
-        return null;
-    }
-
-    public ByteBuffer getBytes(int index, OutputStream out, int length) throws IOException {
-        return null;
-    }
-
-    public ByteBuffer getBytes(int index, GatheringByteChannel out, int length) throws IOException {
-        return null;
-    }
-
-    public int getBytes(int index, FileChannel out, long position, int length) throws IOException {
-        return 0;
-    }
 
     public String getString(int index, int length, Charset charset) {
-        return null;
+        if (charset == Charset.forName("US-ASCII") || charset == Charset.forName("ISO_8859_1")){
+            return null;
+        }else{
+            return toString(index, length, charset);
+        }
     }
 
     public boolean readBoolean() {
-        return false;
+        return readByte() == 1;
     }
 
     public byte readByte() {
-        return 0;
+        checkReadableBytes0(1);
+        int i = readerIndex;
+        byte v = getByte0(i);
+        readerIndex = i + 1;
+        return v;
     }
 
     public short readUnsignedByte() {
@@ -220,7 +232,10 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public short readShort() {
-        return 0;
+        checkReadableBytes0(2);
+        short v = getShort0(readerIndex);
+        readerIndex += 2;
+        return v;
     }
 
     public short readShortLE() {
@@ -236,7 +251,10 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public int readMedium() {
-        return 0;
+        checkReadableBytes0(3);
+        int v = getMedium(readerIndex);
+        readerIndex += 3;
+        return v;
     }
 
     public int readMediumLE() {
@@ -252,7 +270,10 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public int readInt() {
-        return 0;
+        checkReadableBytes0(4);
+        int v = getInt0(readerIndex);
+        readerIndex += 4;
+        return v;
     }
 
     public int readIntLE() {
@@ -268,7 +289,10 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public long readLong() {
-        return 0;
+        checkReadableBytes0(8);
+        long v = getLong0(readerIndex);
+        readerIndex += 8;
+        return v;
     }
 
     public long readLongLE() {
@@ -276,15 +300,15 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public char readChar() {
-        return 0;
+        return (char) readShort();
     }
 
     public float readFloat() {
-        return 0;
+        return Float.intBitsToFloat(readInt());
     }
 
     public double readDouble() {
-        return 0;
+        return Double.longBitsToDouble(readLong());
     }
 
     public ByteBuffer readBytes(int length) {
@@ -343,21 +367,32 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return null;
     }
 
-    public ByteBuffer setByte(int index, int value) {
-        return null;
+    public ByteBuffer setByte(int index, byte value) {
+        checkIndex(index);
+        setByte0(index, value);
+        return this;
     }
 
-    public ByteBuffer setShort(int index, int value) {
-        return null;
+
+
+    public ByteBuffer setShort(int index, short value) {
+        checkIndex(index);
+        setShort0(index, value);
+        return this;
     }
+
+
 
     public ByteBuffer setShortLE(int index, int value) {
         return null;
     }
 
     public ByteBuffer setMedium(int index, int value) {
-        return null;
+        checkIndex(index);
+        setMedium0(index, value);
+        return this;
     }
+
 
     public ByteBuffer setMediumLE(int index, int value) {
         return null;
@@ -368,28 +403,40 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public ByteBuffer setInt(int index, int value) {
-        return null;
+        checkIndex(index);
+        setInt0(index, value);
+        return this;
+    }
+
+
+
+    public ByteBuffer setChar(int index, char value) {
+        checkIndex(index);
+        setInt0(index, value);
+        return this;
     }
 
     public ByteBuffer setLong(int index, long value) {
-        return null;
+        checkIndex(index);
+        setLong0(index, value);
+        return this;
     }
 
-    public ByteBuffer setChar(int index, int value) {
-        return null;
-    }
 
     public ByteBuffer setLongLE(int index, long value) {
         return null;
     }
 
+
     public ByteBuffer setFloat(int index, float value) {
-        return null;
+        return setInt(index, Float.floatToRawIntBits(value));
     }
 
+
     public ByteBuffer setDouble(int index, double value) {
-        return null;
+        return setLong(index, Double.doubleToRawLongBits(value));
     }
+
 
     public ByteBuffer setBytes(int index, ByteBuffer src) {
         return null;
@@ -427,28 +474,72 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return 0;
     }
 
+    @Override
+    public int setCharSequence(int index, CharSequence sequence, Charset charset) {
+       return ByteBufferUtilities.writeUtf8(this, index, sequence, sequence.length());
+    }
+
+    @Override
     public ByteBuffer setZero(int index, int length) {
-        return null;
+        if (length == 0) {
+            return this;
+        }
+
+        checkIndex(index, length);
+
+        int nLong = length >>> 3;
+        int nBytes = length & 7;
+        for (int i = nLong; i > 0; i --) {
+            setLong0(index, 0);
+            index += 8;
+        }
+        if (nBytes == 4) {
+            setInt0(index, 0);
+            // Not need to update the index as we not will use it after this.
+        } else if (nBytes < 4) {
+            for (int i = nBytes; i > 0; i --) {
+                setByte0(index, (byte) 0);
+                index ++;
+            }
+        } else {
+            setInt0(index, 0);
+            index += 4;
+            for (int i = nBytes - 4; i > 0; i --) {
+                setByte0(index, (byte) 0);
+                index ++;
+            }
+        }
+        return this;
     }
 
     public ByteBuffer writeBoolean(boolean value) {
-        return null;
+        writeByte(value ? (byte)1 : (byte)0);
+        return this;
     }
 
-    public ByteBuffer writeByte(int value) {
-        return null;
+    public ByteBuffer writeByte(byte value) {
+        ensureWritable0(1);
+        setByte0(writerIndex, value);
+        writerIndex++;
+        return this;
     }
 
     public ByteBuffer writeShortLE(int value) {
         return null;
     }
 
-    public ByteBuffer writeShort(int value) {
-        return null;
+    public ByteBuffer writeShort(short value) {
+        ensureWritable0(2);
+        setShort0(writerIndex, value);
+        writerIndex += 2;
+        return this;
     }
 
     public ByteBuffer writeMedium(int value) {
-        return null;
+        ensureWritable0(3);
+        setMedium0(writerIndex, value);
+        writerIndex += 3;
+        return this;
     }
 
     public ByteBuffer writeMediumLE(int value) {
@@ -456,7 +547,10 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public ByteBuffer writeInt(int value) {
-        return null;
+        ensureWritable0(4);
+        setInt0(writerIndex, value);
+        writerIndex += 4;
+        return this;
     }
 
     public ByteBuffer writeIntLE(int value) {
@@ -468,19 +562,29 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public ByteBuffer writeLong(long value) {
-        return null;
+        ensureWritable0(8);
+        setLong0(writerIndex, value);
+        writerIndex += 8;
+        return this;
     }
 
-    public ByteBuffer writeChar(int value) {
-        return null;
+    public ByteBuffer writeChar(char value) {
+        writeShort((short) value);
+        return this;
     }
 
     public ByteBuffer writeFloat(float value) {
-        return null;
+        ensureWritable0(4);
+        setFloat(writerIndex, value);
+        writerIndex += 4;
+        return this;
     }
 
     public ByteBuffer writeDouble(double value) {
-        return null;
+        ensureWritable0(8);
+        setDouble(writerIndex, value);
+        writerIndex += 8;
+        return this;
     }
 
     public ByteBuffer writeBytes(ByteBuffer src) {
@@ -563,7 +667,26 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return this;
     }
     public String toString(int index, int length, Charset charset) {
-        return null;
+        if (length == 0){
+            //fixme
+            return "";
+        }
+        //TODO 使用一个缓存池来进行操作
+        final byte[] array;
+        final int offset;
+        if (hasArray()){//载体是数组的直接使用数组引用构建字符串
+            array = this.array();
+            offset = this.arrayOffset() + index;
+        }else{//载体不是数组，则为JDK ByteBuffer，需要使用缓存来保存1024字节以下的字节数组缓存，避免在堆中反复回收
+            array = ByteBuffers.getBytes(length);
+            offset = 0;
+            //使用获取方法获取字节数组内容
+            getBytes(index, array, 0, length);
+        }
+        if(charset == Charset.forName("US-ASCII")){
+            return new String(array, 0, offset, length);
+        }
+        return new String(array, offset, length, charset);
     }
     protected final void discardMarks() {
         markedReaderIndex = markedWriterIndex = 0;
@@ -597,15 +720,15 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return this.writerIndex;
     }
 
-    public int readableBytes() {
+    public int readableBytesLength() {
         return this.writerIndex - this.readerIndex;
     }
 
-    public int writableBytes() {
+    public int writableBytesLength() {
         return capacity() - this.writerIndex;
     }
 
-    public int maxWritableBytes() {
+    public int maxWritableBytesLength() {
         return this.maxCapacity - this.writerIndex;
     }
 
@@ -637,15 +760,34 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return null;
     }
 
-    public ByteBuffer ensureWritable(int minWritableBytes) {
-        return null;
-    }
 
     public int ensureWritable(int minWritableBytes, boolean force) {
         return 0;
     }
 
+    public ByteBuffer ensureWritable(int minWritableBytes) {
+        if (minWritableBytes <= 0){
+            throw new IllegalArgumentException("新容量为0或者负数");
+        }
+        ensureWritable0(minWritableBytes);
+        return this;
+    }
+
+    final void ensureWritable0(int minWritableBytes) {
+        if (minWritableBytes <= writableBytesLength()) {
+            return;
+        }
+        //按照一定的分段函数进行计算新的容量
+        int newCapacity = ByteBufferUtilities.calcNewCapacity(capacity(), writerIndex, minWritableBytes, maxCapacity);
+        //调整容量
+        capacity(newCapacity);
+    }
     public int indexOf(int fromIndex, int toIndex, byte value) {
+        return ByteBufferFinder.indexOf(this, fromIndex, toIndex, value);
+    }
+
+    @Override
+    public int indexOf(int fromIndex, int toIndex, byte[] value) {
         return ByteBufferFinder.indexOf(this, fromIndex, toIndex, value);
     }
 
@@ -662,27 +804,58 @@ abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     public int forEachByte(ByteProcessor processor) {
-        return 0;
+        return forEachByte(0, capacity(), processor);
     }
 
+    @Override
     public int forEachByte(int index, int length, ByteProcessor processor) {
-        return 0;
+        int start = index;
+        int end = index + length;
+        for (; start < end; ++start) {
+            if (!processor.process(getByte0(start))) {
+                return start;
+            }
+        }
+
+        return -1;
     }
 
-    public int forEachByteDesc(ByteProcessor processor) {
-        return 0;
+    @Override
+    public int forEachByte(final int index, int length, ByteProcessor[] processors) {
+        int processorSize = processors.length;
+        int firstMatchedIndex = -1;
+        int currentProcessIndex = 0;
+        for (int i = index; i < length; i++) {
+            if (processors[currentProcessIndex].process(getByte0(i))){
+                if (currentProcessIndex == 0){
+                    firstMatchedIndex = i;
+                }
+                currentProcessIndex++;
+                if (currentProcessIndex == processorSize){
+                    return firstMatchedIndex;
+                }
+            }
+        }
+        return -1;
     }
 
+
+    @Override
     public int forEachByteDesc(int index, int length, ByteProcessor processor) {
         return 0;
     }
 
+
+    public int forEachByteDesc(ByteProcessor processor) {
+        return forEachByteDesc(0, capacity(), processor);
+    }
+
     public ByteBuffer copy() {
-        return copy(readerIndex, readableBytes());
+        return copy(readerIndex, readableBytesLength());
     }
 
     public ByteBuffer slice() {
-        return slice(readerIndex, readableBytes());
+        return slice(readerIndex, readableBytesLength());
     }
 
     public ByteBuffer retainedSlice() {
@@ -701,32 +874,8 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return null;
     }
 
-    public int nioBufferCount() {
-        return 0;
-    }
-
-    public java.nio.ByteBuffer nioBuffer() {
-        return null;
-    }
-
-    public java.nio.ByteBuffer nioBuffer(int index, int length) {
-        return null;
-    }
-
-    public java.nio.ByteBuffer internalNioBuffer(int index, int length) {
-        return null;
-    }
-
-    public java.nio.ByteBuffer[] nioBuffers() {
-        return new java.nio.ByteBuffer[0];
-    }
-
-    public java.nio.ByteBuffer[] nioBuffers(int index, int length) {
-        return new java.nio.ByteBuffer[0];
-    }
-
     public String toString(Charset charset) {
-        return toString(readerIndex, readableBytes(), charset);
+        return toString(readerIndex, readableBytesLength(), charset);
     }
 
     protected void checkIndex0(int index, int fieldLength) {
@@ -781,4 +930,20 @@ abstract class AbstractByteBuffer implements ByteBuffer {
         return (index | length | (index + length) | (capacity - (index + length))) < 0;
     }
 
+
+
+
+
+    /*=========================================================================================================*/
+    protected abstract byte getByte0(int index);
+    protected abstract short getShort0(int index);
+//    protected abstract int getMedium0(int index);
+    protected abstract int getInt0(int index);
+    protected abstract long getLong0(int index);
+
+    protected abstract void setByte0(int index, byte value);
+    protected abstract void setShort0(int index, short value);
+    protected abstract void setMedium0(int index, int value);
+    protected abstract void setInt0(int index, int value);
+    protected abstract void setLong0(int index, long value);
 }

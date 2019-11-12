@@ -18,6 +18,32 @@ public abstract class PooledByteBuffer extends AbstractReferenceCountedByteBuffe
         return null;
     }
 
+
+    public int nioBufferCount() {
+        return 0;
+    }
+
+    public java.nio.ByteBuffer nioBuffer() {
+        return null;
+    }
+
+    public java.nio.ByteBuffer nioBuffer(int index, int length) {
+        return null;
+    }
+
+    public java.nio.ByteBuffer internalNioBuffer(int index, int length) {
+        return null;
+    }
+
+    public java.nio.ByteBuffer[] nioBuffers() {
+        return new java.nio.ByteBuffer[0];
+    }
+
+    public java.nio.ByteBuffer[] nioBuffers(int index, int length) {
+        return new java.nio.ByteBuffer[0];
+    }
+
+
     public boolean isDirect() {
         return false;
     }
@@ -51,6 +77,17 @@ public abstract class PooledByteBuffer extends AbstractReferenceCountedByteBuffe
     }
 
     public String toString(int index, int length, Charset charset) {
+        return null;
+    }
+
+    @Override
+    protected void deallocate() {
+
+    }
+
+
+    @Override
+    public ReferenceCounted touch(Object hint) {
         return null;
     }
 }

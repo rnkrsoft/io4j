@@ -204,7 +204,8 @@
  */
 package com.rnkrsoft.io.file;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+
+import com.rnkrsoft.io.buffer.ByteBuffer;
 
 import java.io.File;
 import java.io.IOException;
@@ -251,10 +252,10 @@ public interface FileTransaction {
     /**
      * 写入缓冲区，对事务的活动时间进行更新
      *
-     * @param byteBuf 字节缓冲区
+     * @param buffer 字节缓冲区
      * @throws IOException IO异常
      */
-    void write(ByteBuf byteBuf) throws IOException;
+    void write(ByteBuffer buffer) throws IOException;
 
     /**
      * 读取指定文件版本号的文件数据为字节缓冲区，对事务的活动时间进行更新
@@ -262,7 +263,7 @@ public interface FileTransaction {
      * @return 字节缓冲区
      * @throws IOException IO异常
      */
-    ByteBuf read() throws IOException;
+    ByteBuffer read() throws IOException;
 
     /**
      * 打开当前文件为输入流，对事务的活动时间进行更新

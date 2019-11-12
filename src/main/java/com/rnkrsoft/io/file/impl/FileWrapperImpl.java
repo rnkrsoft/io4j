@@ -204,7 +204,9 @@
  */
 package com.rnkrsoft.io.file.impl;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuffer;
+import com.rnkrsoft.io.buffer.ByteBufferType;
+import com.rnkrsoft.io.buffer.ByteBuffers;
 import com.rnkrsoft.io.file.FileWrapper;
 import lombok.Getter;
 
@@ -231,12 +233,12 @@ class FileWrapperImpl implements FileWrapper {
     }
 
     @Override
-    public ByteBuf read() throws IOException {
+    public ByteBuffer read() throws IOException {
         InputStream is = null;
         try {
             is =new FileInputStream(file);
-            ByteBuf byteBuf = ByteBuf.allocate(1024).autoExpand(true);
-            byteBuf.read(is);
+            ByteBuffer byteBuf = ByteBuffers.newBuffer(ByteBufferType.HEAP, false, 1024, 2 * 1024 * 1024);
+            byteBuf.load(is);
             return byteBuf;
         } finally {
             if (is != null) {

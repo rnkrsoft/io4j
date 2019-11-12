@@ -204,7 +204,9 @@
  */
 package com.rnkrsoft.io.file.impl;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuffer;
+import com.rnkrsoft.io.buffer.ByteBufferType;
+import com.rnkrsoft.io.buffer.ByteBuffers;
 import com.rnkrsoft.io.file.DynamicFile;
 import com.rnkrsoft.io.file.FileTransaction;
 import com.rnkrsoft.message.MessageFormatter;
@@ -213,8 +215,10 @@ import com.rnkrsoft.time.FastDateFormat;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.UUID;
 
 /**
@@ -268,34 +272,29 @@ class FileTransactionImpl implements FileTransaction {
     }
 
     @Override
-    public void write(ByteBuf byteBuf) throws IOException {
-        FileOutputStream fos = null;
+    public void write(ByteBuffer byteBuf) throws IOException {
+        FileOutputStream os = null;
         try {
-            fos = new FileOutputStream(tempFile);
-            byteBuf.write(fos);
+            os = new FileOutputStream(tempFile);
+            FileChannel fileChannel = os.getChannel();
+            byteBuf.getBytes(0, fileChannel, 0, byteBuf.readableBytesLength());
             this.lastActiveTime = System.currentTimeMillis();
         } finally {
-            if (fos != null) {
-                fos.flush();
-                fos.close();
-                fos = null;
-            }
+            IOUtils.closeQuietly(os);
         }
     }
 
     @Override
-    public ByteBuf read() throws IOException {
-        InputStream is = null;
+    public ByteBuffer read() throws IOException {
+        FileInputStream is = null;
         try {
             is = new FileInputStream(getFile());
-            ByteBuf byteBuf = ByteBuf.allocate(1024).autoExpand(true);
-            byteBuf.read(is);
+            ByteBuffer byteBuf = ByteBuffers.newBuffer(ByteBufferType.HEAP, false, 1024, 2 * 1024 * 1024);
+            FileChannel fileChannel = is.getChannel();
+            byteBuf.writeBytes(fileChannel, 0, (int) fileChannel.size());
             return byteBuf;
         } finally {
-            if (is != null) {
-                is.close();
-                is = null;
-            }
+            IOUtils.closeQuietly(is);
         }
     }
 

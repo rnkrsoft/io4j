@@ -11,65 +11,6 @@ import java.nio.charset.Charset;
  * Created by rnkrsoft on 2019/10/30.
  */
 public interface ByteBufferReadable {
-    boolean getBoolean(int index);
-
-    byte getByte(int index);
-
-    short getUnsignedByte(int index);
-
-    short getShort(int index);
-
-    short getShortLE(int index);
-
-    int getUnsignedShort(int index);
-
-    int getUnsignedShortLE(int index);
-
-    int getMedium(int index);
-
-    int getMediumLE(int index);
-
-    int getUnsignedMedium(int index);
-
-    int getUnsignedMediumLE(int index);
-
-    int getInt(int index);
-
-    int getIntLE(int index);
-
-    long getUnsignedInt(int index);
-
-    long getUnsignedIntLE(int index);
-
-    long getLong(int index);
-
-    long getLongLE(int index);
-
-    char getChar(int index);
-
-    float getFloat(int index);
-
-    double getDouble(int index);
-
-    ByteBuffer getBytes(int index, ByteBuffer dst);
-
-    ByteBuffer getBytes(int index, ByteBuffer dst, int length);
-
-    ByteBuffer getBytes(int index, ByteBuffer dst, int dstIndex, int length);
-
-    ByteBuffer getBytes(int index, byte[] dst);
-
-    ByteBuffer getBytes(int index, byte[] dst, int dstIndex, int length);
-
-    ByteBuffer getBytes(int index, java.nio.ByteBuffer dst);
-
-    ByteBuffer getBytes(int index, OutputStream out, int length) throws IOException;
-
-    ByteBuffer getBytes(int index, GatheringByteChannel out, int length) throws IOException;
-
-    int getBytes(int index, FileChannel out, long position, int length) throws IOException;
-
-    String getString(int index, int length, Charset charset);
 
     boolean readBoolean();
 

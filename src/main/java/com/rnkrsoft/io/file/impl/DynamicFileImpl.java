@@ -204,7 +204,7 @@
  */
 package com.rnkrsoft.io.file.impl;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuffer;
 import com.rnkrsoft.io.file.DynamicFile;
 import com.rnkrsoft.io.file.FileTransaction;
 import com.rnkrsoft.io.file.FileWrapper;
@@ -263,7 +263,7 @@ public final class DynamicFileImpl extends DynamicFile {
     }
 
     @Override
-    public ByteBuf read(long version) throws IOException {
+    public ByteBuffer read(long version) throws IOException {
         FileWrapper fileWrapper = getFile(version);
         return fileWrapper.read();
     }

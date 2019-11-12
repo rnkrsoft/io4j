@@ -8,6 +8,6 @@ public class IndexOfProcessor implements ByteProcessor {
     }
 
     public boolean process(byte value) {
-        return value != byteToFind;
+        return value == byteToFind;
     }
 }

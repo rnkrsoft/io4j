@@ -1,6 +1,6 @@
 package com.rnkrsoft.io.file.impl;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuffer;
 import com.rnkrsoft.io.file.DynamicFile;
 import com.rnkrsoft.io.file.FileTransaction;
 import com.rnkrsoft.io.file.FileWrapper;
@@ -30,18 +30,18 @@ public class DynamicFileImplTest {
         System.out.println(file);
         fileTransaction.write("this is a test" + new FastDate().toString(DateStyle.CHINESE_FORMAT1));
         System.out.println("-------------------");
-        ByteBuf byteBuf1 = fileTransaction.read();
-        System.out.println(byteBuf1.asString(Charset.forName("UTF-8")));
+        ByteBuffer byteBuf1 = fileTransaction.read();
+        System.out.println(byteBuf1.getString(0, byteBuf1.readableBytesLength(), Charset.forName("UTF-8")));
         txId = fileTransaction.getTransactionId();
         FileTransaction fileTransaction1 = dynamicFile.getTransaction(txId);
         Assert.assertEquals(false, fileTransaction1.isFinished());
         fileTransaction.commit();
         Assert.assertEquals(true, fileTransaction1.isFinished());
         System.out.println("-------------------");
-        ByteBuf byteBuf = fileTransaction.read();
-        System.out.println(byteBuf.asString(Charset.forName("UTF-8")));
+        ByteBuffer byteBuf = fileTransaction.read();
+        System.out.println(byteBuf.getString(0, byteBuf1.readableBytesLength(), Charset.forName("UTF-8")));
         FileWrapper fileWrapper = dynamicFile.getFile();
         System.out.println(fileWrapper.getVersion());
-        System.out.println(fileWrapper.read().asString(Charset.forName("UTF-8")));
+        System.out.println(fileWrapper.read().getString(0, byteBuf1.readableBytesLength(), Charset.forName("UTF-8")));
     }
 }

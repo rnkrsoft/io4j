@@ -204,7 +204,7 @@
  */
 package com.rnkrsoft.io.file;
 
-import com.rnkrsoft.io.buffer.ByteBuf;
+import com.rnkrsoft.io.buffer.ByteBuffer;
 
 import java.io.File;
 import java.io.IOException;
@@ -229,7 +229,7 @@ public interface FileWrapper {
      * @return 字节缓冲区
      * @throws IOException IO异常
      */
-    ByteBuf read() throws IOException;
+    ByteBuffer read() throws IOException;
 
     /**
      * 打开当前文件为输入流
