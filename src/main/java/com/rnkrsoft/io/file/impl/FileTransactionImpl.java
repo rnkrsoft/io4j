@@ -204,9 +204,9 @@
  */
 package com.rnkrsoft.io.file.impl;
 
+import com.rnkrsoft.io.buffer.util.DiskSizeUnit;
 import com.rnkrsoft.io.buffer.ByteBuffer;
-import com.rnkrsoft.io.buffer.ByteBufferType;
-import com.rnkrsoft.io.buffer.ByteBuffers;
+import com.rnkrsoft.io.buffer.Unpooled;
 import com.rnkrsoft.io.file.DynamicFile;
 import com.rnkrsoft.io.file.FileTransaction;
 import com.rnkrsoft.message.MessageFormatter;
@@ -277,7 +277,7 @@ class FileTransactionImpl implements FileTransaction {
         try {
             os = new FileOutputStream(tempFile);
             FileChannel fileChannel = os.getChannel();
-            byteBuf.getBytes(0, fileChannel, 0, byteBuf.readableBytesLength());
+            byteBuf.getBytes(0, fileChannel, byteBuf.readableBytes());
             this.lastActiveTime = System.currentTimeMillis();
         } finally {
             IOUtils.closeQuietly(os);
@@ -289,9 +289,9 @@ class FileTransactionImpl implements FileTransaction {
         FileInputStream is = null;
         try {
             is = new FileInputStream(getFile());
-            ByteBuffer byteBuf = ByteBuffers.newBuffer(ByteBufferType.HEAP, false, 1024, 2 * 1024 * 1024);
+            ByteBuffer byteBuf = Unpooled.buffer(DiskSizeUnit.nKB(1024), DiskSizeUnit.nMB(4));
             FileChannel fileChannel = is.getChannel();
-            byteBuf.writeBytes(fileChannel, 0, (int) fileChannel.size());
+            byteBuf.writeBytes(fileChannel, (int) fileChannel.size());
             return byteBuf;
         } finally {
             IOUtils.closeQuietly(is);
