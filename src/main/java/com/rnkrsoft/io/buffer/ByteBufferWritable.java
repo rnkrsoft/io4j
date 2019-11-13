@@ -17,7 +17,7 @@ public interface ByteBufferWritable {
      * and increases the {@code writerIndex} by {@code 1} in this buffer.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 1}
+     *         if {@code this.writableBytesLength} is less than {@code 1}
      */
     ByteBuffer writeBoolean(boolean value);
 
@@ -27,7 +27,7 @@ public interface ByteBufferWritable {
      * The 24 high-order bits of the specified value are ignored.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 1}
+     *         if {@code this.writableBytesLength} is less than {@code 1}
      */
     ByteBuffer writeByte(int value);
 
@@ -37,7 +37,7 @@ public interface ByteBufferWritable {
      * in this buffer.  The 16 high-order bits of the specified value are ignored.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 2}
+     *         if {@code this.writableBytesLength} is less than {@code 2}
      */
     ByteBuffer writeShort(int value);
 
@@ -47,7 +47,7 @@ public interface ByteBufferWritable {
      * in this buffer.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 3}
+     *         if {@code this.writableBytesLength} is less than {@code 3}
      */
     ByteBuffer writeMedium(int value);
 
@@ -56,7 +56,7 @@ public interface ByteBufferWritable {
      * and increases the {@code writerIndex} by {@code 4} in this buffer.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 4}
+     *         if {@code this.writableBytesLength} is less than {@code 4}
      */
     ByteBuffer writeInt(int value);
 
@@ -66,7 +66,7 @@ public interface ByteBufferWritable {
      * in this buffer.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 8}
+     *         if {@code this.writableBytesLength} is less than {@code 8}
      */
     ByteBuffer writeLong(long value);
 
@@ -76,7 +76,7 @@ public interface ByteBufferWritable {
      * in this buffer.  The 16 high-order bits of the specified value are ignored.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 2}
+     *         if {@code this.writableBytesLength} is less than {@code 2}
      */
     ByteBuffer writeChar(int value);
 
@@ -86,7 +86,7 @@ public interface ByteBufferWritable {
      * in this buffer.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 4}
+     *         if {@code this.writableBytesLength} is less than {@code 4}
      */
     ByteBuffer writeFloat(float value);
 
@@ -96,7 +96,7 @@ public interface ByteBufferWritable {
      * in this buffer.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code this.writableBytes} is less than {@code 8}
+     *         if {@code this.writableBytesLength} is less than {@code 8}
      */
     ByteBuffer writeDouble(double value);
 
@@ -112,7 +112,7 @@ public interface ByteBufferWritable {
      *
      * @throws IndexOutOfBoundsException
      *         if {@code src.readableBytes} is greater than
-     *            {@code this.writableBytes}
+     *            {@code this.writableBytesLength}
      */
     ByteBuffer writeBytes(ByteBuffer src);
 
@@ -128,7 +128,7 @@ public interface ByteBufferWritable {
      * @param length the number of bytes to transfer
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code length} is greater than {@code this.writableBytes} or
+     *         if {@code length} is greater than {@code this.writableBytesLength} or
      *         if {@code length} is greater then {@code src.readableBytes}
      */
     ByteBuffer writeBytes(ByteBuffer src, int length);
@@ -145,7 +145,7 @@ public interface ByteBufferWritable {
      *         if the specified {@code srcIndex} is less than {@code 0},
      *         if {@code srcIndex + length} is greater than
      *            {@code src.capacity}, or
-     *         if {@code length} is greater than {@code this.writableBytes}
+     *         if {@code length} is greater than {@code this.writableBytesLength}
      */
     ByteBuffer writeBytes(ByteBuffer src, int srcIndex, int length);
 
@@ -155,7 +155,7 @@ public interface ByteBufferWritable {
      * by the number of the transferred bytes (= {@code src.length}).
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code src.length} is greater than {@code this.writableBytes}
+     *         if {@code src.length} is greater than {@code this.writableBytesLength}
      */
     ByteBuffer writeBytes(byte[] src);
 
@@ -171,7 +171,7 @@ public interface ByteBufferWritable {
      *         if the specified {@code srcIndex} is less than {@code 0},
      *         if {@code srcIndex + length} is greater than
      *            {@code src.length}, or
-     *         if {@code length} is greater than {@code this.writableBytes}
+     *         if {@code length} is greater than {@code this.writableBytesLength}
      */
     ByteBuffer writeBytes(byte[] src, int srcIndex, int length);
 
@@ -183,7 +183,7 @@ public interface ByteBufferWritable {
      *
      * @throws IndexOutOfBoundsException
      *         if {@code src.remaining()} is greater than
-     *            {@code this.writableBytes}
+     *            {@code this.writableBytesLength}
      */
     ByteBuffer writeBytes(java.nio.ByteBuffer src);
 
@@ -197,7 +197,7 @@ public interface ByteBufferWritable {
      * @return the actual number of bytes read in from the specified stream
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code length} is greater than {@code this.writableBytes}
+     *         if {@code length} is greater than {@code this.writableBytesLength}
      * @throws IOException
      *         if the specified stream threw an exception during I/O
      */
@@ -213,7 +213,7 @@ public interface ByteBufferWritable {
      * @return the actual number of bytes read in from the specified channel
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code length} is greater than {@code this.writableBytes}
+     *         if {@code length} is greater than {@code this.writableBytesLength}
      * @throws IOException
      *         if the specified channel threw an exception during I/O
      */
@@ -225,7 +225,19 @@ public interface ByteBufferWritable {
      * specified {@code length}.
      *
      * @param length the number of <tt>NUL</tt>s to write to the buffer
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
+     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytesLength}
      */
     ByteBuffer writeZero(int length);
+
+
+    /**
+     *
+     * @param string
+     * @param charset
+     * @return
+     */
+    ByteBuffer writeString(String string, Charset charset);
+    ByteBuffer writeStringUTF8(String string);
+    ByteBuffer writelnString(String string, Charset charset);
+    ByteBuffer writelnStringUTF8(String string);
 }

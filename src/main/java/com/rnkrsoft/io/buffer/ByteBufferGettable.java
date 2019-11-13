@@ -167,7 +167,7 @@ public interface ByteBufferGettable {
      *
      * @throws IndexOutOfBoundsException
      *         if the specified {@code index} is less than {@code 0} or
-     *         if {@code index + dst.writableBytes} is greater than
+     *         if {@code index + dst.writableBytesLength} is greater than
      *            {@code this.capacity}
      */
     ByteBuffer getBytes(int index, ByteBuffer dst);
@@ -188,7 +188,7 @@ public interface ByteBufferGettable {
      *         if the specified {@code index} is less than {@code 0},
      *         if {@code index + length} is greater than
      *            {@code this.capacity}, or
-     *         if {@code length} is greater than {@code dst.writableBytes}
+     *         if {@code length} is greater than {@code dst.writableBytesLength}
      */
     ByteBuffer getBytes(int index, ByteBuffer dst, int length);
 

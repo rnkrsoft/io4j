@@ -20,6 +20,7 @@ import com.rnkrsoft.io.buffer.util.internal.EmptyArrays;
 import com.rnkrsoft.io.buffer.util.internal.PlatformDependent;
 import com.rnkrsoft.io.buffer.util.internal.StringUtil;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteOrder;
@@ -31,7 +32,7 @@ import java.nio.charset.Charset;
 /**
  * An empty {@link ByteBuffer} whose capacity and maximum capacity are all {@code 0}.
  */
-public final class EmptyByteBuffer extends ByteBuffer {
+public final class EmptyByteBuffer implements ByteBuffer {
 
     private static final java.nio.ByteBuffer EMPTY_BYTE_BUFFER = java.nio.ByteBuffer.allocateDirect(0);
     private static final long EMPTY_BYTE_BUFFER_ADDRESS;
@@ -148,17 +149,17 @@ public final class EmptyByteBuffer extends ByteBuffer {
     }
 
     @Override
-    public int readableBytes() {
+    public int readableBytesLength() {
         return 0;
     }
 
     @Override
-    public int writableBytes() {
+    public int writableBytesLength() {
         return 0;
     }
 
     @Override
-    public int maxWritableBytes() {
+    public int maxWritableBytesLength() {
         return 0;
     }
 
@@ -298,7 +299,7 @@ public final class EmptyByteBuffer extends ByteBuffer {
 
     @Override
     public ByteBuffer getBytes(int index, ByteBuffer dst) {
-        return checkIndex(index, dst.writableBytes());
+        return checkIndex(index, dst.writableBytesLength());
     }
 
     @Override
@@ -506,7 +507,7 @@ public final class EmptyByteBuffer extends ByteBuffer {
 
     @Override
     public ByteBuffer readBytes(ByteBuffer dst) {
-        return checkLength(dst.writableBytes());
+        return checkLength(dst.writableBytesLength());
     }
 
     @Override
@@ -543,6 +544,16 @@ public final class EmptyByteBuffer extends ByteBuffer {
     public int readBytes(GatheringByteChannel out, int length) {
         checkLength(length);
         return 0;
+    }
+
+    @Override
+    public String readString(int length, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public String readStringUTF8(int length) {
+        return null;
     }
 
     @Override
@@ -597,7 +608,7 @@ public final class EmptyByteBuffer extends ByteBuffer {
 
     @Override
     public ByteBuffer writeBytes(ByteBuffer src) {
-        return checkLength(src.readableBytes());
+        return checkLength(src.readableBytesLength());
     }
 
     @Override
@@ -640,6 +651,26 @@ public final class EmptyByteBuffer extends ByteBuffer {
     @Override
     public ByteBuffer writeZero(int length) {
         return checkLength(length);
+    }
+
+    @Override
+    public ByteBuffer writeString(String string, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writeStringUTF8(String string) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writelnString(String string, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writelnStringUTF8(String string) {
+        return null;
     }
 
     @Override
@@ -823,6 +854,31 @@ public final class EmptyByteBuffer extends ByteBuffer {
     @Override
     public ByteBuffer retain() {
         return this;
+    }
+
+    @Override
+    public InputStream asInputStream() {
+        return new ByteBufferInputStream(this, 0, true);
+    }
+
+    @Override
+    public int load(InputStream is) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public int load(String fileName) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public int store(OutputStream os) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public int store(String fileName) throws IOException {
+        return 0;
     }
 
     @Override

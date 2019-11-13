@@ -54,7 +54,7 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
             this.buffers[0] = b;
             boolean direct = true;
             int nioBufferCount = b.nioBufferCount();
-            int capacity = b.readableBytes();
+            int capacity = b.readableBytesLength();
             order = b.order();
             for (int i = 1; i < buffers.length; i++) {
                 b = buffers[i];
@@ -62,7 +62,7 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
                     throw new IllegalArgumentException("All ByteBufs need to have same ByteOrder");
                 }
                 nioBufferCount += b.nioBufferCount();
-                capacity += b.readableBytes();
+                capacity += b.readableBytesLength();
                 if (!b.isDirect()) {
                     direct = false;
                 }
@@ -216,12 +216,12 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
                 b = comp.buf;
                 isBuffer = false;
             }
-            readable += b.readableBytes();
+            readable += b.readableBytesLength();
             if (index < readable) {
                 if (isBuffer) {
                     // Create a new component and store it in the array so it not create a new object
                     // on the next access.
-                    comp = new Component(i, readable - b.readableBytes(), b);
+                    comp = new Component(i, readable - b.readableBytesLength(), b);
                     buffers[i] = comp;
                 }
                 return comp;
@@ -312,12 +312,12 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
         int adjustment = c.offset;
         ByteBuffer s = c.buf;
         for (;;) {
-            int localLength = Math.min(length, s.readableBytes() - (index - adjustment));
+            int localLength = Math.min(length, s.readableBytesLength() - (index - adjustment));
             s.getBytes(index - adjustment, dst, dstIndex, localLength);
             index += localLength;
             dstIndex += localLength;
             length -= localLength;
-            adjustment += s.readableBytes();
+            adjustment += s.readableBytesLength();
             if (length <= 0) {
                 break;
             }
@@ -342,12 +342,12 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
             int adjustment = c.offset;
             ByteBuffer s = c.buf;
             for (;;) {
-                int localLength = Math.min(length, s.readableBytes() - (index - adjustment));
+                int localLength = Math.min(length, s.readableBytesLength() - (index - adjustment));
                 dst.limit(dst.position() + localLength);
                 s.getBytes(index - adjustment, dst);
                 index += localLength;
                 length -= localLength;
-                adjustment += s.readableBytes();
+                adjustment += s.readableBytesLength();
                 if (length <= 0) {
                     break;
                 }
@@ -371,12 +371,12 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
         int adjustment = c.offset;
         ByteBuffer s = c.buf;
         for (;;) {
-            int localLength = Math.min(length, s.readableBytes() - (index - adjustment));
+            int localLength = Math.min(length, s.readableBytesLength() - (index - adjustment));
             s.getBytes(index - adjustment, dst, dstIndex, localLength);
             index += localLength;
             dstIndex += localLength;
             length -= localLength;
-            adjustment += s.readableBytes();
+            adjustment += s.readableBytesLength();
             if (length <= 0) {
                 break;
             }
@@ -413,11 +413,11 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
         int adjustment = c.offset;
         ByteBuffer s = c.buf;
         for (;;) {
-            int localLength = Math.min(length, s.readableBytes() - (index - adjustment));
+            int localLength = Math.min(length, s.readableBytesLength() - (index - adjustment));
             s.getBytes(index - adjustment, out, localLength);
             index += localLength;
             length -= localLength;
-            adjustment += s.readableBytes();
+            adjustment += s.readableBytesLength();
             if (length <= 0) {
                 break;
             }
@@ -490,7 +490,7 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
             int adjustment = c.offset;
             ByteBuffer s = c.buf;
             for (;;) {
-                int localLength = Math.min(length, s.readableBytes() - (index - adjustment));
+                int localLength = Math.min(length, s.readableBytesLength() - (index - adjustment));
                 switch (s.nioBufferCount()) {
                     case 0:
                         throw new UnsupportedOperationException();
@@ -503,7 +503,7 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
 
                 index += localLength;
                 length -= localLength;
-                adjustment += s.readableBytes();
+                adjustment += s.readableBytesLength();
                 if (length <= 0) {
                     break;
                 }
@@ -564,7 +564,7 @@ final class FixedCompositeByteBuffer extends AbstractReferenceCountedByteBuffer 
         Component(int index, int offset, ByteBuffer buf) {
             this.index = index;
             this.offset = offset;
-            endOffset = offset + buf.readableBytes();
+            endOffset = offset + buf.readableBytesLength();
             this.buf = buf;
         }
     }

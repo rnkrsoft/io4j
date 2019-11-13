@@ -277,7 +277,7 @@ class FileTransactionImpl implements FileTransaction {
         try {
             os = new FileOutputStream(tempFile);
             FileChannel fileChannel = os.getChannel();
-            byteBuf.getBytes(0, fileChannel, byteBuf.readableBytes());
+            byteBuf.getBytes(0, fileChannel, byteBuf.readableBytesLength());
             this.lastActiveTime = System.currentTimeMillis();
         } finally {
             IOUtils.closeQuietly(os);

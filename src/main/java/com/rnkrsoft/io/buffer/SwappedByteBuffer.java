@@ -119,18 +119,18 @@ class SwappedByteBuffer implements ByteBuffer {
     }
 
     @Override
-    public int readableBytes() {
-        return buf.readableBytes();
+    public int readableBytesLength() {
+        return buf.readableBytesLength();
     }
 
     @Override
-    public int writableBytes() {
-        return buf.writableBytes();
+    public int writableBytesLength() {
+        return buf.writableBytesLength();
     }
 
     @Override
-    public int maxWritableBytes() {
-        return buf.maxWritableBytes();
+    public int maxWritableBytesLength() {
+        return buf.maxWritableBytesLength();
     }
 
     @Override
@@ -547,6 +547,16 @@ class SwappedByteBuffer implements ByteBuffer {
     }
 
     @Override
+    public String readString(int length, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public String readStringUTF8(int length) {
+        return null;
+    }
+
+    @Override
     public ByteBuffer skipBytes(int length) {
         buf.skipBytes(length);
         return this;
@@ -656,6 +666,26 @@ class SwappedByteBuffer implements ByteBuffer {
     public ByteBuffer writeZero(int length) {
         buf.writeZero(length);
         return this;
+    }
+
+    @Override
+    public ByteBuffer writeString(String string, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writeStringUTF8(String string) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writelnString(String string, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writelnStringUTF8(String string) {
+        return null;
     }
 
     @Override
@@ -805,6 +835,31 @@ class SwappedByteBuffer implements ByteBuffer {
     public ByteBuffer retain() {
         buf.retain();
         return this;
+    }
+
+    @Override
+    public InputStream asInputStream() {
+        return buf.asInputStream();
+    }
+
+    @Override
+    public int load(InputStream is) throws IOException {
+        return buf.load(is);
+    }
+
+    @Override
+    public int load(String fileName) throws IOException {
+        return buf.load(fileName);
+    }
+
+    @Override
+    public int store(OutputStream os) throws IOException {
+        return buf.store(os);
+    }
+
+    @Override
+    public int store(String fileName) throws IOException {
+        return buf.store(fileName);
     }
 
     @Override

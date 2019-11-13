@@ -80,18 +80,18 @@ class WrappedCompositeByteBuffer extends CompositeByteBuffer {
     }
 
     @Override
-    public final int readableBytes() {
-        return wrapped.readableBytes();
+    public final int readableBytesLength() {
+        return wrapped.readableBytesLength();
     }
 
     @Override
-    public final int writableBytes() {
-        return wrapped.writableBytes();
+    public final int writableBytesLength() {
+        return wrapped.writableBytesLength();
     }
 
     @Override
-    public final int maxWritableBytes() {
-        return wrapped.maxWritableBytes();
+    public final int maxWritableBytesLength() {
+        return wrapped.maxWritableBytesLength();
     }
 
     @Override

@@ -33,7 +33,7 @@ import java.nio.charset.Charset;
  * indices on the fly because of internal optimizations made by {@link ByteBufferUtil#writeAscii(ByteBuffer, CharSequence)}
  * and {@link ByteBufferUtil#writeUtf8(ByteBuffer, CharSequence)}.
  */
-class WrappedByteBuffer extends ByteBuffer {
+class WrappedByteBuffer implements ByteBuffer {
 
     protected final ByteBuffer buf;
 
@@ -124,18 +124,18 @@ class WrappedByteBuffer extends ByteBuffer {
     }
 
     @Override
-    public final int readableBytes() {
-        return buf.readableBytes();
+    public final int readableBytesLength() {
+        return buf.readableBytesLength();
     }
 
     @Override
-    public final int writableBytes() {
-        return buf.writableBytes();
+    public final int writableBytesLength() {
+        return buf.writableBytesLength();
     }
 
     @Override
-    public final int maxWritableBytes() {
-        return buf.maxWritableBytes();
+    public final int maxWritableBytesLength() {
+        return buf.maxWritableBytesLength();
     }
 
     @Override
@@ -542,6 +542,16 @@ class WrappedByteBuffer extends ByteBuffer {
     }
 
     @Override
+    public String readString(int length, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public String readStringUTF8(int length) {
+        return null;
+    }
+
+    @Override
     public ByteBuffer skipBytes(int length) {
         buf.skipBytes(length);
         return this;
@@ -651,6 +661,26 @@ class WrappedByteBuffer extends ByteBuffer {
     public ByteBuffer writeZero(int length) {
         buf.writeZero(length);
         return this;
+    }
+
+    @Override
+    public ByteBuffer writeString(String string, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writeStringUTF8(String string) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writelnString(String string, Charset charset) {
+        return null;
+    }
+
+    @Override
+    public ByteBuffer writelnStringUTF8(String string) {
+        return null;
     }
 
     @Override
@@ -804,6 +834,31 @@ class WrappedByteBuffer extends ByteBuffer {
     public ByteBuffer retain() {
         buf.retain();
         return this;
+    }
+
+    @Override
+    public InputStream asInputStream() {
+        return buf.asInputStream();
+    }
+
+    @Override
+    public int load(InputStream is) throws IOException {
+        return buf.load(is);
+    }
+
+    @Override
+    public int load(String fileName) throws IOException {
+        return buf.load(fileName);
+    }
+
+    @Override
+    public int store(OutputStream os) throws IOException {
+        return buf.store(os);
+    }
+
+    @Override
+    public int store(String fileName) throws IOException {
+        return buf.store(fileName);
     }
 
     @Override

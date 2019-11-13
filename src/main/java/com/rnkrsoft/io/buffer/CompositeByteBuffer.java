@@ -250,7 +250,7 @@ class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements 
         try {
             checkComponentIndex(cIndex);
 
-            int readableBytes = buffer.readableBytes();
+            int readableBytes = buffer.readableBytesLength();
 
             // No need to consolidate - just add a component to the list.
             @SuppressWarnings("deprecation")
@@ -272,7 +272,7 @@ class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements 
                 }
             }
             if (increaseWriterIndex) {
-                writerIndex(writerIndex() + buffer.readableBytes());
+                writerIndex(writerIndex() + buffer.readableBytesLength());
             }
             return cIndex;
         } finally {
@@ -531,7 +531,7 @@ class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements 
         ByteBuffer buf = first;
         int bytesToSlice = length;
         do {
-            int readableBytes = buf.readableBytes();
+            int readableBytes = buf.readableBytesLength();
             if (bytesToSlice <= readableBytes) {
                 // Last component
                 buf.writerIndex(buf.readerIndex() + bytesToSlice);
@@ -1487,7 +1487,7 @@ class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements 
 
         Component(ByteBuffer buf) {
             this.buf = buf;
-            length = buf.readableBytes();
+            length = buf.readableBytesLength();
         }
 
         void freeIfNecessary() {
@@ -1727,7 +1727,7 @@ class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements 
 
     @Override
     public java.nio.ByteBuffer[] nioBuffers() {
-        return nioBuffers(readerIndex(), readableBytes());
+        return nioBuffers(readerIndex(), readableBytesLength());
     }
 
     @Override

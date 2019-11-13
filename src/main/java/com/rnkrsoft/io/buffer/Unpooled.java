@@ -429,7 +429,7 @@ public final class Unpooled {
      * respectively.
      */
     public static ByteBuffer copiedBuffer(ByteBuffer buffer) {
-        int readable = buffer.readableBytes();
+        int readable = buffer.readableBytesLength();
         if (readable > 0) {
             ByteBuffer copy = buffer(readable);
             copy.writeBytes(buffer, buffer.readerIndex(), readable);
@@ -503,7 +503,7 @@ public final class Unpooled {
         ByteOrder order = null;
         int length = 0;
         for (ByteBuffer b: buffers) {
-            int bLen = b.readableBytes();
+            int bLen = b.readableBytesLength();
             if (bLen <= 0) {
                 continue;
             }
@@ -528,7 +528,7 @@ public final class Unpooled {
         byte[] mergedArray = new byte[length];
         for (int i = 0, j = 0; i < buffers.length; i ++) {
             ByteBuffer b = buffers[i];
-            int bLen = b.readableBytes();
+            int bLen = b.readableBytesLength();
             b.getBytes(b.readerIndex(), mergedArray, j, bLen);
             j += bLen;
         }

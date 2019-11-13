@@ -174,7 +174,7 @@ public interface ByteBufferReadable {
      * does not.
      *
      * @throws IndexOutOfBoundsException
-     *         if {@code dst.writableBytes} is greater than
+     *         if {@code dst.writableBytesLength} is greater than
      *            {@code this.readableBytes}
      */
     ByteBuffer readBytes(ByteBuffer dst);
@@ -190,7 +190,7 @@ public interface ByteBufferReadable {
      *
      * @throws IndexOutOfBoundsException
      *         if {@code length} is greater than {@code this.readableBytes} or
-     *         if {@code length} is greater than {@code dst.writableBytes}
+     *         if {@code length} is greater than {@code dst.writableBytesLength}
      */
     ByteBuffer readBytes(ByteBuffer dst, int length);
 
@@ -274,6 +274,7 @@ public interface ByteBufferReadable {
      *         if the specified channel threw an exception during I/O
      */
     int  readBytes(GatheringByteChannel out, int length) throws IOException;
-
+    String readString(int length, Charset charset);
+    String readStringUTF8(int length);
 
 }

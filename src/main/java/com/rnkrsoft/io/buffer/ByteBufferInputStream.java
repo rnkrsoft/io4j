@@ -59,7 +59,7 @@ public class ByteBufferInputStream extends InputStream implements DataInput {
      * @param buffer The buffer which provides the content for this {@link InputStream}.
      */
     public ByteBufferInputStream(ByteBuffer buffer) {
-        this(buffer, buffer.readableBytes());
+        this(buffer, buffer.readableBytesLength());
     }
 
     /**
@@ -85,7 +85,7 @@ public class ByteBufferInputStream extends InputStream implements DataInput {
      *                       be called on {@code buffer}.
      */
     public ByteBufferInputStream(ByteBuffer buffer, boolean releaseOnClose) {
-        this(buffer, buffer.readableBytes(), releaseOnClose);
+        this(buffer, buffer.readableBytesLength(), releaseOnClose);
     }
 
     /**
@@ -110,12 +110,12 @@ public class ByteBufferInputStream extends InputStream implements DataInput {
             }
             throw new IllegalArgumentException("length: " + length);
         }
-        if (length > buffer.readableBytes()) {
+        if (length > buffer.readableBytesLength()) {
             if (releaseOnClose) {
                 buffer.release();
             }
             throw new IndexOutOfBoundsException("Too many bytes to be read - Needs "
-                    + length + ", maximum is " + buffer.readableBytes());
+                    + length + ", maximum is " + buffer.readableBytesLength());
         }
 
         this.releaseOnClose = releaseOnClose;

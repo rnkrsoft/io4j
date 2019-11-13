@@ -16,6 +16,7 @@
 
 package com.rnkrsoft.io.buffer;
 
+import com.rnkrsoft.io.buffer.util.DiskSizeUnit;
 import com.rnkrsoft.io.buffer.util.ResourceLeakDetector;
 import com.rnkrsoft.io.buffer.util.ResourceLeakTracker;
 import com.rnkrsoft.io.buffer.util.internal.PlatformDependent;
@@ -25,10 +26,10 @@ import com.rnkrsoft.io.buffer.util.internal.StringUtil;
  * Skeletal {@link ByteBufferAllocator} implementation to extend.
  */
 public abstract class AbstractByteBufferAllocator implements ByteBufferAllocator {
-    static final int DEFAULT_INITIAL_CAPACITY = 256;
+    static final int DEFAULT_INITIAL_CAPACITY = DiskSizeUnit.nBit(256);
     static final int DEFAULT_MAX_CAPACITY = Integer.MAX_VALUE;
     static final int DEFAULT_MAX_COMPONENTS = 16;
-    static final int CALCULATE_THRESHOLD = 1048576 * 4; // 4 MiB page
+    static final int CALCULATE_THRESHOLD = DiskSizeUnit.nMB(4);
 
     static {
         ResourceLeakDetector.addExclusions(AbstractByteBufferAllocator.class, "toLeakAwareBuffer");

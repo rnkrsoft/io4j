@@ -14,23 +14,33 @@ public abstract class DiskSizeUnit {
     private DiskSizeUnit() {
     }
 
+    public static int nBit(int size){
+        assert size > -1 && size < 1024;
+        return size;
+    }
+
     public static int nKB(int size) {
+        assert size > -1 && size < 1024;
         return size * KB;
     }
 
     public static int nMB(int size) {
+        assert size > -1 && size < 1024;
         return size * MB;
     }
 
     public static int nGB(int size) {
+        assert size > -1 && size < 1024;
         return size * GB;
     }
 
     public static int nTB(int size) {
+        assert size > -1 && size < 1024;
         return size * TB;
     }
 
     public static int nPB(int size) {
+        assert size > -1 && size < 1024;
         return size * KB;
     }
 }

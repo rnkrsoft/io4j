@@ -15,6 +15,7 @@
  */
 package com.rnkrsoft.io.buffer;
 
+import com.rnkrsoft.io.buffer.util.CharsetUtil;
 import com.rnkrsoft.io.buffer.util.IllegalReferenceCountException;
 import com.rnkrsoft.io.buffer.util.ResourceLeakDetector;
 import com.rnkrsoft.io.buffer.util.ResourceLeakDetectorFactory;
@@ -24,6 +25,7 @@ import com.rnkrsoft.io.buffer.util.internal.SystemPropertyUtil;
 import com.rnkrsoft.io.buffer.util.internal.logging.InternalLogger;
 import com.rnkrsoft.io.buffer.util.internal.logging.InternalLoggerFactory;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -146,17 +148,17 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
     }
 
     @Override
-    public int readableBytes() {
+    public int readableBytesLength() {
         return writerIndex - readerIndex;
     }
 
     @Override
-    public int writableBytes() {
+    public int writableBytesLength() {
         return capacity() - writerIndex;
     }
 
     @Override
-    public int maxWritableBytes() {
+    public int maxWritableBytesLength() {
         return maxCapacity() - writerIndex;
     }
 
@@ -253,7 +255,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     final void ensureWritable0(int minWritableBytes) {
         ensureAccessible();
-        if (minWritableBytes <= writableBytes()) {
+        if (minWritableBytes <= writableBytesLength()) {
             return;
         }
 
@@ -278,7 +280,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
                     "minWritableBytes: %d (expected: >= 0)", minWritableBytes));
         }
 
-        if (minWritableBytes <= writableBytes()) {
+        if (minWritableBytes <= writableBytesLength()) {
             return 0;
         }
 
@@ -444,7 +446,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer getBytes(int index, ByteBuffer dst) {
-        getBytes(index, dst, dst.writableBytes());
+        getBytes(index, dst, dst.writableBytesLength());
         return this;
     }
 
@@ -466,7 +468,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer setBoolean(int index, boolean value) {
-        setByte(index, value? 1 : 0);
+        setByte(index, value ? 1 : 0);
         return this;
     }
 
@@ -532,7 +534,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer setBytes(int index, ByteBuffer src) {
-        setBytes(index, src, src.readableBytes());
+        setBytes(index, src, src.readableBytesLength());
         return this;
     }
 
@@ -542,9 +544,9 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
         if (src == null) {
             throw new NullPointerException("src");
         }
-        if (length > src.readableBytes()) {
+        if (length > src.readableBytesLength()) {
             throw new IndexOutOfBoundsException(String.format(
-                    "length(%d) exceeds src.readableBytes(%d) where src is: %s", length, src.readableBytes(), src));
+                    "length(%d) exceeds src.readableBytes(%d) where src is: %s", length, src.readableBytesLength(), src));
         }
 
         setBytes(index, src, src.readerIndex(), length);
@@ -562,7 +564,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
         int nLong = length >>> 3;
         int nBytes = length & 7;
-        for (int i = nLong; i > 0; i --) {
+        for (int i = nLong; i > 0; i--) {
             _setLong(index, 0);
             index += 8;
         }
@@ -570,16 +572,16 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
             _setInt(index, 0);
             // Not need to update the index as we not will use it after this.
         } else if (nBytes < 4) {
-            for (int i = nBytes; i > 0; i --) {
+            for (int i = nBytes; i > 0; i--) {
                 _setByte(index, (byte) 0);
-                index ++;
+                index++;
             }
         } else {
             _setInt(index, 0);
             index += 4;
-            for (int i = nBytes - 4; i > 0; i --) {
+            for (int i = nBytes - 4; i > 0; i--) {
                 _setByte(index, (byte) 0);
-                index ++;
+                index++;
             }
         }
         return this;
@@ -707,15 +709,15 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer readBytes(ByteBuffer dst) {
-        readBytes(dst, dst.writableBytes());
+        readBytes(dst, dst.writableBytesLength());
         return this;
     }
 
     @Override
     public ByteBuffer readBytes(ByteBuffer dst, int length) {
-        if (length > dst.writableBytes()) {
+        if (length > dst.writableBytesLength()) {
             throw new IndexOutOfBoundsException(String.format(
-                    "length(%d) exceeds dst.writableBytes(%d) where dst is: %s", length, dst.writableBytes(), dst));
+                    "length(%d) exceeds dst.writableBytesLength(%d) where dst is: %s", length, dst.writableBytesLength(), dst));
         }
         readBytes(dst, dst.writerIndex(), length);
         dst.writerIndex(dst.writerIndex() + length);
@@ -842,15 +844,15 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer writeBytes(ByteBuffer src) {
-        writeBytes(src, src.readableBytes());
+        writeBytes(src, src.readableBytesLength());
         return this;
     }
 
     @Override
     public ByteBuffer writeBytes(ByteBuffer src, int length) {
-        if (length > src.readableBytes()) {
+        if (length > src.readableBytesLength()) {
             throw new IndexOutOfBoundsException(String.format(
-                    "length(%d) exceeds src.readableBytes(%d) where src is: %s", length, src.readableBytes(), src));
+                    "length(%d) exceeds src.readableBytes(%d) where src is: %s", length, src.readableBytesLength(), src));
         }
         writeBytes(src, src.readerIndex(), length);
         src.readerIndex(src.readerIndex() + length);
@@ -907,7 +909,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
         int nLong = length >>> 3;
         int nBytes = length & 7;
-        for (int i = nLong; i > 0; i --) {
+        for (int i = nLong; i > 0; i--) {
             _setLong(wIndex, 0);
             wIndex += 8;
         }
@@ -915,14 +917,14 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
             _setInt(wIndex, 0);
             wIndex += 4;
         } else if (nBytes < 4) {
-            for (int i = nBytes; i > 0; i --) {
+            for (int i = nBytes; i > 0; i--) {
                 _setByte(wIndex, (byte) 0);
                 wIndex++;
             }
         } else {
             _setInt(wIndex, 0);
             wIndex += 4;
-            for (int i = nBytes - 4; i > 0; i --) {
+            for (int i = nBytes - 4; i > 0; i--) {
                 _setByte(wIndex, (byte) 0);
                 wIndex++;
             }
@@ -933,7 +935,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer copy() {
-        return copy(readerIndex, readableBytes());
+        return copy(readerIndex, readableBytesLength());
     }
 
     @Override
@@ -943,7 +945,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer slice() {
-        return slice(readerIndex, readableBytes());
+        return slice(readerIndex, readableBytesLength());
     }
 
     @Override
@@ -953,17 +955,17 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public java.nio.ByteBuffer nioBuffer() {
-        return nioBuffer(readerIndex, readableBytes());
+        return nioBuffer(readerIndex, readableBytesLength());
     }
 
     @Override
     public java.nio.ByteBuffer[] nioBuffers() {
-        return nioBuffers(readerIndex, readableBytes());
+        return nioBuffers(readerIndex, readableBytesLength());
     }
 
     @Override
     public String toString(Charset charset) {
-        return toString(readerIndex, readableBytes(), charset);
+        return toString(readerIndex, readableBytesLength(), charset);
     }
 
     @Override
@@ -978,7 +980,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public int bytesBefore(byte value) {
-        return bytesBefore(readerIndex(), readableBytes(), value);
+        return bytesBefore(readerIndex(), readableBytesLength(), value);
     }
 
     @Override
@@ -1087,10 +1089,10 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
         }
 
         StringBuilder buf = new StringBuilder()
-            .append(StringUtil.simpleClassName(this))
-            .append("(ridx: ").append(readerIndex)
-            .append(", widx: ").append(writerIndex)
-            .append(", cap: ").append(capacity());
+                .append(StringUtil.simpleClassName(this))
+                .append("(ridx: ").append(readerIndex)
+                .append(", widx: ").append(writerIndex)
+                .append(", cap: ").append(capacity());
         if (maxCapacity != Integer.MAX_VALUE) {
             buf.append('/').append(maxCapacity);
         }
@@ -1137,7 +1139,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     /**
      * Throws an {@link IndexOutOfBoundsException} if the current
-     * {@linkplain #readableBytes() readable bytes} of this buffer is less
+     * {@linkplain ByteBuffer#readableBytesLength() readable bytes} of this buffer is less
      * than the specified value.
      */
     protected final void checkReadableBytes(int minimumReadableBytes) {
@@ -1180,5 +1182,72 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     final void discardMarks() {
         markedReaderIndex = markedWriterIndex = 0;
+    }
+
+    @Override
+    public int store(String fileName) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public int store(OutputStream os) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public int load(String fileName) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public int load(InputStream is) throws IOException {
+        return 0;
+    }
+
+    @Override
+    public ByteBuffer writelnStringUTF8(String string) {
+        return writelnString(string + "\n", CharsetUtil.UTF_8);
+    }
+
+    @Override
+    public ByteBuffer writelnString(String string, Charset charset) {
+        return writeString(string + "\n", charset);
+    }
+
+    @Override
+    public ByteBuffer writeStringUTF8(String string) {
+        return writeString(string, CharsetUtil.UTF_8);
+    }
+
+    public void writeCharSequence(CharSequence sequence, Charset charset) {
+        if (charset == CharsetUtil.UTF_8) {
+            ByteBufferUtil.writeUtf8(this, sequence);
+        } else {
+            ByteBufferUtil.writeAscii(alloc(), sequence);
+        }
+    }
+
+    @Override
+    public ByteBuffer writeString(String string, Charset charset) {
+        int length = (int) (string.length() * charset.newEncoder().maxBytesPerChar());
+        ensureWritable0(length);
+        writeCharSequence(string, charset);
+        return this;
+
+    }
+
+    @Override
+    public String readStringUTF8(int length) {
+        return readString(length, CharsetUtil.UTF_8);
+    }
+
+    @Override
+    public String readString(int length, Charset charset) {
+        return toString(readerIndex, length, charset);
+    }
+
+    @Override
+    public InputStream asInputStream() {
+        return new ByteBufferInputStream(this, readableBytesLength(), true);
     }
 }

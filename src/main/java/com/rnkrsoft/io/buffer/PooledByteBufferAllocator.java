@@ -16,6 +16,7 @@
 
 package com.rnkrsoft.io.buffer;
 
+import com.rnkrsoft.io.buffer.util.DiskSizeUnit;
 import com.rnkrsoft.io.buffer.util.Runtime;
 import com.rnkrsoft.io.buffer.util.concurrent.FastThreadLocal;
 import com.rnkrsoft.io.buffer.util.concurrent.FastThreadLocalThread;
@@ -45,17 +46,17 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
     private static final boolean DEFAULT_USE_CACHE_FOR_ALL_THREADS;
     private static final int DEFAULT_DIRECT_MEMORY_CACHE_ALIGNMENT;
 
-    private static final int MIN_PAGE_SIZE = 4096;
+    private static final int MIN_PAGE_SIZE = DiskSizeUnit.nKB(4);
     private static final int MAX_CHUNK_SIZE = (int) (((long) Integer.MAX_VALUE + 1) / 2);
 
     static {
-        int defaultPageSize = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.pageSize", 8192);
+        int defaultPageSize = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.pageSize", DiskSizeUnit.nKB(8));
         Throwable pageSizeFallbackCause = null;
         try {
             validateAndCalculatePageShifts(defaultPageSize);
         } catch (Throwable t) {
             pageSizeFallbackCause = t;
-            defaultPageSize = 8192;
+            defaultPageSize = DiskSizeUnit.nKB(8);
         }
         DEFAULT_PAGE_SIZE = defaultPageSize;
 
@@ -82,38 +83,24 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
          */
         final int defaultMinNumArena = Runtime.availableProcessors() * 2;
         final int defaultChunkSize = DEFAULT_PAGE_SIZE << DEFAULT_MAX_ORDER;
-        DEFAULT_NUM_HEAP_ARENA = Math.max(0,
-                SystemPropertyUtil.getInt(
-                        "com.rnkrsoft.io.allocator.numHeapArenas",
-                        (int) Math.min(
-                                defaultMinNumArena,
-                                runtime.maxMemory() / defaultChunkSize / 2 / 3)));
-        DEFAULT_NUM_DIRECT_ARENA = Math.max(0,
-                SystemPropertyUtil.getInt(
-                        "com.rnkrsoft.io.allocator.numDirectArenas",
-                        (int) Math.min(
-                                defaultMinNumArena,
-                                PlatformDependent.maxDirectMemory() / defaultChunkSize / 2 / 3)));
+        DEFAULT_NUM_HEAP_ARENA = Math.max(0, SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.numHeapArenas", (int) Math.min(defaultMinNumArena, runtime.maxMemory() / defaultChunkSize / 2 / 3)));
+        DEFAULT_NUM_DIRECT_ARENA = Math.max(0, SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.numDirectArenas", (int) Math.min(defaultMinNumArena, PlatformDependent.maxDirectMemory() / defaultChunkSize / 2 / 3)));
 
         // cache sizes
-        DEFAULT_TINY_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.tinyCacheSize", 512);
-        DEFAULT_SMALL_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.smallCacheSize", 256);
-        DEFAULT_NORMAL_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.normalCacheSize", 64);
+        DEFAULT_TINY_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.tinyCacheSize", DiskSizeUnit.nBit(512));
+        DEFAULT_SMALL_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.smallCacheSize", DiskSizeUnit.nBit(256));
+        DEFAULT_NORMAL_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.normalCacheSize", DiskSizeUnit.nBit(64));
 
         // 32 kb is the default maximum capacity of the cached buffer. Similar to what is explained in
         // 'Scalable memory allocation using jemalloc'
-        DEFAULT_MAX_CACHED_BUFFER_CAPACITY = SystemPropertyUtil.getInt(
-                "com.rnkrsoft.io.allocator.maxCachedBufferCapacity", 32 * 1024);
+        DEFAULT_MAX_CACHED_BUFFER_CAPACITY = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.maxCachedBufferCapacity", DiskSizeUnit.nKB(32));
 
         // the number of threshold of allocations when cached entries will be freed up if not frequently used
-        DEFAULT_CACHE_TRIM_INTERVAL = SystemPropertyUtil.getInt(
-                "com.rnkrsoft.io.allocator.cacheTrimInterval", 8192);
+        DEFAULT_CACHE_TRIM_INTERVAL = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.cacheTrimInterval", 8192);
 
-        DEFAULT_USE_CACHE_FOR_ALL_THREADS = SystemPropertyUtil.getBoolean(
-                "com.rnkrsoft.io.allocator.useCacheForAllThreads", true);
+        DEFAULT_USE_CACHE_FOR_ALL_THREADS = SystemPropertyUtil.getBoolean("com.rnkrsoft.io.allocator.useCacheForAllThreads", true);
 
-        DEFAULT_DIRECT_MEMORY_CACHE_ALIGNMENT = SystemPropertyUtil.getInt(
-                "com.rnkrsoft.io.allocator.directMemoryCacheAlignment", 0);
+        DEFAULT_DIRECT_MEMORY_CACHE_ALIGNMENT = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.directMemoryCacheAlignment", 0);
 
         if (logger.isDebugEnabled()) {
             logger.debug("-Dcom.rnkrsoft.io.allocator.numHeapArenas: {}", DEFAULT_NUM_HEAP_ARENA);
@@ -231,7 +218,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
         if (nHeapArena > 0) {
             heapArenas = newArenaArray(nHeapArena);
             List<PoolArenaMetric> metrics = new ArrayList<PoolArenaMetric>(heapArenas.length);
-            for (int i = 0; i < heapArenas.length; i ++) {
+            for (int i = 0; i < heapArenas.length; i++) {
                 PoolArena.HeapArena arena = new PoolArena.HeapArena(this,
                         pageSize, maxOrder, pageShifts, chunkSize,
                         directMemoryCacheAlignment);
@@ -247,7 +234,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
         if (nDirectArena > 0) {
             directArenas = newArenaArray(nDirectArena);
             List<PoolArenaMetric> metrics = new ArrayList<PoolArenaMetric>(directArenas.length);
-            for (int i = 0; i < directArenas.length; i ++) {
+            for (int i = 0; i < directArenas.length; i++) {
                 PoolArena.DirectArena arena = new PoolArena.DirectArena(
                         this, pageSize, maxOrder, pageShifts, chunkSize, directMemoryCacheAlignment);
                 directArenas[i] = arena;
@@ -267,7 +254,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
                                      int tinyCacheSize, int smallCacheSize, int normalCacheSize,
                                      long cacheThreadAliveCheckInterval) {
         this(preferDirect, nHeapArena, nDirectArena, pageSize, maxOrder,
-             tinyCacheSize, smallCacheSize, normalCacheSize);
+                tinyCacheSize, smallCacheSize, normalCacheSize);
     }
 
     @SuppressWarnings("unchecked")
@@ -295,7 +282,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
 
         // Ensure the resulting chunkSize does not overflow.
         int chunkSize = pageSize;
-        for (int i = maxOrder; i > 0; i --) {
+        for (int i = maxOrder; i > 0; i--) {
             if (chunkSize > MAX_CHUNK_SIZE / 2) {
                 throw new IllegalArgumentException(String.format(
                         "pageSize (%d) << maxOrder (%d) must not exceed %d", pageSize, maxOrder, MAX_CHUNK_SIZE));
@@ -603,7 +590,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
     }
 
     final PoolThreadCache threadCache() {
-        PoolThreadCache cache =  threadCache.get();
+        PoolThreadCache cache = threadCache.get();
         assert cache != null;
         return cache;
     }
@@ -619,7 +606,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
                 .append(" heap arena(s):")
                 .append(StringUtil.NEWLINE);
         if (heapArenasLen > 0) {
-            for (PoolArena<byte[]> a: heapArenas) {
+            for (PoolArena<byte[]> a : heapArenas) {
                 buf.append(a);
             }
         }
@@ -627,10 +614,10 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
         int directArenasLen = directArenas == null ? 0 : directArenas.length;
 
         buf.append(directArenasLen)
-           .append(" direct arena(s):")
-           .append(StringUtil.NEWLINE);
+                .append(" direct arena(s):")
+                .append(StringUtil.NEWLINE);
         if (directArenasLen > 0) {
-            for (PoolArena<java.nio.ByteBuffer> a: directArenas) {
+            for (PoolArena<java.nio.ByteBuffer> a : directArenas) {
                 buf.append(a);
             }
         }

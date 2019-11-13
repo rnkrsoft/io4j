@@ -90,7 +90,7 @@ public final class ByteBufferUtil {
      * of the specified buffer's readable bytes.
      */
     public static String hexDump(ByteBuffer buffer) {
-        return hexDump(buffer, buffer.readerIndex(), buffer.readableBytes());
+        return hexDump(buffer, buffer.readerIndex(), buffer.readableBytesLength());
     }
 
     /**
@@ -143,7 +143,7 @@ public final class ByteBufferUtil {
      * useful when implementing a new buffer type.
      */
     public static int hashCode(ByteBuffer buffer) {
-        final int aLen = buffer.readableBytes();
+        final int aLen = buffer.readableBytesLength();
         final int intCount = aLen >>> 2;
         final int byteCount = aLen & 3;
 
@@ -178,8 +178,8 @@ public final class ByteBufferUtil {
      * This method is useful when implementing a new buffer type.
      */
     public static boolean equals(ByteBuffer bufferA, ByteBuffer bufferB) {
-        final int aLen = bufferA.readableBytes();
-        if (aLen != bufferB.readableBytes()) {
+        final int aLen = bufferA.readableBytesLength();
+        if (aLen != bufferB.readableBytesLength()) {
             return false;
         }
 
@@ -223,8 +223,8 @@ public final class ByteBufferUtil {
      * This method is useful when implementing a new buffer type.
      */
     public static int compare(ByteBuffer bufferA, ByteBuffer bufferB) {
-        final int aLen = bufferA.readableBytes();
-        final int bLen = bufferB.readableBytes();
+        final int aLen = bufferA.readableBytesLength();
+        final int bLen = bufferB.readableBytesLength();
         final int minLength = Math.min(aLen, bLen);
         final int uintCount = minLength >>> 2;
         final int byteCount = minLength & 3;
@@ -622,7 +622,7 @@ public final class ByteBufferUtil {
      * Returns a multi-line hexadecimal dump of the specified {@link ByteBuffer} that is easy to read by humans.
      */
     public static String prettyHexDump(ByteBuffer buffer) {
-        return prettyHexDump(buffer, buffer.readerIndex(), buffer.readableBytes());
+        return prettyHexDump(buffer, buffer.readerIndex(), buffer.readableBytesLength());
     }
 
     /**
@@ -638,7 +638,7 @@ public final class ByteBufferUtil {
      * {@link StringBuilder} that is easy to read by humans.
      */
     public static void appendPrettyHexDump(StringBuilder dump, ByteBuffer buf) {
-        appendPrettyHexDump(dump, buf, buf.readerIndex(), buf.readableBytes());
+        appendPrettyHexDump(dump, buf, buf.readerIndex(), buf.readableBytesLength());
     }
 
     /**
@@ -950,7 +950,7 @@ public final class ByteBufferUtil {
      * @param charset The specified {@link Charset}.
      */
     public static boolean isText(ByteBuffer buf, Charset charset) {
-        return isText(buf, buf.readerIndex(), buf.readableBytes(), charset);
+        return isText(buf, buf.readerIndex(), buf.readableBytesLength(), charset);
     }
 
     /**
@@ -967,7 +967,7 @@ public final class ByteBufferUtil {
     public static boolean isText(ByteBuffer buf, int index, int length, Charset charset) {
         checkNotNull(buf, "buf");
         checkNotNull(charset, "charset");
-        final int maxIndex = buf.readerIndex() + buf.readableBytes();
+        final int maxIndex = buf.readerIndex() + buf.readableBytesLength();
         if (index < 0 || length < 0 || index > maxIndex - length) {
             throw new IndexOutOfBoundsException("index: " + index + " length: " + length);
         }

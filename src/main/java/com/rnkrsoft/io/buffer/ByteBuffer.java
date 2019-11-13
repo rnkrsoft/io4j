@@ -109,7 +109,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * <pre>
  * // Fills the writable bytes of a buffer with random integers.
  * {@link ByteBuffer} buffer = ...;
- * while (buffer.maxWritableBytes() >= 4) {
+ * while (buffer.maxWritableBytesLength() >= 4) {
  *     buffer.writeInt(random.nextInt());
  * }
  * </pre>
@@ -232,132 +232,92 @@ import java.nio.charset.UnsupportedCharsetException;
 public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, ByteBufferReadable, ByteBufferWritable, ReferenceCounted, Comparable<ByteBuffer> {
 
     /**
-     * Returns the number of bytes (octets) this buffer can contain.
+     * 缓冲区当前载体的当前容量，容量即字节数组长度
+     *
+     * @return 当前容量
      */
     int capacity();
 
     /**
-     * Adjusts the capacity of this buffer.  If the {@code newCapacity} is less than the current
-     * capacity, the content of this buffer is truncated.  If the {@code newCapacity} is greater
-     * than the current capacity, the buffer is appended with unspecified data whose length is
-     * {@code (newCapacity - currentCapacity)}.
+     * 设置当前缓冲区新的容量，可进行扩容或者压缩,如果新的容量小于当前已写入内容，则会发生截断。
+     *
+     * @param newCapacity 新的容量当前容量
+     * @return 当前字节缓冲区
      */
     ByteBuffer capacity(int newCapacity);
 
     /**
-     * Returns the maximum allowed capacity of this buffer.  If a user attempts to increase the
-     * capacity of this buffer beyond the maximum capacity using {@link #capacity(int)} or
-     * {@link #ensureWritable(int)}, those methods will raise an
-     * {@link IllegalArgumentException}.
+     * 缓冲区最大的容量大小，该值由字节缓冲区创建时设置，具有不可变。当运行时，缓冲区内容超过容量值时，则进行扩增，直到最大容量，方法{@link #ensureWritable(int)}调用该方法的设置值
+     *
+     * @return 最大的容量大小
      */
     int maxCapacity();
 
     /**
-     * Returns the {@link ByteBufferAllocator} which created this buffer.
+     * 获取当前缓冲区实例对应的缓冲区分配器
+     *
+     * @return 缓冲区分配器
      */
     ByteBufferAllocator alloc();
 
     /**
-     * Returns the <a href="http://en.wikipedia.org/wiki/Endianness">endianness</a>
-     * of this buffer.
+     * 获取缓冲区使用的是大端顺序还是小端顺序
      */
     ByteOrder order();
 
     /**
-     * Returns a buffer with the specified {@code endianness} which shares the whole region,
-     * indexes, and marks of this buffer.  Modifying the content, the indexes, or the marks of the
-     * returned buffer or this buffer affects each other's content, indexes, and marks.  If the
-     * specified {@code endianness} is identical to this buffer's byte order, this method can
-     * return {@code this}.  This method does not modify {@code readerIndex} or {@code writerIndex}
-     * of this buffer.
+     * 设置缓冲区的端顺序
      */
     ByteBuffer order(ByteOrder endianness);
 
     /**
-     * Return the underlying buffer instance if this buffer is a wrapper of another buffer.
+     * 如果该缓冲区是包装类型缓冲区，则可返回真正的缓冲区实例
      *
-     * @return {@code null} if this buffer is not a wrapper
+     * @return 如果该缓冲区不是包装类型缓冲区，则返回{@code null}
      */
     ByteBuffer unwrap();
 
     /**
-     * Returns {@code true} if and only if this buffer is backed by an
-     * NIO direct buffer.
+     * 可返回当前缓冲区底层是基于JDK的直接内存区的缓冲区
+     *
+     * @return 如果为直接内存缓冲区则返回真
      */
     boolean isDirect();
 
     /**
-     * Returns the {@code readerIndex} of this buffer.
+     * 当前读游标
+     *
+     * @return 游标索引
      */
     int readerIndex();
 
     /**
-     * Sets the {@code readerIndex} of this buffer.
+     * 重设读游标位置
      *
-     * @throws IndexOutOfBoundsException if the specified {@code readerIndex} is
-     *                                   less than {@code 0} or
-     *                                   greater than {@code this.writerIndex}
+     * @param readerIndex 游标位置，[0，writerIndex)
+     * @return 当前字节缓冲区
+     * @throws IndexOutOfBoundsException 当读游标{@code readerIndex} 小于 {@code 0} 或者大于当前缓冲区的读游标 {@code writerIndex}则抛出该异常
      */
     ByteBuffer readerIndex(int readerIndex);
 
     /**
-     * Returns the {@code writerIndex} of this buffer.
+     * 当前已写游标
+     *
+     * @return 游标索引
      */
     int writerIndex();
 
     /**
-     * Sets the {@code writerIndex} of this buffer.
+     * 重设写游标位置
      *
-     * @throws IndexOutOfBoundsException if the specified {@code writerIndex} is
-     *                                   less than {@code this.readerIndex} or
-     *                                   greater than {@code this.capacity}
+     * @param writerIndex 游标位置，[0，capacity)
+     * @return 当前字节缓冲区
+     * @throws IndexOutOfBoundsException 当写游标{@code writerIndex} 小于 {@code readerIndex} 或者大于当前缓冲区的容量{@code capacity()}则抛出该异常
      */
     ByteBuffer writerIndex(int writerIndex);
 
     /**
-     * Sets the {@code readerIndex} and {@code writerIndex} of this buffer
-     * in one shot.  This method is useful when you have to worry about the
-     * invocation order of {@link #readerIndex(int)} and {@link #writerIndex(int)}
-     * methods.  For example, the following code will fail:
-     * <p>
-     * <pre>
-     * // Create a buffer whose readerIndex, writerIndex and capacity are
-     * // 0, 0 and 8 respectively.
-     * {@link ByteBuffer} buf = {@link Unpooled}.buffer(8);
-     *
-     * // IndexOutOfBoundsException is thrown because the specified
-     * // readerIndex (2) cannot be greater than the current writerIndex (0).
-     * buf.readerIndex(2);
-     * buf.writerIndex(4);
-     * </pre>
-     * <p>
-     * The following code will also fail:
-     * <p>
-     * <pre>
-     * // Create a buffer whose readerIndex, writerIndex and capacity are
-     * // 0, 8 and 8 respectively.
-     * {@link ByteBuffer} buf = {@link Unpooled}.wrappedBuffer(new byte[8]);
-     *
-     * // readerIndex becomes 8.
-     * buf.readLong();
-     *
-     * // IndexOutOfBoundsException is thrown because the specified
-     * // writerIndex (4) cannot be less than the current readerIndex (8).
-     * buf.writerIndex(4);
-     * buf.readerIndex(2);
-     * </pre>
-     * <p>
-     * By contrast, this method guarantees that it never
-     * throws an {@link IndexOutOfBoundsException} as long as the specified
-     * indexes meet basic constraints, regardless what the current index
-     * values of the buffer are:
-     * <p>
-     * <pre>
-     * // No matter what the current state of the buffer is, the following
-     * // call always succeeds as long as the capacity of the buffer is not
-     * // less than 4.
-     * buf.setIndex(2, 4);
-     * </pre>
+     * 用于快速重设读写游标
      *
      * @throws IndexOutOfBoundsException if the specified {@code readerIndex} is less than 0,
      *                                   if the specified {@code writerIndex} is less than the specified
@@ -367,27 +327,26 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     ByteBuffer setIndex(int readerIndex, int writerIndex);
 
     /**
-     * Returns the number of readable bytes which is equal to
+     * 可读取字节的长度
      * {@code (this.writerIndex - this.readerIndex)}.
      */
-    int readableBytes();
+    int readableBytesLength();
 
     /**
-     * Returns the number of writable bytes which is equal to
-     * {@code (this.capacity - this.writerIndex)}.
+     * 在不进行扩容的情况下，当前可写入字节的长度 {@code (this.capacity() - this.writerIndex)}.
      */
-    int writableBytes();
+    int writableBytesLength();
 
     /**
-     * Returns the maximum possible number of writable bytes, which is equal to
+     * 在进行扩容的情况下，可写入字节的长度
      * {@code (this.maxCapacity - this.writerIndex)}.
      */
-    int maxWritableBytes();
+    int maxWritableBytesLength();
 
     /**
-     * Returns {@code true}
-     * if and only if {@code (this.writerIndex - this.readerIndex)} is greater
-     * than {@code 0}.
+     * 是否可读，可读的条件为readIndex < writeIndex
+     *
+     * @return 返回真则可以读取至少一个字节，具体可读取多少字节可{@code(readableBytesLength)}
      */
     boolean isReadable();
 
@@ -397,9 +356,9 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     boolean isReadable(int size);
 
     /**
-     * Returns {@code true}
-     * if and only if {@code (this.capacity - this.writerIndex)} is greater
-     * than {@code 0}.
+     * 是否可写，可写的条件为maxCapacity > writeIndex
+     *
+     * @return 返回真则可以写入至少一个字节，具体可写入多少字节可{@code(writableBytesLength)}
      */
     boolean isWritable();
 
@@ -410,13 +369,9 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     boolean isWritable(int size);
 
     /**
-     * Sets the {@code readerIndex} and {@code writerIndex} of this buffer to
-     * {@code 0}.
-     * This method is identical to {@link #setIndex(int, int) setIndex(0, 0)}.
-     * <p>
-     * Please note that the behavior of this method is different
-     * from that of NIO buffer, which sets the {@code limit} to
-     * the {@code capacity} of the buffer.
+     * 清空缓冲区内容，仅进行读写游标的重置，并不进行数据重置为0
+     *
+     * @return 当前字节缓冲区
      */
     ByteBuffer clear();
 
@@ -473,7 +428,7 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     ByteBuffer discardSomeReadBytes();
 
     /**
-     * Makes sure the number of {@linkplain #writableBytes() the writable bytes}
+     * Makes sure the number of {@linkplain #writableBytesLength() the writable bytes}
      * is equal to or greater than the specified value.  If there is enough
      * writable bytes in this buffer, this method returns with no side effect.
      * Otherwise, it raises an {@link IllegalArgumentException}.
@@ -484,7 +439,7 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     ByteBuffer ensureWritable(int minWritableBytes);
 
     /**
-     * Tries to make sure the number of {@linkplain #writableBytes() the writable bytes}
+     * Tries to make sure the number of {@linkplain #writableBytesLength() the writable bytes}
      * is equal to or greater than the specified value.  Unlike {@link #ensureWritable(int)},
      * this method does not raise an exception but returns a code.
      *
@@ -502,721 +457,6 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
      */
     int ensureWritable(int minWritableBytes, boolean force);
 
-    /**
-     * Gets a boolean at the specified absolute (@code index) in this buffer.
-     * This method does not modify the {@code readerIndex} or {@code writerIndex}
-     * of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 1} is greater than {@code this.capacity}
-     */
-    boolean getBoolean(int index);
-
-    /**
-     * Gets a byte at the specified absolute {@code index} in this buffer.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 1} is greater than {@code this.capacity}
-     */
-    byte getByte(int index);
-
-    /**
-     * Gets an unsigned byte at the specified absolute {@code index} in this
-     * buffer.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 1} is greater than {@code this.capacity}
-     */
-    short getUnsignedByte(int index);
-
-    /**
-     * Gets a 16-bit short integer at the specified absolute {@code index} in
-     * this buffer.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 2} is greater than {@code this.capacity}
-     */
-    short getShort(int index);
-
-    /**
-     * Gets an unsigned 16-bit short integer at the specified absolute
-     * {@code index} in this buffer.  This method does not modify
-     * {@code readerIndex} or {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 2} is greater than {@code this.capacity}
-     */
-    int getUnsignedShort(int index);
-
-    /**
-     * Gets a 24-bit medium integer at the specified absolute {@code index} in
-     * this buffer.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 3} is greater than {@code this.capacity}
-     */
-    int getMedium(int index);
-
-    /**
-     * Gets an unsigned 24-bit medium integer at the specified absolute
-     * {@code index} in this buffer.  This method does not modify
-     * {@code readerIndex} or {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 3} is greater than {@code this.capacity}
-     */
-    int getUnsignedMedium(int index);
-
-    /**
-     * Gets a 32-bit integer at the specified absolute {@code index} in
-     * this buffer.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 4} is greater than {@code this.capacity}
-     */
-    int getInt(int index);
-
-    /**
-     * Gets an unsigned 32-bit integer at the specified absolute {@code index}
-     * in this buffer.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 4} is greater than {@code this.capacity}
-     */
-    long getUnsignedInt(int index);
-
-    /**
-     * Gets a 64-bit long integer at the specified absolute {@code index} in
-     * this buffer.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 8} is greater than {@code this.capacity}
-     */
-    long getLong(int index);
-
-    /**
-     * Gets a 2-byte UTF-16 character at the specified absolute
-     * {@code index} in this buffer.  This method does not modify
-     * {@code readerIndex} or {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 2} is greater than {@code this.capacity}
-     */
-    char getChar(int index);
-
-    /**
-     * Gets a 32-bit floating point number at the specified absolute
-     * {@code index} in this buffer.  This method does not modify
-     * {@code readerIndex} or {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 4} is greater than {@code this.capacity}
-     */
-    float getFloat(int index);
-
-    /**
-     * Gets a 64-bit floating point number at the specified absolute
-     * {@code index} in this buffer.  This method does not modify
-     * {@code readerIndex} or {@code writerIndex} of this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 8} is greater than {@code this.capacity}
-     */
-    double getDouble(int index);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the specified absolute {@code index} until the destination becomes
-     * non-writable.  This method is basically same with
-     * {@link #getBytes(int, ByteBuffer, int, int)}, except that this
-     * method increases the {@code writerIndex} of the destination by the
-     * number of the transferred bytes while
-     * {@link #getBytes(int, ByteBuffer, int, int)} does not.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * the source buffer (i.e. {@code this}).
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + dst.writableBytes} is greater than
-     *                                   {@code this.capacity}
-     */
-    ByteBuffer getBytes(int index, ByteBuffer dst);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the specified absolute {@code index}.  This method is basically same
-     * with {@link #getBytes(int, ByteBuffer, int, int)}, except that this
-     * method increases the {@code writerIndex} of the destination by the
-     * number of the transferred bytes while
-     * {@link #getBytes(int, ByteBuffer, int, int)} does not.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * the source buffer (i.e. {@code this}).
-     *
-     * @param length the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0},
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}, or
-     *                                   if {@code length} is greater than {@code dst.writableBytes}
-     */
-    ByteBuffer getBytes(int index, ByteBuffer dst, int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex}
-     * of both the source (i.e. {@code this}) and the destination.
-     *
-     * @param dstIndex the first index of the destination
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0},
-     *                                   if the specified {@code dstIndex} is less than {@code 0},
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}, or
-     *                                   if {@code dstIndex + length} is greater than
-     *                                   {@code dst.capacity}
-     */
-    ByteBuffer getBytes(int index, ByteBuffer dst, int dstIndex, int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + dst.length} is greater than
-     *                                   {@code this.capacity}
-     */
-    ByteBuffer getBytes(int index, byte[] dst);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex}
-     * of this buffer.
-     *
-     * @param dstIndex the first index of the destination
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0},
-     *                                   if the specified {@code dstIndex} is less than {@code 0},
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}, or
-     *                                   if {@code dstIndex + length} is greater than
-     *                                   {@code dst.length}
-     */
-    ByteBuffer getBytes(int index, byte[] dst, int dstIndex, int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the specified absolute {@code index} until the destination's position
-     * reaches its limit.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer while the destination's {@code position} will be increased.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + dst.remaining()} is greater than
-     *                                   {@code this.capacity}
-     */
-    ByteBuffer getBytes(int index, java.nio.ByteBuffer dst);
-
-    /**
-     * Transfers this buffer's data to the specified stream starting at the
-     * specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @param length the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}
-     * @throws IOException               if the specified stream threw an exception during I/O
-     */
-    ByteBuffer getBytes(int index, OutputStream out, int length) throws IOException;
-
-    /**
-     * Transfers this buffer's data to the specified channel starting at the
-     * specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @param length the maximum number of bytes to transfer
-     * @return the actual number of bytes written out to the specified channel
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}
-     * @throws IOException               if the specified channel threw an exception during I/O
-     */
-    int getBytes(int index, GatheringByteChannel out, int length) throws IOException;
-
-    /**
-     * Sets the specified boolean at the specified absolute {@code index} in this
-     * buffer.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 1} is greater than {@code this.capacity}
-     */
-    ByteBuffer setBoolean(int index, boolean value);
-
-    /**
-     * Sets the specified byte at the specified absolute {@code index} in this
-     * buffer.  The 24 high-order bits of the specified value are ignored.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 1} is greater than {@code this.capacity}
-     */
-    ByteBuffer setByte(int index, int value);
-
-    /**
-     * Sets the specified 16-bit short integer at the specified absolute
-     * {@code index} in this buffer.  The 16 high-order bits of the specified
-     * value are ignored.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 2} is greater than {@code this.capacity}
-     */
-    ByteBuffer setShort(int index, int value);
-
-    /**
-     * Sets the specified 24-bit medium integer at the specified absolute
-     * {@code index} in this buffer.  Please note that the most significant
-     * byte is ignored in the specified value.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 3} is greater than {@code this.capacity}
-     */
-    ByteBuffer setMedium(int index, int value);
-
-    /**
-     * Sets the specified 32-bit integer at the specified absolute
-     * {@code index} in this buffer.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 4} is greater than {@code this.capacity}
-     */
-    ByteBuffer setInt(int index, int value);
-
-    /**
-     * Sets the specified 64-bit long integer at the specified absolute
-     * {@code index} in this buffer.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 8} is greater than {@code this.capacity}
-     */
-    ByteBuffer setLong(int index, long value);
-
-    /**
-     * Sets the specified 2-byte UTF-16 character at the specified absolute
-     * {@code index} in this buffer.
-     * The 16 high-order bits of the specified value are ignored.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 2} is greater than {@code this.capacity}
-     */
-    ByteBuffer setChar(int index, int value);
-
-    /**
-     * Sets the specified 32-bit floating-point number at the specified
-     * absolute {@code index} in this buffer.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 4} is greater than {@code this.capacity}
-     */
-    ByteBuffer setFloat(int index, float value);
-
-    /**
-     * Sets the specified 64-bit floating-point number at the specified
-     * absolute {@code index} in this buffer.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   {@code index + 8} is greater than {@code this.capacity}
-     */
-    ByteBuffer setDouble(int index, double value);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the specified absolute {@code index} until the source buffer becomes
-     * unreadable.  This method is basically same with
-     * {@link #setBytes(int, ByteBuffer, int, int)}, except that this
-     * method increases the {@code readerIndex} of the source buffer by
-     * the number of the transferred bytes while
-     * {@link #setBytes(int, ByteBuffer, int, int)} does not.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * the source buffer (i.e. {@code this}).
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + src.readableBytes} is greater than
-     *                                   {@code this.capacity}
-     */
-    ByteBuffer setBytes(int index, ByteBuffer src);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the specified absolute {@code index}.  This method is basically same
-     * with {@link #setBytes(int, ByteBuffer, int, int)}, except that this
-     * method increases the {@code readerIndex} of the source buffer by
-     * the number of the transferred bytes while
-     * {@link #setBytes(int, ByteBuffer, int, int)} does not.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * the source buffer (i.e. {@code this}).
-     *
-     * @param length the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0},
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}, or
-     *                                   if {@code length} is greater than {@code src.readableBytes}
-     */
-    ByteBuffer setBytes(int index, ByteBuffer src, int length);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex}
-     * of both the source (i.e. {@code this}) and the destination.
-     *
-     * @param srcIndex the first index of the source
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0},
-     *                                   if the specified {@code srcIndex} is less than {@code 0},
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}, or
-     *                                   if {@code srcIndex + length} is greater than
-     *                                   {@code src.capacity}
-     */
-    ByteBuffer setBytes(int index, ByteBuffer src, int srcIndex, int length);
-
-    /**
-     * Transfers the specified source array's data to this buffer starting at
-     * the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + src.length} is greater than
-     *                                   {@code this.capacity}
-     */
-    ByteBuffer setBytes(int index, byte[] src);
-
-    /**
-     * Transfers the specified source array's data to this buffer starting at
-     * the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0},
-     *                                   if the specified {@code srcIndex} is less than {@code 0},
-     *                                   if {@code index + length} is greater than
-     *                                   {@code this.capacity}, or
-     *                                   if {@code srcIndex + length} is greater than {@code src.length}
-     */
-    ByteBuffer setBytes(int index, byte[] src, int srcIndex, int length);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the specified absolute {@code index} until the source buffer's position
-     * reaches its limit.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + src.remaining()} is greater than
-     *                                   {@code this.capacity}
-     */
-    ByteBuffer setBytes(int index, java.nio.ByteBuffer src);
-
-    /**
-     * Transfers the content of the specified source stream to this buffer
-     * starting at the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @param length the number of bytes to transfer
-     * @return the actual number of bytes read in from the specified channel.
-     * {@code -1} if the specified channel is closed.
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + length} is greater than {@code this.capacity}
-     * @throws IOException               if the specified stream threw an exception during I/O
-     */
-    int setBytes(int index, InputStream in, int length) throws IOException;
-
-    /**
-     * Transfers the content of the specified source channel to this buffer
-     * starting at the specified absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @param length the maximum number of bytes to transfer
-     * @return the actual number of bytes read in from the specified channel.
-     * {@code -1} if the specified channel is closed.
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + length} is greater than {@code this.capacity}
-     * @throws IOException               if the specified channel threw an exception during I/O
-     */
-    int setBytes(int index, ScatteringByteChannel in, int length) throws IOException;
-
-    /**
-     * Fills this buffer with <tt>NUL (0x00)</tt> starting at the specified
-     * absolute {@code index}.
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @param length the number of <tt>NUL</tt>s to write to the buffer
-     * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
-     *                                   if {@code index + length} is greater than {@code this.capacity}
-     */
-    ByteBuffer setZero(int index, int length);
-
-    /**
-     * Gets a boolean at the current {@code readerIndex} and increases
-     * the {@code readerIndex} by {@code 1} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 1}
-     */
-    boolean readBoolean();
-
-    /**
-     * Gets a byte at the current {@code readerIndex} and increases
-     * the {@code readerIndex} by {@code 1} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 1}
-     */
-    byte readByte();
-
-    /**
-     * Gets an unsigned byte at the current {@code readerIndex} and increases
-     * the {@code readerIndex} by {@code 1} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 1}
-     */
-    short readUnsignedByte();
-
-    /**
-     * Gets a 16-bit short integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 2} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 2}
-     */
-    short readShort();
-
-    /**
-     * Gets an unsigned 16-bit short integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 2} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 2}
-     */
-    int readUnsignedShort();
-
-    /**
-     * Gets a 24-bit medium integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 3} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 3}
-     */
-    int readMedium();
-
-    /**
-     * Gets an unsigned 24-bit medium integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 3} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 3}
-     */
-    int readUnsignedMedium();
-
-    /**
-     * Gets a 32-bit integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 4} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 4}
-     */
-    int readInt();
-
-    /**
-     * Gets an unsigned 32-bit integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 4} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 4}
-     */
-    long readUnsignedInt();
-
-    /**
-     * Gets a 64-bit integer at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 8} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 8}
-     */
-    long readLong();
-
-    /**
-     * Gets a 2-byte UTF-16 character at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 2} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 2}
-     */
-    char readChar();
-
-    /**
-     * Gets a 32-bit floating point number at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 4} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 4}
-     */
-    float readFloat();
-
-    /**
-     * Gets a 64-bit floating point number at the current {@code readerIndex}
-     * and increases the {@code readerIndex} by {@code 8} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 8}
-     */
-    double readDouble();
-
-    /**
-     * Transfers this buffer's data to a newly created buffer starting at
-     * the current {@code readerIndex} and increases the {@code readerIndex}
-     * by the number of the transferred bytes (= {@code length}).
-     * The returned buffer's {@code readerIndex} and {@code writerIndex} are
-     * {@code 0} and {@code length} respectively.
-     *
-     * @param length the number of bytes to transfer
-     * @return the newly created buffer which contains the transferred bytes
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
-     */
-    ByteBuffer readBytes(int length);
-
-    /**
-     * Returns a new slice of this buffer's sub-region starting at the current
-     * {@code readerIndex} and increases the {@code readerIndex} by the size
-     * of the new slice (= {@code length}).
-     * <p>
-     * Also be aware that this method will NOT call {@link #retain()} and so the
-     * reference count will NOT be increased.
-     *
-     * @param length the size of the new slice
-     * @return the newly created slice
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
-     */
-    ByteBuffer readSlice(int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the current {@code readerIndex} until the destination becomes
-     * non-writable, and increases the {@code readerIndex} by the number of the
-     * transferred bytes.  This method is basically same with
-     * {@link #readBytes(ByteBuffer, int, int)}, except that this method
-     * increases the {@code writerIndex} of the destination by the number of
-     * the transferred bytes while {@link #readBytes(ByteBuffer, int, int)}
-     * does not.
-     *
-     * @throws IndexOutOfBoundsException if {@code dst.writableBytes} is greater than
-     *                                   {@code this.readableBytes}
-     */
-    ByteBuffer readBytes(ByteBuffer dst);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the current {@code readerIndex} and increases the {@code readerIndex}
-     * by the number of the transferred bytes (= {@code length}).  This method
-     * is basically same with {@link #readBytes(ByteBuffer, int, int)},
-     * except that this method increases the {@code writerIndex} of the
-     * destination by the number of the transferred bytes (= {@code length})
-     * while {@link #readBytes(ByteBuffer, int, int)} does not.
-     *
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes} or
-     *                                   if {@code length} is greater than {@code dst.writableBytes}
-     */
-    ByteBuffer readBytes(ByteBuffer dst, int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the current {@code readerIndex} and increases the {@code readerIndex}
-     * by the number of the transferred bytes (= {@code length}).
-     *
-     * @param dstIndex the first index of the destination
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code dstIndex} is less than {@code 0},
-     *                                   if {@code length} is greater than {@code this.readableBytes}, or
-     *                                   if {@code dstIndex + length} is greater than
-     *                                   {@code dst.capacity}
-     */
-    ByteBuffer readBytes(ByteBuffer dst, int dstIndex, int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the current {@code readerIndex} and increases the {@code readerIndex}
-     * by the number of the transferred bytes (= {@code dst.length}).
-     *
-     * @throws IndexOutOfBoundsException if {@code dst.length} is greater than {@code this.readableBytes}
-     */
-    ByteBuffer readBytes(byte[] dst);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the current {@code readerIndex} and increases the {@code readerIndex}
-     * by the number of the transferred bytes (= {@code length}).
-     *
-     * @param dstIndex the first index of the destination
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code dstIndex} is less than {@code 0},
-     *                                   if {@code length} is greater than {@code this.readableBytes}, or
-     *                                   if {@code dstIndex + length} is greater than {@code dst.length}
-     */
-    ByteBuffer readBytes(byte[] dst, int dstIndex, int length);
-
-    /**
-     * Transfers this buffer's data to the specified destination starting at
-     * the current {@code readerIndex} until the destination's position
-     * reaches its limit, and increases the {@code readerIndex} by the
-     * number of the transferred bytes.
-     *
-     * @throws IndexOutOfBoundsException if {@code dst.remaining()} is greater than
-     *                                   {@code this.readableBytes}
-     */
-    ByteBuffer readBytes(java.nio.ByteBuffer dst);
-
-    /**
-     * Transfers this buffer's data to the specified stream starting at the
-     * current {@code readerIndex}.
-     *
-     * @param length the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
-     * @throws IOException               if the specified stream threw an exception during I/O
-     */
-    ByteBuffer readBytes(OutputStream out, int length) throws IOException;
-
-    /**
-     * Transfers this buffer's data to the specified stream starting at the
-     * current {@code readerIndex}.
-     *
-     * @param length the maximum number of bytes to transfer
-     * @return the actual number of bytes written out to the specified channel
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
-     * @throws IOException               if the specified channel threw an exception during I/O
-     */
-    int readBytes(GatheringByteChannel out, int length) throws IOException;
 
     /**
      * Increases the current {@code readerIndex} by the specified
@@ -1226,210 +466,14 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
      */
     ByteBuffer skipBytes(int length);
 
-    /**
-     * Sets the specified boolean at the current {@code writerIndex}
-     * and increases the {@code writerIndex} by {@code 1} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 1}
-     */
-    ByteBuffer writeBoolean(boolean value);
 
     /**
-     * Sets the specified byte at the current {@code writerIndex}
-     * and increases the {@code writerIndex} by {@code 1} in this buffer.
-     * The 24 high-order bits of the specified value are ignored.
+     * 在字节缓冲区中搜索指定的字节内容，查找到返回索引位置，否则返回-1
      *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 1}
-     */
-    ByteBuffer writeByte(int value);
-
-    /**
-     * Sets the specified 16-bit short integer at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by {@code 2}
-     * in this buffer.  The 16 high-order bits of the specified value are ignored.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 2}
-     */
-    ByteBuffer writeShort(int value);
-
-    /**
-     * Sets the specified 24-bit medium integer at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by {@code 3}
-     * in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 3}
-     */
-    ByteBuffer writeMedium(int value);
-
-    /**
-     * Sets the specified 32-bit integer at the current {@code writerIndex}
-     * and increases the {@code writerIndex} by {@code 4} in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 4}
-     */
-    ByteBuffer writeInt(int value);
-
-    /**
-     * Sets the specified 64-bit long integer at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by {@code 8}
-     * in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 8}
-     */
-    ByteBuffer writeLong(long value);
-
-    /**
-     * Sets the specified 2-byte UTF-16 character at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by {@code 2}
-     * in this buffer.  The 16 high-order bits of the specified value are ignored.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 2}
-     */
-    ByteBuffer writeChar(int value);
-
-    /**
-     * Sets the specified 32-bit floating point number at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by {@code 4}
-     * in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 4}
-     */
-    ByteBuffer writeFloat(float value);
-
-    /**
-     * Sets the specified 64-bit floating point number at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by {@code 8}
-     * in this buffer.
-     *
-     * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 8}
-     */
-    ByteBuffer writeDouble(double value);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the current {@code writerIndex} until the source buffer becomes
-     * unreadable, and increases the {@code writerIndex} by the number of
-     * the transferred bytes.  This method is basically same with
-     * {@link #writeBytes(ByteBuffer, int, int)}, except that this method
-     * increases the {@code readerIndex} of the source buffer by the number of
-     * the transferred bytes while {@link #writeBytes(ByteBuffer, int, int)}
-     * does not.
-     *
-     * @throws IndexOutOfBoundsException if {@code src.readableBytes} is greater than
-     *                                   {@code this.writableBytes}
-     */
-    ByteBuffer writeBytes(ByteBuffer src);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the current {@code writerIndex} and increases the {@code writerIndex}
-     * by the number of the transferred bytes (= {@code length}).  This method
-     * is basically same with {@link #writeBytes(ByteBuffer, int, int)},
-     * except that this method increases the {@code readerIndex} of the source
-     * buffer by the number of the transferred bytes (= {@code length}) while
-     * {@link #writeBytes(ByteBuffer, int, int)} does not.
-     *
-     * @param length the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes} or
-     *                                   if {@code length} is greater then {@code src.readableBytes}
-     */
-    ByteBuffer writeBytes(ByteBuffer src, int length);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the current {@code writerIndex} and increases the {@code writerIndex}
-     * by the number of the transferred bytes (= {@code length}).
-     *
-     * @param srcIndex the first index of the source
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code srcIndex} is less than {@code 0},
-     *                                   if {@code srcIndex + length} is greater than
-     *                                   {@code src.capacity}, or
-     *                                   if {@code length} is greater than {@code this.writableBytes}
-     */
-    ByteBuffer writeBytes(ByteBuffer src, int srcIndex, int length);
-
-    /**
-     * Transfers the specified source array's data to this buffer starting at
-     * the current {@code writerIndex} and increases the {@code writerIndex}
-     * by the number of the transferred bytes (= {@code src.length}).
-     *
-     * @throws IndexOutOfBoundsException if {@code src.length} is greater than {@code this.writableBytes}
-     */
-    ByteBuffer writeBytes(byte[] src);
-
-    /**
-     * Transfers the specified source array's data to this buffer starting at
-     * the current {@code writerIndex} and increases the {@code writerIndex}
-     * by the number of the transferred bytes (= {@code length}).
-     *
-     * @param srcIndex the first index of the source
-     * @param length   the number of bytes to transfer
-     * @throws IndexOutOfBoundsException if the specified {@code srcIndex} is less than {@code 0},
-     *                                   if {@code srcIndex + length} is greater than
-     *                                   {@code src.length}, or
-     *                                   if {@code length} is greater than {@code this.writableBytes}
-     */
-    ByteBuffer writeBytes(byte[] src, int srcIndex, int length);
-
-    /**
-     * Transfers the specified source buffer's data to this buffer starting at
-     * the current {@code writerIndex} until the source buffer's position
-     * reaches its limit, and increases the {@code writerIndex} by the
-     * number of the transferred bytes.
-     *
-     * @throws IndexOutOfBoundsException if {@code src.remaining()} is greater than
-     *                                   {@code this.writableBytes}
-     */
-    ByteBuffer writeBytes(java.nio.ByteBuffer src);
-
-    /**
-     * Transfers the content of the specified stream to this buffer
-     * starting at the current {@code writerIndex} and increases the
-     * {@code writerIndex} by the number of the transferred bytes.
-     *
-     * @param length the number of bytes to transfer
-     * @return the actual number of bytes read in from the specified stream
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
-     * @throws IOException               if the specified stream threw an exception during I/O
-     */
-    int writeBytes(InputStream in, int length) throws IOException;
-
-    /**
-     * Transfers the content of the specified channel to this buffer
-     * starting at the current {@code writerIndex} and increases the
-     * {@code writerIndex} by the number of the transferred bytes.
-     *
-     * @param length the maximum number of bytes to transfer
-     * @return the actual number of bytes read in from the specified channel
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
-     * @throws IOException               if the specified channel threw an exception during I/O
-     */
-    int writeBytes(ScatteringByteChannel in, int length) throws IOException;
-
-    /**
-     * Fills this buffer with <tt>NUL (0x00)</tt> starting at the current
-     * {@code writerIndex} and increases the {@code writerIndex} by the
-     * specified {@code length}.
-     *
-     * @param length the number of <tt>NUL</tt>s to write to the buffer
-     * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
-     */
-    ByteBuffer writeZero(int length);
-
-    /**
-     * Locates the first occurrence of the specified {@code value} in this
-     * buffer.  The search takes place from the specified {@code fromIndex}
-     * (inclusive)  to the specified {@code toIndex} (exclusive).
-     * <p>
-     * If {@code fromIndex} is greater than {@code toIndex}, the search is
-     * performed in a reversed order.
-     * <p>
-     * This method does not modify {@code readerIndex} or {@code writerIndex} of
-     * this buffer.
-     *
-     * @return the absolute index of the first occurrence if found.
-     * {@code -1} otherwise.
+     * @param fromIndex 起始查找位置
+     * @param toIndex   结束查找位置
+     * @param value     内容
+     * @return 查找到返回索引位置，否则返回-1
      */
     int indexOf(int fromIndex, int toIndex, byte value);
 
@@ -1653,18 +697,20 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
      */
     boolean hasArray();
 
+
     /**
-     * Returns the backing byte array of this buffer.
+     * 如果当前缓冲区基于堆数组实现，则返回载体对应的字节数组，否则返回{@code null}
      *
-     * @throws UnsupportedOperationException if there no accessible backing byte array
+     * @return 载体数组
+     * @throws UnsupportedOperationException 如果后端不是基于堆数组的则抛出异常
      */
     byte[] array();
 
     /**
-     * Returns the offset of the first byte within the backing byte array of
-     * this buffer.
+     * 如果当前缓冲区基于堆数组实现，则返回数组偏移索引，否则返回{@code -1}
      *
-     * @throws UnsupportedOperationException if there no accessible backing byte array
+     * @return 数组偏移索引
+     * @throws UnsupportedOperationException 如果后端不是基于堆数组的则抛出异常
      */
     int arrayOffset();
 
@@ -1694,9 +740,12 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     String toString(Charset charset);
 
     /**
-     * Decodes this buffer's sub-region into a string with the specified
-     * character set.  This method does not modify {@code readerIndex} or
-     * {@code writerIndex} of this buffer.
+     * 将指定起始位置，指定长度的缓冲区内容以字符串形式输出，不改变读取游标的位置
+     *
+     * @param index   起始位置索引
+     * @param length  内容长度
+     * @param charset 字符集对象
+     * @return 以charset编码的字符串内容
      */
     String toString(int index, int length, Charset charset);
 
@@ -1747,4 +796,48 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
 
     @Override
     ByteBuffer retain();
+
+
+    /**
+     * 将缓冲区中的内容作为输入流
+     *
+     * @return 字节数组输入流
+     */
+    InputStream asInputStream();
+
+    /**
+     * 从输入流读取
+     *
+     * @param is 输入流
+     * @return 读取字节数
+     * @throws IOException 异常
+     */
+    int load(InputStream is) throws IOException;
+
+    /**
+     * 从文件读取
+     *
+     * @param fileName 文件名
+     * @return 读取字节数
+     * @throws IOException 异常
+     */
+    int load(String fileName) throws IOException;
+
+    /**
+     * 向输出流写入
+     *
+     * @param os 输入流
+     * @return 写入字节数
+     * @throws IOException 异常
+     */
+    int store(OutputStream os) throws IOException;
+
+    /**
+     * 像文件写入
+     *
+     * @param fileName 文件名
+     * @return 写入字节数
+     * @throws IOException 异常
+     */
+    int store(String fileName) throws IOException;
 }
