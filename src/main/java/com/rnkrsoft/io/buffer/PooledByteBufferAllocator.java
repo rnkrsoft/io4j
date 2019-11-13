@@ -125,8 +125,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
         }
     }
 
-    public static final PooledByteBufferAllocator DEFAULT =
-            new PooledByteBufferAllocator(PlatformDependent.directBufferPreferred());
+    public static final PooledByteBufferAllocator DEFAULT = new PooledByteBufferAllocator(PlatformDependent.directBufferPreferred());
 
     private final PoolArena<byte[]>[] heapArenas;
     private final PoolArena<java.nio.ByteBuffer>[] directArenas;
@@ -168,24 +167,41 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
      * {@link PooledByteBufferAllocator#PooledByteBufferAllocator(boolean, int, int, int, int, int, int, int, boolean)}
      */
     @Deprecated
-    public PooledByteBufferAllocator(boolean preferDirect, int nHeapArena, int nDirectArena, int pageSize, int maxOrder,
-                                     int tinyCacheSize, int smallCacheSize, int normalCacheSize) {
+    public PooledByteBufferAllocator(boolean preferDirect,
+                                     int nHeapArena,
+                                     int nDirectArena,
+                                     int pageSize,
+                                     int maxOrder,
+                                     int tinyCacheSize,
+                                     int smallCacheSize,
+                                     int normalCacheSize) {
         this(preferDirect, nHeapArena, nDirectArena, pageSize, maxOrder, tinyCacheSize, smallCacheSize,
                 normalCacheSize, DEFAULT_USE_CACHE_FOR_ALL_THREADS, DEFAULT_DIRECT_MEMORY_CACHE_ALIGNMENT);
     }
 
     public PooledByteBufferAllocator(boolean preferDirect, int nHeapArena,
-                                     int nDirectArena, int pageSize, int maxOrder, int tinyCacheSize,
-                                     int smallCacheSize, int normalCacheSize,
+                                     int nDirectArena,
+                                     int pageSize,
+                                     int maxOrder,
+                                     int tinyCacheSize,
+                                     int smallCacheSize,
+                                     int normalCacheSize,
                                      boolean useCacheForAllThreads) {
         this(preferDirect, nHeapArena, nDirectArena, pageSize, maxOrder,
                 tinyCacheSize, smallCacheSize, normalCacheSize,
                 useCacheForAllThreads, DEFAULT_DIRECT_MEMORY_CACHE_ALIGNMENT);
     }
 
-    public PooledByteBufferAllocator(boolean preferDirect, int nHeapArena, int nDirectArena, int pageSize, int maxOrder,
-                                     int tinyCacheSize, int smallCacheSize, int normalCacheSize,
-                                     boolean useCacheForAllThreads, int directMemoryCacheAlignment) {
+    public PooledByteBufferAllocator(boolean preferDirect,
+                                     int nHeapArena,
+                                     int nDirectArena,
+                                     int pageSize,
+                                     int maxOrder,
+                                     int tinyCacheSize,
+                                     int smallCacheSize,
+                                     int normalCacheSize,
+                                     boolean useCacheForAllThreads,
+                                     int directMemoryCacheAlignment) {
         super(preferDirect);
         threadCache = new PoolThreadLocalCache(useCacheForAllThreads);
         this.tinyCacheSize = tinyCacheSize;

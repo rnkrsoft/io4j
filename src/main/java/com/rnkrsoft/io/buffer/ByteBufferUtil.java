@@ -750,9 +750,7 @@ public final class ByteBufferUtil {
             int srcIdx = fromIndex;
             int dstIdx = 0;
             for (; srcIdx < endIndex; srcIdx ++, dstIdx += 2) {
-                System.arraycopy(
-                    HEXDUMP_TABLE, (array[srcIdx] & 0xFF) << 1,
-                    buf, dstIdx, 2);
+                System.arraycopy( HEXDUMP_TABLE, (array[srcIdx] & 0xFF) << 1,  buf, dstIdx, 2);
             }
 
             return new String(buf);
