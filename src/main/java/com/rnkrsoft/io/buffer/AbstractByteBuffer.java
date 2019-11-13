@@ -24,11 +24,9 @@ import com.rnkrsoft.io.buffer.util.internal.StringUtil;
 import com.rnkrsoft.io.buffer.util.internal.SystemPropertyUtil;
 import com.rnkrsoft.io.buffer.util.internal.logging.InternalLogger;
 import com.rnkrsoft.io.buffer.util.internal.logging.InternalLoggerFactory;
+import com.rnkrsoft.message.MessageFormatter;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.ByteOrder;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
@@ -1186,22 +1184,73 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public int store(String fileName) throws IOException {
-        return 0;
+        File file = new File(fileName);
+        File dir = file.getParentFile();
+        if (!dir.exists()){
+            dir.mkdirs();
+        }
+        OutputStream os = new FileOutputStream(file);
+        try {
+            return store(os);
+        }finally {
+            if (os != null){
+                os.close();
+            }
+        }
+
     }
 
     @Override
     public int store(OutputStream os) throws IOException {
-        return 0;
+        if (os == null) {
+            throw new NullPointerException("OutputStream is null!");
+        }
+        int byteLen = 0;
+        int byteWriteLen = 0;
+        while ((byteWriteLen = readableBytesLength()) > 0) {
+            byte[] data = new byte[Math.min(1024, byteWriteLen)];
+            byteLen += data.length;
+            readBytes(data);
+            os.write(data);
+        }
+        return byteLen;
     }
 
     @Override
     public int load(String fileName) throws IOException {
-        return 0;
+        File file = new File(fileName);
+        if (!file.exists()){
+            throw new FileNotFoundException(MessageFormatter.format("file '{}' is not found!", file));
+        }
+        InputStream is = new FileInputStream(file);
+        try{
+            return load(is);
+        }finally {
+            if (is != null){
+                is.close();
+            }
+        }
     }
 
     @Override
     public int load(InputStream is) throws IOException {
-        return 0;
+        if (is == null) {
+            throw new NullPointerException("InputStream is null!");
+        }
+        int byteLen = 0;
+        int byteReadLen = 0;
+        byte[] data = new byte[1024];
+        while ((byteReadLen = is.read(data)) != -1) {
+            if (byteReadLen == 1024) {
+                writeBytes(data);
+            } else {
+                byte[] data0 = new byte[byteReadLen];
+                System.arraycopy(data, 0, data0, 0, byteReadLen);
+                writeBytes(data0);
+            }
+            byteLen += byteReadLen;
+        }
+        return byteLen;
     }
 
     @Override
