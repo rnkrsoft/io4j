@@ -40,7 +40,8 @@ public abstract class Recycler<T> {
 
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(Recycler.class);
 
-    private static final Handle NOOP_HANDLE = new Handle() { };
+    private static final Handle NOOP_HANDLE = new Handle() {
+    };
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger(Integer.MIN_VALUE);
     private static final int OWN_THREAD_ID = ID_GENERATOR.getAndIncrement();
     private static final int DEFAULT_INITIAL_MAX_CAPACITY = 32768; // Use 32k instances as default max capacity.
@@ -57,23 +58,18 @@ public abstract class Recycler<T> {
         // e.g. com.rnkrsoft.io.recycler.maxCapacity.writeTask
         //      com.rnkrsoft.io.recycler.maxCapacity.outboundBuffer
         int maxCapacity = SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxCapacity.default",
-                                                    DEFAULT_INITIAL_MAX_CAPACITY);
+                DEFAULT_INITIAL_MAX_CAPACITY);
         if (maxCapacity < 0) {
             maxCapacity = DEFAULT_INITIAL_MAX_CAPACITY;
         }
         DEFAULT_MAX_CAPACITY = maxCapacity;
 
-        MAX_SHARED_CAPACITY_FACTOR = max(2,
-                SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxSharedCapacityFactor",
-                        2));
+        MAX_SHARED_CAPACITY_FACTOR = max(2, SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxSharedCapacityFactor", 2));
 
-        MAX_DELAYED_QUEUES_PER_THREAD = max(0,
-                SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxDelayedQueuesPerThread",
-                        // We use the same value as default EventLoop number
-                        Runtime.availableProcessors() * 2));
+        // We use the same value as default EventLoop number
+        MAX_DELAYED_QUEUES_PER_THREAD = max(0, SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxDelayedQueuesPerThread", Runtime.availableProcessors() * 2));
 
-        LINK_CAPACITY = safeFindNextPositivePowerOfTwo(
-                max(SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.linkCapacity", 16), 16));
+        LINK_CAPACITY = safeFindNextPositivePowerOfTwo(max(SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.linkCapacity", 16), 16));
 
         // By default we allow one push to a Recycler for each 8th try on handles that were never recycled before.
         // This should help to slowly increase the capacity of the recycler while not be too sensitive to allocation
@@ -113,9 +109,9 @@ public abstract class Recycler<T> {
         protected void onRemoval(Stack<T> value) {
             // Let us remove the WeakOrderQueue from the WeakHashMap directly if its safe to remove some overhead
             if (value.threadRef.get() == Thread.currentThread()) {
-               if (DELAYED_RECYCLED.isSet()) {
-                   DELAYED_RECYCLED.get().remove(value);
-               }
+                if (DELAYED_RECYCLED.isSet()) {
+                    DELAYED_RECYCLED.get().remove(value);
+                }
             }
         }
     };
@@ -185,7 +181,8 @@ public abstract class Recycler<T> {
         return threadLocal.get().size;
     }
 
-    public interface Handle { }
+    public interface Handle {
+    }
 
     static final class DefaultHandle implements Handle {
         private int lastRecycledId;
@@ -207,11 +204,11 @@ public abstract class Recycler<T> {
 
     private static final FastThreadLocal<Map<Stack<?>, WeakOrderQueue>> DELAYED_RECYCLED =
             new FastThreadLocal<Map<Stack<?>, WeakOrderQueue>>() {
-        @Override
-        protected Map<Stack<?>, WeakOrderQueue> initialValue() {
-            return new WeakHashMap<Stack<?>, WeakOrderQueue>();
-        }
-    };
+                @Override
+                protected Map<Stack<?>, WeakOrderQueue> initialValue() {
+                    return new WeakHashMap<Stack<?>, WeakOrderQueue>();
+                }
+            };
 
     // a queue that makes only moderate guarantees about visibility: items are seen in the correct order,
     // but we aren't absolutely guaranteed to ever see anything at all, thereby keeping the queue cheap to maintain
@@ -275,7 +272,7 @@ public abstract class Recycler<T> {
 
         private static boolean reserveSpace(AtomicInteger availableSharedCapacity, int space) {
             assert space >= 0;
-            for (;;) {
+            for (; ; ) {
                 int available = availableSharedCapacity.get();
                 if (available < space) {
                     return false;
@@ -365,7 +362,7 @@ public abstract class Recycler<T> {
                         continue;
                     }
                     element.stack = dst;
-                    dstElems[newDstSize ++] = element;
+                    dstElems[newDstSize++] = element;
                 }
 
                 if (srcEnd == LINK_CAPACITY && head.next != null) {
@@ -469,7 +466,7 @@ public abstract class Recycler<T> {
                 }
                 size = this.size;
             }
-            size --;
+            size--;
             DefaultHandle ret = elements[size];
             elements[size] = null;
             if (ret.lastRecycledId != ret.recycleId) {
@@ -518,7 +515,7 @@ public abstract class Recycler<T> {
                     // performing a volatile read to confirm there is no data left to collect.
                     // We never unlink the first queue, as we don't want to synchronize on updating the head.
                     if (cursor.hasFinalData()) {
-                        for (;;) {
+                        for (; ; ) {
                             if (cursor.transfer(this)) {
                                 success = true;
                             } else {

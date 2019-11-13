@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
 /**
  * An empty {@link ByteBuffer} whose capacity and maximum capacity are all {@code 0}.
  */
-public final class EmptyByteBuffer implements ByteBuffer {
+final class EmptyByteBuffer implements ByteBuffer {
 
     private static final java.nio.ByteBuffer EMPTY_BYTE_BUFFER = java.nio.ByteBuffer.allocateDirect(0);
     private static final long EMPTY_BYTE_BUFFER_ADDRESS;

@@ -31,8 +31,7 @@ public final class UnpooledByteBufferAllocator extends AbstractByteBufferAllocat
     /**
      * Default instance which uses leak-detection for direct buffers.
      */
-    public static final UnpooledByteBufferAllocator DEFAULT =
-            new UnpooledByteBufferAllocator(PlatformDependent.directBufferPreferred());
+    public static final UnpooledByteBufferAllocator DEFAULT = new UnpooledByteBufferAllocator(PlatformDependent.directBufferPreferred());
 
     /**
      * Create a new instance which uses leak-detection for direct buffers.
