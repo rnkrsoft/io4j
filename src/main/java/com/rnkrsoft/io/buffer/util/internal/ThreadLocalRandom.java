@@ -76,7 +76,7 @@ public final class ThreadLocalRandom extends Random {
         if (initialSeedUniquifier == 0) {
             // Use the system property value.
             ThreadLocalRandom.initialSeedUniquifier = initialSeedUniquifier =
-                    SystemPropertyUtil.getLong("io.netty.initialSeedUniquifier", 0);
+                    SystemPropertyUtil.getLong("com.rnkrsoft.io.initialSeedUniquifier", 0);
         }
 
         // Otherwise, generate one.
@@ -172,7 +172,7 @@ public final class ThreadLocalRandom extends Random {
             if (seedUniquifier.compareAndSet(current, next)) {
                 if (current == 0 && logger.isDebugEnabled()) {
                     logger.debug(String.format(
-                            "-Dio.netty.initialSeedUniquifier: 0x%016x (took %d ms)",
+                            "-Dcom.rnkrsoft.io.initialSeedUniquifier: 0x%016x (took %d ms)",
                             actualCurrent, TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime)));
                 }
                 return next ^ System.nanoTime();

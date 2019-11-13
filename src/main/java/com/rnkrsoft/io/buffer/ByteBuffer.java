@@ -229,12 +229,12 @@ import java.nio.charset.UnsupportedCharsetException;
  * {@link ByteBufferOutputStream}.
  */
 @SuppressWarnings("ClassMayBeInterface")
-public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettable, ByteBufferReadable, ByteBufferWritable, ReferenceCounted, Comparable<ByteBuffer> {
+public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, ByteBufferReadable, ByteBufferWritable, ReferenceCounted, Comparable<ByteBuffer> {
 
     /**
      * Returns the number of bytes (octets) this buffer can contain.
      */
-    public abstract int capacity();
+    int capacity();
 
     /**
      * Adjusts the capacity of this buffer.  If the {@code newCapacity} is less than the current
@@ -242,7 +242,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * than the current capacity, the buffer is appended with unspecified data whose length is
      * {@code (newCapacity - currentCapacity)}.
      */
-    public abstract ByteBuffer capacity(int newCapacity);
+    ByteBuffer capacity(int newCapacity);
 
     /**
      * Returns the maximum allowed capacity of this buffer.  If a user attempts to increase the
@@ -250,18 +250,18 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@link #ensureWritable(int)}, those methods will raise an
      * {@link IllegalArgumentException}.
      */
-    public abstract int maxCapacity();
+    int maxCapacity();
 
     /**
      * Returns the {@link ByteBufferAllocator} which created this buffer.
      */
-    public abstract ByteBufferAllocator alloc();
+    ByteBufferAllocator alloc();
 
     /**
      * Returns the <a href="http://en.wikipedia.org/wiki/Endianness">endianness</a>
      * of this buffer.
      */
-    public abstract ByteOrder order();
+    ByteOrder order();
 
     /**
      * Returns a buffer with the specified {@code endianness} which shares the whole region,
@@ -271,25 +271,25 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * return {@code this}.  This method does not modify {@code readerIndex} or {@code writerIndex}
      * of this buffer.
      */
-    public abstract ByteBuffer order(ByteOrder endianness);
+    ByteBuffer order(ByteOrder endianness);
 
     /**
      * Return the underlying buffer instance if this buffer is a wrapper of another buffer.
      *
      * @return {@code null} if this buffer is not a wrapper
      */
-    public abstract ByteBuffer unwrap();
+    ByteBuffer unwrap();
 
     /**
      * Returns {@code true} if and only if this buffer is backed by an
      * NIO direct buffer.
      */
-    public abstract boolean isDirect();
+    boolean isDirect();
 
     /**
      * Returns the {@code readerIndex} of this buffer.
      */
-    public abstract int readerIndex();
+    int readerIndex();
 
     /**
      * Sets the {@code readerIndex} of this buffer.
@@ -298,12 +298,12 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   less than {@code 0} or
      *                                   greater than {@code this.writerIndex}
      */
-    public abstract ByteBuffer readerIndex(int readerIndex);
+    ByteBuffer readerIndex(int readerIndex);
 
     /**
      * Returns the {@code writerIndex} of this buffer.
      */
-    public abstract int writerIndex();
+    int writerIndex();
 
     /**
      * Sets the {@code writerIndex} of this buffer.
@@ -312,7 +312,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   less than {@code this.readerIndex} or
      *                                   greater than {@code this.capacity}
      */
-    public abstract ByteBuffer writerIndex(int writerIndex);
+    ByteBuffer writerIndex(int writerIndex);
 
     /**
      * Sets the {@code readerIndex} and {@code writerIndex} of this buffer
@@ -364,50 +364,50 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code readerIndex} or if the specified {@code writerIndex} is
      *                                   greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setIndex(int readerIndex, int writerIndex);
+    ByteBuffer setIndex(int readerIndex, int writerIndex);
 
     /**
      * Returns the number of readable bytes which is equal to
      * {@code (this.writerIndex - this.readerIndex)}.
      */
-    public abstract int readableBytes();
+    int readableBytes();
 
     /**
      * Returns the number of writable bytes which is equal to
      * {@code (this.capacity - this.writerIndex)}.
      */
-    public abstract int writableBytes();
+    int writableBytes();
 
     /**
      * Returns the maximum possible number of writable bytes, which is equal to
      * {@code (this.maxCapacity - this.writerIndex)}.
      */
-    public abstract int maxWritableBytes();
+    int maxWritableBytes();
 
     /**
      * Returns {@code true}
      * if and only if {@code (this.writerIndex - this.readerIndex)} is greater
      * than {@code 0}.
      */
-    public abstract boolean isReadable();
+    boolean isReadable();
 
     /**
      * Returns {@code true} if and only if this buffer contains equal to or more than the specified number of elements.
      */
-    public abstract boolean isReadable(int size);
+    boolean isReadable(int size);
 
     /**
      * Returns {@code true}
      * if and only if {@code (this.capacity - this.writerIndex)} is greater
      * than {@code 0}.
      */
-    public abstract boolean isWritable();
+    boolean isWritable();
 
     /**
      * Returns {@code true} if and only if this buffer has enough room to allow writing the specified number of
      * elements.
      */
-    public abstract boolean isWritable(int size);
+    boolean isWritable(int size);
 
     /**
      * Sets the {@code readerIndex} and {@code writerIndex} of this buffer to
@@ -418,7 +418,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * from that of NIO buffer, which sets the {@code limit} to
      * the {@code capacity} of the buffer.
      */
-    public abstract ByteBuffer clear();
+    ByteBuffer clear();
 
     /**
      * Marks the current {@code readerIndex} in this buffer.  You can
@@ -426,7 +426,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@code readerIndex} by calling {@link #resetReaderIndex()}.
      * The initial value of the marked {@code readerIndex} is {@code 0}.
      */
-    public abstract ByteBuffer markReaderIndex();
+    ByteBuffer markReaderIndex();
 
     /**
      * Repositions the current {@code readerIndex} to the marked
@@ -435,7 +435,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the current {@code writerIndex} is less than the marked
      *                                   {@code readerIndex}
      */
-    public abstract ByteBuffer resetReaderIndex();
+    ByteBuffer resetReaderIndex();
 
     /**
      * Marks the current {@code writerIndex} in this buffer.  You can
@@ -443,7 +443,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@code writerIndex} by calling {@link #resetWriterIndex()}.
      * The initial value of the marked {@code writerIndex} is {@code 0}.
      */
-    public abstract ByteBuffer markWriterIndex();
+    ByteBuffer markWriterIndex();
 
     /**
      * Repositions the current {@code writerIndex} to the marked
@@ -452,7 +452,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the current {@code readerIndex} is greater than the marked
      *                                   {@code writerIndex}
      */
-    public abstract ByteBuffer resetWriterIndex();
+    ByteBuffer resetWriterIndex();
 
     /**
      * Discards the bytes between the 0th index and {@code readerIndex}.
@@ -462,7 +462,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * <p>
      * Please refer to the class documentation for more detailed explanation.
      */
-    public abstract ByteBuffer discardReadBytes();
+    ByteBuffer discardReadBytes();
 
     /**
      * Similar to {@link ByteBuffer#discardReadBytes()} except that this method might discard
@@ -470,7 +470,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * overall memory bandwidth consumption at the cost of potentially additional memory
      * consumption.
      */
-    public abstract ByteBuffer discardSomeReadBytes();
+    ByteBuffer discardSomeReadBytes();
 
     /**
      * Makes sure the number of {@linkplain #writableBytes() the writable bytes}
@@ -481,7 +481,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @param minWritableBytes the expected minimum number of writable bytes
      * @throws IndexOutOfBoundsException if {@link #writerIndex()} + {@code minWritableBytes} > {@link #maxCapacity()}
      */
-    public abstract ByteBuffer ensureWritable(int minWritableBytes);
+    ByteBuffer ensureWritable(int minWritableBytes);
 
     /**
      * Tries to make sure the number of {@linkplain #writableBytes() the writable bytes}
@@ -500,7 +500,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@code 3} if the buffer does not have enough bytes, but its capacity has been
      * increased to its maximum.
      */
-    public abstract int ensureWritable(int minWritableBytes, boolean force);
+    int ensureWritable(int minWritableBytes, boolean force);
 
     /**
      * Gets a boolean at the specified absolute (@code index) in this buffer.
@@ -510,7 +510,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 1} is greater than {@code this.capacity}
      */
-    public abstract boolean getBoolean(int index);
+    boolean getBoolean(int index);
 
     /**
      * Gets a byte at the specified absolute {@code index} in this buffer.
@@ -520,7 +520,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 1} is greater than {@code this.capacity}
      */
-    public abstract byte getByte(int index);
+    byte getByte(int index);
 
     /**
      * Gets an unsigned byte at the specified absolute {@code index} in this
@@ -530,7 +530,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 1} is greater than {@code this.capacity}
      */
-    public abstract short getUnsignedByte(int index);
+    short getUnsignedByte(int index);
 
     /**
      * Gets a 16-bit short integer at the specified absolute {@code index} in
@@ -540,7 +540,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 2} is greater than {@code this.capacity}
      */
-    public abstract short getShort(int index);
+    short getShort(int index);
 
     /**
      * Gets an unsigned 16-bit short integer at the specified absolute
@@ -550,7 +550,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 2} is greater than {@code this.capacity}
      */
-    public abstract int getUnsignedShort(int index);
+    int getUnsignedShort(int index);
 
     /**
      * Gets a 24-bit medium integer at the specified absolute {@code index} in
@@ -560,7 +560,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 3} is greater than {@code this.capacity}
      */
-    public abstract int getMedium(int index);
+    int getMedium(int index);
 
     /**
      * Gets an unsigned 24-bit medium integer at the specified absolute
@@ -570,7 +570,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 3} is greater than {@code this.capacity}
      */
-    public abstract int getUnsignedMedium(int index);
+    int getUnsignedMedium(int index);
 
     /**
      * Gets a 32-bit integer at the specified absolute {@code index} in
@@ -580,7 +580,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 4} is greater than {@code this.capacity}
      */
-    public abstract int getInt(int index);
+    int getInt(int index);
 
     /**
      * Gets an unsigned 32-bit integer at the specified absolute {@code index}
@@ -590,7 +590,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 4} is greater than {@code this.capacity}
      */
-    public abstract long getUnsignedInt(int index);
+    long getUnsignedInt(int index);
 
     /**
      * Gets a 64-bit long integer at the specified absolute {@code index} in
@@ -600,7 +600,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 8} is greater than {@code this.capacity}
      */
-    public abstract long getLong(int index);
+    long getLong(int index);
 
     /**
      * Gets a 2-byte UTF-16 character at the specified absolute
@@ -610,7 +610,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 2} is greater than {@code this.capacity}
      */
-    public abstract char getChar(int index);
+    char getChar(int index);
 
     /**
      * Gets a 32-bit floating point number at the specified absolute
@@ -620,7 +620,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 4} is greater than {@code this.capacity}
      */
-    public abstract float getFloat(int index);
+    float getFloat(int index);
 
     /**
      * Gets a 64-bit floating point number at the specified absolute
@@ -630,7 +630,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 8} is greater than {@code this.capacity}
      */
-    public abstract double getDouble(int index);
+    double getDouble(int index);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -647,7 +647,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + dst.writableBytes} is greater than
      *                                   {@code this.capacity}
      */
-    public abstract ByteBuffer getBytes(int index, ByteBuffer dst);
+    ByteBuffer getBytes(int index, ByteBuffer dst);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -665,7 +665,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code this.capacity}, or
      *                                   if {@code length} is greater than {@code dst.writableBytes}
      */
-    public abstract ByteBuffer getBytes(int index, ByteBuffer dst, int length);
+    ByteBuffer getBytes(int index, ByteBuffer dst, int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -682,7 +682,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code dstIndex + length} is greater than
      *                                   {@code dst.capacity}
      */
-    public abstract ByteBuffer getBytes(int index, ByteBuffer dst, int dstIndex, int length);
+    ByteBuffer getBytes(int index, ByteBuffer dst, int dstIndex, int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -694,7 +694,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + dst.length} is greater than
      *                                   {@code this.capacity}
      */
-    public abstract ByteBuffer getBytes(int index, byte[] dst);
+    ByteBuffer getBytes(int index, byte[] dst);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -711,7 +711,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code dstIndex + length} is greater than
      *                                   {@code dst.length}
      */
-    public abstract ByteBuffer getBytes(int index, byte[] dst, int dstIndex, int length);
+    ByteBuffer getBytes(int index, byte[] dst, int dstIndex, int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -724,7 +724,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + dst.remaining()} is greater than
      *                                   {@code this.capacity}
      */
-    public abstract ByteBuffer getBytes(int index, java.nio.ByteBuffer dst);
+    ByteBuffer getBytes(int index, java.nio.ByteBuffer dst);
 
     /**
      * Transfers this buffer's data to the specified stream starting at the
@@ -738,7 +738,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code this.capacity}
      * @throws IOException               if the specified stream threw an exception during I/O
      */
-    public abstract ByteBuffer getBytes(int index, OutputStream out, int length) throws IOException;
+    ByteBuffer getBytes(int index, OutputStream out, int length) throws IOException;
 
     /**
      * Transfers this buffer's data to the specified channel starting at the
@@ -753,7 +753,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code this.capacity}
      * @throws IOException               if the specified channel threw an exception during I/O
      */
-    public abstract int getBytes(int index, GatheringByteChannel out, int length) throws IOException;
+    int getBytes(int index, GatheringByteChannel out, int length) throws IOException;
 
     /**
      * Sets the specified boolean at the specified absolute {@code index} in this
@@ -764,7 +764,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 1} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setBoolean(int index, boolean value);
+    ByteBuffer setBoolean(int index, boolean value);
 
     /**
      * Sets the specified byte at the specified absolute {@code index} in this
@@ -775,7 +775,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 1} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setByte(int index, int value);
+    ByteBuffer setByte(int index, int value);
 
     /**
      * Sets the specified 16-bit short integer at the specified absolute
@@ -787,7 +787,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 2} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setShort(int index, int value);
+    ByteBuffer setShort(int index, int value);
 
     /**
      * Sets the specified 24-bit medium integer at the specified absolute
@@ -799,7 +799,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 3} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setMedium(int index, int value);
+    ByteBuffer setMedium(int index, int value);
 
     /**
      * Sets the specified 32-bit integer at the specified absolute
@@ -810,7 +810,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 4} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setInt(int index, int value);
+    ByteBuffer setInt(int index, int value);
 
     /**
      * Sets the specified 64-bit long integer at the specified absolute
@@ -821,7 +821,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 8} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setLong(int index, long value);
+    ByteBuffer setLong(int index, long value);
 
     /**
      * Sets the specified 2-byte UTF-16 character at the specified absolute
@@ -833,7 +833,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 2} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setChar(int index, int value);
+    ByteBuffer setChar(int index, int value);
 
     /**
      * Sets the specified 32-bit floating-point number at the specified
@@ -844,7 +844,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 4} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setFloat(int index, float value);
+    ByteBuffer setFloat(int index, float value);
 
     /**
      * Sets the specified 64-bit floating-point number at the specified
@@ -855,7 +855,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   {@code index + 8} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setDouble(int index, double value);
+    ByteBuffer setDouble(int index, double value);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -872,7 +872,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + src.readableBytes} is greater than
      *                                   {@code this.capacity}
      */
-    public abstract ByteBuffer setBytes(int index, ByteBuffer src);
+    ByteBuffer setBytes(int index, ByteBuffer src);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -890,7 +890,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code this.capacity}, or
      *                                   if {@code length} is greater than {@code src.readableBytes}
      */
-    public abstract ByteBuffer setBytes(int index, ByteBuffer src, int length);
+    ByteBuffer setBytes(int index, ByteBuffer src, int length);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -907,7 +907,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code srcIndex + length} is greater than
      *                                   {@code src.capacity}
      */
-    public abstract ByteBuffer setBytes(int index, ByteBuffer src, int srcIndex, int length);
+    ByteBuffer setBytes(int index, ByteBuffer src, int srcIndex, int length);
 
     /**
      * Transfers the specified source array's data to this buffer starting at
@@ -919,7 +919,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + src.length} is greater than
      *                                   {@code this.capacity}
      */
-    public abstract ByteBuffer setBytes(int index, byte[] src);
+    ByteBuffer setBytes(int index, byte[] src);
 
     /**
      * Transfers the specified source array's data to this buffer starting at
@@ -933,7 +933,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code this.capacity}, or
      *                                   if {@code srcIndex + length} is greater than {@code src.length}
      */
-    public abstract ByteBuffer setBytes(int index, byte[] src, int srcIndex, int length);
+    ByteBuffer setBytes(int index, byte[] src, int srcIndex, int length);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -946,7 +946,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + src.remaining()} is greater than
      *                                   {@code this.capacity}
      */
-    public abstract ByteBuffer setBytes(int index, java.nio.ByteBuffer src);
+    ByteBuffer setBytes(int index, java.nio.ByteBuffer src);
 
     /**
      * Transfers the content of the specified source stream to this buffer
@@ -961,7 +961,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + length} is greater than {@code this.capacity}
      * @throws IOException               if the specified stream threw an exception during I/O
      */
-    public abstract int setBytes(int index, InputStream in, int length) throws IOException;
+    int setBytes(int index, InputStream in, int length) throws IOException;
 
     /**
      * Transfers the content of the specified source channel to this buffer
@@ -976,7 +976,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code index + length} is greater than {@code this.capacity}
      * @throws IOException               if the specified channel threw an exception during I/O
      */
-    public abstract int setBytes(int index, ScatteringByteChannel in, int length) throws IOException;
+    int setBytes(int index, ScatteringByteChannel in, int length) throws IOException;
 
     /**
      * Fills this buffer with <tt>NUL (0x00)</tt> starting at the specified
@@ -988,7 +988,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if the specified {@code index} is less than {@code 0} or
      *                                   if {@code index + length} is greater than {@code this.capacity}
      */
-    public abstract ByteBuffer setZero(int index, int length);
+    ByteBuffer setZero(int index, int length);
 
     /**
      * Gets a boolean at the current {@code readerIndex} and increases
@@ -996,7 +996,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 1}
      */
-    public abstract boolean readBoolean();
+    boolean readBoolean();
 
     /**
      * Gets a byte at the current {@code readerIndex} and increases
@@ -1004,7 +1004,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 1}
      */
-    public abstract byte readByte();
+    byte readByte();
 
     /**
      * Gets an unsigned byte at the current {@code readerIndex} and increases
@@ -1012,7 +1012,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 1}
      */
-    public abstract short readUnsignedByte();
+    short readUnsignedByte();
 
     /**
      * Gets a 16-bit short integer at the current {@code readerIndex}
@@ -1020,7 +1020,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 2}
      */
-    public abstract short readShort();
+    short readShort();
 
     /**
      * Gets an unsigned 16-bit short integer at the current {@code readerIndex}
@@ -1028,7 +1028,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 2}
      */
-    public abstract int readUnsignedShort();
+    int readUnsignedShort();
 
     /**
      * Gets a 24-bit medium integer at the current {@code readerIndex}
@@ -1036,7 +1036,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 3}
      */
-    public abstract int readMedium();
+    int readMedium();
 
     /**
      * Gets an unsigned 24-bit medium integer at the current {@code readerIndex}
@@ -1044,7 +1044,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 3}
      */
-    public abstract int readUnsignedMedium();
+    int readUnsignedMedium();
 
     /**
      * Gets a 32-bit integer at the current {@code readerIndex}
@@ -1052,7 +1052,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 4}
      */
-    public abstract int readInt();
+    int readInt();
 
     /**
      * Gets an unsigned 32-bit integer at the current {@code readerIndex}
@@ -1060,7 +1060,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 4}
      */
-    public abstract long readUnsignedInt();
+    long readUnsignedInt();
 
     /**
      * Gets a 64-bit integer at the current {@code readerIndex}
@@ -1068,7 +1068,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 8}
      */
-    public abstract long readLong();
+    long readLong();
 
     /**
      * Gets a 2-byte UTF-16 character at the current {@code readerIndex}
@@ -1076,7 +1076,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 2}
      */
-    public abstract char readChar();
+    char readChar();
 
     /**
      * Gets a 32-bit floating point number at the current {@code readerIndex}
@@ -1084,7 +1084,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 4}
      */
-    public abstract float readFloat();
+    float readFloat();
 
     /**
      * Gets a 64-bit floating point number at the current {@code readerIndex}
@@ -1092,7 +1092,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.readableBytes} is less than {@code 8}
      */
-    public abstract double readDouble();
+    double readDouble();
 
     /**
      * Transfers this buffer's data to a newly created buffer starting at
@@ -1105,7 +1105,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return the newly created buffer which contains the transferred bytes
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
      */
-    public abstract ByteBuffer readBytes(int length);
+    ByteBuffer readBytes(int length);
 
     /**
      * Returns a new slice of this buffer's sub-region starting at the current
@@ -1119,7 +1119,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return the newly created slice
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
      */
-    public abstract ByteBuffer readSlice(int length);
+    ByteBuffer readSlice(int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -1134,7 +1134,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code dst.writableBytes} is greater than
      *                                   {@code this.readableBytes}
      */
-    public abstract ByteBuffer readBytes(ByteBuffer dst);
+    ByteBuffer readBytes(ByteBuffer dst);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -1148,7 +1148,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes} or
      *                                   if {@code length} is greater than {@code dst.writableBytes}
      */
-    public abstract ByteBuffer readBytes(ByteBuffer dst, int length);
+    ByteBuffer readBytes(ByteBuffer dst, int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -1162,7 +1162,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code dstIndex + length} is greater than
      *                                   {@code dst.capacity}
      */
-    public abstract ByteBuffer readBytes(ByteBuffer dst, int dstIndex, int length);
+    ByteBuffer readBytes(ByteBuffer dst, int dstIndex, int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -1171,7 +1171,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code dst.length} is greater than {@code this.readableBytes}
      */
-    public abstract ByteBuffer readBytes(byte[] dst);
+    ByteBuffer readBytes(byte[] dst);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -1184,7 +1184,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   if {@code length} is greater than {@code this.readableBytes}, or
      *                                   if {@code dstIndex + length} is greater than {@code dst.length}
      */
-    public abstract ByteBuffer readBytes(byte[] dst, int dstIndex, int length);
+    ByteBuffer readBytes(byte[] dst, int dstIndex, int length);
 
     /**
      * Transfers this buffer's data to the specified destination starting at
@@ -1195,7 +1195,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code dst.remaining()} is greater than
      *                                   {@code this.readableBytes}
      */
-    public abstract ByteBuffer readBytes(java.nio.ByteBuffer dst);
+    ByteBuffer readBytes(java.nio.ByteBuffer dst);
 
     /**
      * Transfers this buffer's data to the specified stream starting at the
@@ -1205,7 +1205,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
      * @throws IOException               if the specified stream threw an exception during I/O
      */
-    public abstract ByteBuffer readBytes(OutputStream out, int length) throws IOException;
+    ByteBuffer readBytes(OutputStream out, int length) throws IOException;
 
     /**
      * Transfers this buffer's data to the specified stream starting at the
@@ -1216,7 +1216,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
      * @throws IOException               if the specified channel threw an exception during I/O
      */
-    public abstract int readBytes(GatheringByteChannel out, int length) throws IOException;
+    int readBytes(GatheringByteChannel out, int length) throws IOException;
 
     /**
      * Increases the current {@code readerIndex} by the specified
@@ -1224,7 +1224,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
      */
-    public abstract ByteBuffer skipBytes(int length);
+    ByteBuffer skipBytes(int length);
 
     /**
      * Sets the specified boolean at the current {@code writerIndex}
@@ -1232,7 +1232,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 1}
      */
-    public abstract ByteBuffer writeBoolean(boolean value);
+    ByteBuffer writeBoolean(boolean value);
 
     /**
      * Sets the specified byte at the current {@code writerIndex}
@@ -1241,7 +1241,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 1}
      */
-    public abstract ByteBuffer writeByte(int value);
+    ByteBuffer writeByte(int value);
 
     /**
      * Sets the specified 16-bit short integer at the current
@@ -1250,7 +1250,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 2}
      */
-    public abstract ByteBuffer writeShort(int value);
+    ByteBuffer writeShort(int value);
 
     /**
      * Sets the specified 24-bit medium integer at the current
@@ -1259,7 +1259,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 3}
      */
-    public abstract ByteBuffer writeMedium(int value);
+    ByteBuffer writeMedium(int value);
 
     /**
      * Sets the specified 32-bit integer at the current {@code writerIndex}
@@ -1267,7 +1267,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 4}
      */
-    public abstract ByteBuffer writeInt(int value);
+    ByteBuffer writeInt(int value);
 
     /**
      * Sets the specified 64-bit long integer at the current
@@ -1276,7 +1276,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 8}
      */
-    public abstract ByteBuffer writeLong(long value);
+    ByteBuffer writeLong(long value);
 
     /**
      * Sets the specified 2-byte UTF-16 character at the current
@@ -1285,7 +1285,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 2}
      */
-    public abstract ByteBuffer writeChar(int value);
+    ByteBuffer writeChar(int value);
 
     /**
      * Sets the specified 32-bit floating point number at the current
@@ -1294,7 +1294,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 4}
      */
-    public abstract ByteBuffer writeFloat(float value);
+    ByteBuffer writeFloat(float value);
 
     /**
      * Sets the specified 64-bit floating point number at the current
@@ -1303,7 +1303,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code this.writableBytes} is less than {@code 8}
      */
-    public abstract ByteBuffer writeDouble(double value);
+    ByteBuffer writeDouble(double value);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -1318,7 +1318,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code src.readableBytes} is greater than
      *                                   {@code this.writableBytes}
      */
-    public abstract ByteBuffer writeBytes(ByteBuffer src);
+    ByteBuffer writeBytes(ByteBuffer src);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -1333,7 +1333,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes} or
      *                                   if {@code length} is greater then {@code src.readableBytes}
      */
-    public abstract ByteBuffer writeBytes(ByteBuffer src, int length);
+    ByteBuffer writeBytes(ByteBuffer src, int length);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -1347,7 +1347,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code src.capacity}, or
      *                                   if {@code length} is greater than {@code this.writableBytes}
      */
-    public abstract ByteBuffer writeBytes(ByteBuffer src, int srcIndex, int length);
+    ByteBuffer writeBytes(ByteBuffer src, int srcIndex, int length);
 
     /**
      * Transfers the specified source array's data to this buffer starting at
@@ -1356,7 +1356,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws IndexOutOfBoundsException if {@code src.length} is greater than {@code this.writableBytes}
      */
-    public abstract ByteBuffer writeBytes(byte[] src);
+    ByteBuffer writeBytes(byte[] src);
 
     /**
      * Transfers the specified source array's data to this buffer starting at
@@ -1370,7 +1370,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *                                   {@code src.length}, or
      *                                   if {@code length} is greater than {@code this.writableBytes}
      */
-    public abstract ByteBuffer writeBytes(byte[] src, int srcIndex, int length);
+    ByteBuffer writeBytes(byte[] src, int srcIndex, int length);
 
     /**
      * Transfers the specified source buffer's data to this buffer starting at
@@ -1381,7 +1381,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code src.remaining()} is greater than
      *                                   {@code this.writableBytes}
      */
-    public abstract ByteBuffer writeBytes(java.nio.ByteBuffer src);
+    ByteBuffer writeBytes(java.nio.ByteBuffer src);
 
     /**
      * Transfers the content of the specified stream to this buffer
@@ -1393,7 +1393,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
      * @throws IOException               if the specified stream threw an exception during I/O
      */
-    public abstract int writeBytes(InputStream in, int length) throws IOException;
+    int writeBytes(InputStream in, int length) throws IOException;
 
     /**
      * Transfers the content of the specified channel to this buffer
@@ -1405,7 +1405,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
      * @throws IOException               if the specified channel threw an exception during I/O
      */
-    public abstract int writeBytes(ScatteringByteChannel in, int length) throws IOException;
+    int writeBytes(ScatteringByteChannel in, int length) throws IOException;
 
     /**
      * Fills this buffer with <tt>NUL (0x00)</tt> starting at the current
@@ -1415,7 +1415,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @param length the number of <tt>NUL</tt>s to write to the buffer
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.writableBytes}
      */
-    public abstract ByteBuffer writeZero(int length);
+    ByteBuffer writeZero(int length);
 
     /**
      * Locates the first occurrence of the specified {@code value} in this
@@ -1431,7 +1431,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return the absolute index of the first occurrence if found.
      * {@code -1} otherwise.
      */
-    public abstract int indexOf(int fromIndex, int toIndex, byte value);
+    int indexOf(int fromIndex, int toIndex, byte value);
 
     /**
      * Locates the first occurrence of the specified {@code value} in this
@@ -1444,7 +1444,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return the number of bytes between the current {@code readerIndex}
      * and the first occurrence if found. {@code -1} otherwise.
      */
-    public abstract int bytesBefore(byte value);
+    int bytesBefore(byte value);
 
     /**
      * Locates the first occurrence of the specified {@code value} in this
@@ -1458,7 +1458,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * and the first occurrence if found. {@code -1} otherwise.
      * @throws IndexOutOfBoundsException if {@code length} is greater than {@code this.readableBytes}
      */
-    public abstract int bytesBefore(int length, byte value);
+    int bytesBefore(int length, byte value);
 
     /**
      * Locates the first occurrence of the specified {@code value} in this
@@ -1472,7 +1472,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * and the first occurrence if found. {@code -1} otherwise.
      * @throws IndexOutOfBoundsException if {@code index + length} is greater than {@code this.capacity}
      */
-    public abstract int bytesBefore(int index, int length, byte value);
+    int bytesBefore(int index, int length, byte value);
 
     /**
      * Iterates over the readable bytes of this buffer with the specified {@code processor} in ascending order.
@@ -1480,7 +1480,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return {@code -1} if the processor iterated to or beyond the end of the readable bytes.
      * The last-visited index If the {@link ByteBufferProcessor#process(byte)} returned {@code false}.
      */
-    public abstract int forEachByte(ByteBufferProcessor processor);
+    int forEachByte(ByteBufferProcessor processor);
 
     /**
      * Iterates over the specified area of this buffer with the specified {@code processor} in ascending order.
@@ -1489,7 +1489,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return {@code -1} if the processor iterated to or beyond the end of the specified area.
      * The last-visited index If the {@link ByteBufferProcessor#process(byte)} returned {@code false}.
      */
-    public abstract int forEachByte(int index, int length, ByteBufferProcessor processor);
+    int forEachByte(int index, int length, ByteBufferProcessor processor);
 
     /**
      * Iterates over the readable bytes of this buffer with the specified {@code processor} in descending order.
@@ -1497,7 +1497,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return {@code -1} if the processor iterated to or beyond the beginning of the readable bytes.
      * The last-visited index If the {@link ByteBufferProcessor#process(byte)} returned {@code false}.
      */
-    public abstract int forEachByteDesc(ByteBufferProcessor processor);
+    int forEachByteDesc(ByteBufferProcessor processor);
 
     /**
      * Iterates over the specified area of this buffer with the specified {@code processor} in descending order.
@@ -1506,7 +1506,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @return {@code -1} if the processor iterated to or beyond the beginning of the specified area.
      * The last-visited index If the {@link ByteBufferProcessor#process(byte)} returned {@code false}.
      */
-    public abstract int forEachByteDesc(int index, int length, ByteBufferProcessor processor);
+    int forEachByteDesc(int index, int length, ByteBufferProcessor processor);
 
     /**
      * Returns a copy of this buffer's readable bytes.  Modifying the content
@@ -1515,7 +1515,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * This method does not modify {@code readerIndex} or {@code writerIndex} of
      * this buffer.
      */
-    public abstract ByteBuffer copy();
+    ByteBuffer copy();
 
     /**
      * Returns a copy of this buffer's sub-region.  Modifying the content of
@@ -1523,7 +1523,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * This method does not modify {@code readerIndex} or {@code writerIndex} of
      * this buffer.
      */
-    public abstract ByteBuffer copy(int index, int length);
+    ByteBuffer copy(int index, int length);
 
     /**
      * Returns a slice of this buffer's readable bytes. Modifying the content
@@ -1536,7 +1536,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * Also be aware that this method will NOT call {@link #retain()} and so the
      * reference count will NOT be increased.
      */
-    public abstract ByteBuffer slice();
+    ByteBuffer slice();
 
     /**
      * Returns a slice of this buffer's sub-region. Modifying the content of
@@ -1548,7 +1548,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * Also be aware that this method will NOT call {@link #retain()} and so the
      * reference count will NOT be increased.
      */
-    public abstract ByteBuffer slice(int index, int length);
+    ByteBuffer slice(int index, int length);
 
     /**
      * Returns a buffer which shares the whole region of this buffer.
@@ -1564,7 +1564,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * However this buffer will share the capacity of the underlying buffer, and therefore allows access to all of the
      * underlying content if necessary.
      */
-    public abstract ByteBuffer duplicate();
+    ByteBuffer duplicate();
 
     /**
      * Returns the maximum number of NIO {@link java.nio.ByteBuffer}s that consist this buffer.  Note that {@link #nioBuffers()}
@@ -1578,7 +1578,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @see #nioBuffers()
      * @see #nioBuffers(int, int)
      */
-    public abstract int nioBufferCount();
+    int nioBufferCount();
 
     /**
      * Exposes this buffer's readable bytes as an NIO {@link java.nio.ByteBuffer}. The returned buffer
@@ -1594,7 +1594,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @see #nioBuffers()
      * @see #nioBuffers(int, int)
      */
-    public abstract java.nio.ByteBuffer nioBuffer();
+    java.nio.ByteBuffer nioBuffer();
 
     /**
      * Exposes this buffer's sub-region as an NIO {@link java.nio.ByteBuffer}. The returned buffer
@@ -1609,12 +1609,12 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @see #nioBuffers()
      * @see #nioBuffers(int, int)
      */
-    public abstract java.nio.ByteBuffer nioBuffer(int index, int length);
+    java.nio.ByteBuffer nioBuffer(int index, int length);
 
     /**
      * Internal use only: Exposes the internal NIO buffer.
      */
-    public abstract java.nio.ByteBuffer internalNioBuffer(int index, int length);
+    java.nio.ByteBuffer internalNioBuffer(int index, int length);
 
     /**
      * Exposes this buffer's readable bytes as an NIO {@link java.nio.ByteBuffer}'s. The returned buffer
@@ -1629,7 +1629,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @see #nioBuffer()
      * @see #nioBuffer(int, int)
      */
-    public abstract java.nio.ByteBuffer[] nioBuffers();
+    java.nio.ByteBuffer[] nioBuffers();
 
     /**
      * Exposes this buffer's bytes as an NIO {@link java.nio.ByteBuffer}'s for the specified index and length
@@ -1644,21 +1644,21 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @see #nioBuffer()
      * @see #nioBuffer(int, int)
      */
-    public abstract java.nio.ByteBuffer[] nioBuffers(int index, int length);
+    java.nio.ByteBuffer[] nioBuffers(int index, int length);
 
     /**
      * Returns {@code true} if and only if this buffer has a backing byte array.
      * If this method returns true, you can safely call {@link #array()} and
      * {@link #arrayOffset()}.
      */
-    public abstract boolean hasArray();
+    boolean hasArray();
 
     /**
      * Returns the backing byte array of this buffer.
      *
      * @throws UnsupportedOperationException if there no accessible backing byte array
      */
-    public abstract byte[] array();
+    byte[] array();
 
     /**
      * Returns the offset of the first byte within the backing byte array of
@@ -1666,20 +1666,20 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      *
      * @throws UnsupportedOperationException if there no accessible backing byte array
      */
-    public abstract int arrayOffset();
+    int arrayOffset();
 
     /**
      * Returns {@code true} if and only if this buffer has a reference to the low-level memory address that points
      * to the backing data.
      */
-    public abstract boolean hasMemoryAddress();
+    boolean hasMemoryAddress();
 
     /**
      * Returns the low-level memory address that point to the first byte of ths backing data.
      *
      * @throws UnsupportedOperationException if this buffer does not support accessing the low-level memory address
      */
-    public abstract long memoryAddress();
+    long memoryAddress();
 
     /**
      * Decodes this buffer's readable bytes into a string with the specified
@@ -1691,14 +1691,14 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * @throws UnsupportedCharsetException if the specified character set name is not supported by the
      *                                     current VM
      */
-    public abstract String toString(Charset charset);
+    String toString(Charset charset);
 
     /**
      * Decodes this buffer's sub-region into a string with the specified
      * character set.  This method does not modify {@code readerIndex} or
      * {@code writerIndex} of this buffer.
      */
-    public abstract String toString(int index, int length, Charset charset);
+    String toString(int index, int length, Charset charset);
 
     /**
      * Returns a hash code which was calculated from the content of this
@@ -1707,7 +1707,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * return the same value.
      */
     @Override
-    public abstract int hashCode();
+    int hashCode();
 
     /**
      * Determines if the content of the specified buffer is identical to the
@@ -1722,7 +1722,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@link ByteBuffer} type.
      */
     @Override
-    public abstract boolean equals(Object obj);
+    boolean equals(Object obj);
 
     /**
      * Compares the content of the specified buffer to the content of this
@@ -1731,7 +1731,7 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@code memcmp} and {@link String#compareTo(String)}.
      */
     @Override
-    public abstract int compareTo(ByteBuffer buffer);
+    int compareTo(ByteBuffer buffer);
 
     /**
      * Returns the string representation of this buffer.  This method does not
@@ -1740,11 +1740,11 @@ public abstract class ByteBuffer implements ByteBufferGettable, ByteBufferSettab
      * {@link #writerIndex()} and {@link #capacity()}.
      */
     @Override
-    public abstract String toString();
+    String toString();
 
     @Override
-    public abstract ByteBuffer retain(int increment);
+    ByteBuffer retain(int increment);
 
     @Override
-    public abstract ByteBuffer retain();
+    ByteBuffer retain();
 }

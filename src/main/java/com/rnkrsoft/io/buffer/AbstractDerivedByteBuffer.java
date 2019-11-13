@@ -16,14 +16,7 @@
 
 package com.rnkrsoft.io.buffer;
 
-/**
- * Abstract base class for {@link ByteBuffer} implementations that wrap another
- * {@link ByteBuffer}.
- *
- * @deprecated Do not use.
- */
-@Deprecated
-public abstract class AbstractDerivedByteBuffer extends AbstractByteBuffer {
+abstract class AbstractDerivedByteBuffer extends AbstractByteBuffer {
 
     protected AbstractDerivedByteBuffer(int maxCapacity) {
         super(maxCapacity);

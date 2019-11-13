@@ -368,24 +368,24 @@ final class PlatformDependent0 {
     }
 
     private static boolean explicitNoUnsafe0() {
-        final boolean noUnsafe = SystemPropertyUtil.getBoolean("io.netty.noUnsafe", false);
-        logger.debug("-Dio.netty.noUnsafe: {}", noUnsafe);
+        final boolean noUnsafe = SystemPropertyUtil.getBoolean("com.rnkrsoft.io.noUnsafe", false);
+        logger.debug("-Dcom.rnkrsoft.io.noUnsafe: {}", noUnsafe);
 
         if (noUnsafe) {
-            logger.debug("sun.misc.Unsafe: unavailable (io.netty.noUnsafe)");
+            logger.debug("sun.misc.Unsafe: unavailable (com.rnkrsoft.io.noUnsafe)");
             return true;
         }
 
         // Legacy properties
         boolean tryUnsafe;
-        if (SystemPropertyUtil.contains("io.netty.tryUnsafe")) {
-            tryUnsafe = SystemPropertyUtil.getBoolean("io.netty.tryUnsafe", true);
+        if (SystemPropertyUtil.contains("com.rnkrsoft.io.tryUnsafe")) {
+            tryUnsafe = SystemPropertyUtil.getBoolean("com.rnkrsoft.io.tryUnsafe", true);
         } else {
             tryUnsafe = SystemPropertyUtil.getBoolean("org.jboss.netty.tryUnsafe", true);
         }
 
         if (!tryUnsafe) {
-            logger.debug("sun.misc.Unsafe: unavailable (io.netty.tryUnsafe/org.jboss.netty.tryUnsafe)");
+            logger.debug("sun.misc.Unsafe: unavailable (com.rnkrsoft.io.tryUnsafe/org.jboss.netty.tryUnsafe)");
             return true;
         }
 
@@ -670,7 +670,7 @@ final class PlatformDependent0 {
 
     private static boolean explicitTryReflectionSetAccessible0() {
         // we disable reflective access
-        return SystemPropertyUtil.getBoolean("io.netty.tryReflectionSetAccessible", javaVersion() < 9);
+        return SystemPropertyUtil.getBoolean("com.rnkrsoft.io.tryReflectionSetAccessible", javaVersion() < 9);
     }
 
     static boolean isExplicitTryReflectionSetAccessible() {

@@ -32,7 +32,7 @@ import java.util.List;
  * This classes is intended to be used with Java 5 static import statement:
  *
  * <pre>
- * import static io.netty.buffer.{@link Unpooled}.*;
+ * import static com.rnkrsoft.io.buffer.{@link Unpooled}.*;
  *
  * {@link ByteBuffer} heapBuffer    = buffer(128);
  * {@link ByteBuffer} directBuffer  = directBuffer(256);

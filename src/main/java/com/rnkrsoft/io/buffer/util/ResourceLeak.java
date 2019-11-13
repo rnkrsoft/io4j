@@ -17,9 +17,8 @@
 package com.rnkrsoft.io.buffer.util;
 
 /**
- * @deprecated please use {@link ResourceLeakTracker} as it may lead to false-positives.
+ * please use {@link ResourceLeakTracker} as it may lead to false-positives.
  */
-@Deprecated
 public interface ResourceLeak {
     /**
      * Records the caller's current stack trace so that the {@link ResourceLeakDetector} can tell where the leaked

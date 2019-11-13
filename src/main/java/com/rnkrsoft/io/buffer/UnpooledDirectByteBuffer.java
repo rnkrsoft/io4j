@@ -30,7 +30,7 @@ import java.nio.channels.ScatteringByteChannel;
  * {@link UnpooledByteBufferAllocator#directBuffer(int, int)}, {@link Unpooled#directBuffer(int)} and
  * {@link Unpooled#wrappedBuffer(java.nio.ByteBuffer)} instead of calling the constructor explicitly.
  */
-public class UnpooledDirectByteBuffer extends AbstractReferenceCountedByteBuffer {
+class UnpooledDirectByteBuffer extends AbstractReferenceCountedByteBuffer {
 
     private final ByteBufferAllocator alloc;
 

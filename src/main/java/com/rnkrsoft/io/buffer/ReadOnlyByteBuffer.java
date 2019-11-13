@@ -28,10 +28,8 @@ import java.nio.channels.ScatteringByteChannel;
  * recommended to use {@link Unpooled#unmodifiableBuffer(ByteBuffer)}
  * instead of calling the constructor explicitly.
  *
- * @deprecated Do not use.
  */
-@Deprecated
-public class ReadOnlyByteBuffer extends AbstractDerivedByteBuffer {
+ class ReadOnlyByteBuffer extends AbstractDerivedByteBuffer {
 
     private final ByteBuffer buffer;
 

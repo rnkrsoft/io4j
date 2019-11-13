@@ -54,9 +54,9 @@ public abstract class Recycler<T> {
 
     static {
         // In the future, we might have different maxCapacity for different object types.
-        // e.g. io.netty.recycler.maxCapacity.writeTask
-        //      io.netty.recycler.maxCapacity.outboundBuffer
-        int maxCapacity = SystemPropertyUtil.getInt("io.netty.recycler.maxCapacity.default",
+        // e.g. com.rnkrsoft.io.recycler.maxCapacity.writeTask
+        //      com.rnkrsoft.io.recycler.maxCapacity.outboundBuffer
+        int maxCapacity = SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxCapacity.default",
                                                     DEFAULT_INITIAL_MAX_CAPACITY);
         if (maxCapacity < 0) {
             maxCapacity = DEFAULT_INITIAL_MAX_CAPACITY;
@@ -64,33 +64,33 @@ public abstract class Recycler<T> {
         DEFAULT_MAX_CAPACITY = maxCapacity;
 
         MAX_SHARED_CAPACITY_FACTOR = max(2,
-                SystemPropertyUtil.getInt("io.netty.recycler.maxSharedCapacityFactor",
+                SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxSharedCapacityFactor",
                         2));
 
         MAX_DELAYED_QUEUES_PER_THREAD = max(0,
-                SystemPropertyUtil.getInt("io.netty.recycler.maxDelayedQueuesPerThread",
+                SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.maxDelayedQueuesPerThread",
                         // We use the same value as default EventLoop number
-                        NettyRuntime.availableProcessors() * 2));
+                        Runtime.availableProcessors() * 2));
 
         LINK_CAPACITY = safeFindNextPositivePowerOfTwo(
-                max(SystemPropertyUtil.getInt("io.netty.recycler.linkCapacity", 16), 16));
+                max(SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.linkCapacity", 16), 16));
 
         // By default we allow one push to a Recycler for each 8th try on handles that were never recycled before.
         // This should help to slowly increase the capacity of the recycler while not be too sensitive to allocation
         // bursts.
-        RATIO = safeFindNextPositivePowerOfTwo(SystemPropertyUtil.getInt("io.netty.recycler.ratio", 8));
+        RATIO = safeFindNextPositivePowerOfTwo(SystemPropertyUtil.getInt("com.rnkrsoft.io.recycler.ratio", 8));
 
         if (logger.isDebugEnabled()) {
             if (DEFAULT_MAX_CAPACITY == 0) {
-                logger.debug("-Dio.netty.recycler.maxCapacity.default: disabled");
-                logger.debug("-Dio.netty.recycler.maxSharedCapacityFactor: disabled");
-                logger.debug("-Dio.netty.recycler.linkCapacity: disabled");
-                logger.debug("-Dio.netty.recycler.ratio: disabled");
+                logger.debug("-Dcom.rnkrsoft.io.recycler.maxCapacity.default: disabled");
+                logger.debug("-Dcom.rnkrsoft.io.recycler.maxSharedCapacityFactor: disabled");
+                logger.debug("-Dcom.rnkrsoft.io.recycler.linkCapacity: disabled");
+                logger.debug("-Dcom.rnkrsoft.io.recycler.ratio: disabled");
             } else {
-                logger.debug("-Dio.netty.recycler.maxCapacity.default: {}", DEFAULT_MAX_CAPACITY);
-                logger.debug("-Dio.netty.recycler.maxSharedCapacityFactor: {}", MAX_SHARED_CAPACITY_FACTOR);
-                logger.debug("-Dio.netty.recycler.linkCapacity: {}", LINK_CAPACITY);
-                logger.debug("-Dio.netty.recycler.ratio: {}", RATIO);
+                logger.debug("-Dcom.rnkrsoft.io.recycler.maxCapacity.default: {}", DEFAULT_MAX_CAPACITY);
+                logger.debug("-Dcom.rnkrsoft.io.recycler.maxSharedCapacityFactor: {}", MAX_SHARED_CAPACITY_FACTOR);
+                logger.debug("-Dcom.rnkrsoft.io.recycler.linkCapacity: {}", LINK_CAPACITY);
+                logger.debug("-Dcom.rnkrsoft.io.recycler.ratio: {}", RATIO);
             }
         }
 

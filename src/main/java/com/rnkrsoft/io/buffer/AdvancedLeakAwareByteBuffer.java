@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
 
 final class AdvancedLeakAwareByteBuffer extends SimpleLeakAwareByteBuffer {
 
-    private static final String PROP_ACQUIRE_AND_RELEASE_ONLY = "io.netty.leakDetection.acquireAndReleaseOnly";
+    private static final String PROP_ACQUIRE_AND_RELEASE_ONLY = "com.rnkrsoft.io.leakDetection.acquireAndReleaseOnly";
     private static final boolean ACQUIRE_AND_RELEASE_ONLY;
 
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(AdvancedLeakAwareByteBuffer.class);

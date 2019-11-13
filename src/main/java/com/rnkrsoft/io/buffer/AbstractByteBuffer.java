@@ -37,9 +37,9 @@ import static com.rnkrsoft.io.buffer.util.internal.MathUtil.isOutOfBounds;
 /**
  * A skeletal implementation of a buffer.
  */
-public abstract class AbstractByteBuffer extends ByteBuffer {
+public abstract class AbstractByteBuffer implements ByteBuffer {
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(AbstractByteBuffer.class);
-    private static final String PROP_MODE = "io.netty.buffer.bytebuf.checkAccessible";
+    private static final String PROP_MODE = "com.rnkrsoft.io.buffer.bytebuf.checkAccessible";
     private static final boolean checkAccessible;
 
     static {

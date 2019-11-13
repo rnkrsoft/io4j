@@ -22,9 +22,9 @@ import com.rnkrsoft.io.buffer.util.internal.SystemPropertyUtil;
 import java.util.Locale;
 
 /**
- * A utility class for wrapping calls to {@link Runtime}.
+ * A utility class for wrapping calls to {@link java.lang.Runtime}.
  */
-public final class NettyRuntime {
+public final class Runtime {
 
     /**
      * Holder class for available processors to enable testing.
@@ -43,19 +43,15 @@ public final class NettyRuntime {
         synchronized void setAvailableProcessors(final int availableProcessors) {
             ObjectUtil.checkPositive(availableProcessors, "availableProcessors");
             if (this.availableProcessors != 0) {
-                final String message = String.format(
-                        Locale.ROOT,
-                        "availableProcessors is already set to [%d], rejecting [%d]",
-                        this.availableProcessors,
-                        availableProcessors);
+                final String message = String.format( Locale.ROOT, "availableProcessors is already set to [%d], rejecting [%d]", this.availableProcessors, availableProcessors);
                 throw new IllegalStateException(message);
             }
             this.availableProcessors = availableProcessors;
         }
 
         /**
-         * Get the configured number of available processors. The default is {@link Runtime#availableProcessors()}.
-         * This can be overridden by setting the system property "io.netty.availableProcessors" or by invoking
+         * Get the configured number of available processors. The default is {@link java.lang.Runtime#availableProcessors()}.
+         * This can be overridden by setting the system property "com.rnkrsoft.io.availableProcessors" or by invoking
          * {@link #setAvailableProcessors(int)} before any calls to this method.
          *
          * @return the configured number of available processors
@@ -63,10 +59,7 @@ public final class NettyRuntime {
         @SuppressForbidden(reason = "to obtain default number of available processors")
         synchronized int availableProcessors() {
             if (this.availableProcessors == 0) {
-                final int availableProcessors =
-                        SystemPropertyUtil.getInt(
-                                "io.netty.availableProcessors",
-                                Runtime.getRuntime().availableProcessors());
+                final int availableProcessors =  SystemPropertyUtil.getInt( "com.rnkrsoft.io.availableProcessors", java.lang.Runtime.getRuntime().availableProcessors());
                 setAvailableProcessors(availableProcessors);
             }
             return this.availableProcessors;
@@ -88,8 +81,8 @@ public final class NettyRuntime {
     }
 
     /**
-     * Get the configured number of available processors. The default is {@link Runtime#availableProcessors()}. This
-     * can be overridden by setting the system property "io.netty.availableProcessors" or by invoking
+     * Get the configured number of available processors. The default is {@link java.lang.Runtime#availableProcessors()}. This
+     * can be overridden by setting the system property "com.rnkrsoft.io.availableProcessors" or by invoking
      * {@link #setAvailableProcessors(int)} before any calls to this method.
      *
      * @return the configured number of available processors
@@ -101,6 +94,6 @@ public final class NettyRuntime {
     /**
      * No public constructor to prevent instances from being created.
      */
-    private NettyRuntime() {
+    private Runtime() {
     }
 }

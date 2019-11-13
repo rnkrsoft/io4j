@@ -21,11 +21,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static com.rnkrsoft.io.buffer.util.internal.ObjectUtil.checkNotNull;
 
 /**
- * @deprecated Known to have problems with class loaders.
+ * Known to have problems with class loaders.
  *
  * Defines a name that must be unique in the map that is provided during construction.
  */
-@Deprecated
 public class UniqueName implements Comparable<UniqueName> {
 
     private static final AtomicInteger nextId = new AtomicInteger();

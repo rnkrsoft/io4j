@@ -57,7 +57,7 @@ import static java.lang.Math.min;
  * {@code sun.misc.Unsafe} object.
  * <p>
  * You can disable the use of {@code sun.misc.Unsafe} if you specify
- * the system property <strong>io.netty.noUnsafe</strong>.
+ * the system property <strong>com.rnkrsoft.io.noUnsafe</strong>.
  */
 public final class PlatformDependent {
 
@@ -75,7 +75,7 @@ public final class PlatformDependent {
 
     private static final boolean HAS_UNSAFE = hasUnsafe0();
     private static final boolean DIRECT_BUFFER_PREFERRED =
-            HAS_UNSAFE && !SystemPropertyUtil.getBoolean("io.netty.noPreferDirect", false);
+            HAS_UNSAFE && !SystemPropertyUtil.getBoolean("com.rnkrsoft.io.noPreferDirect", false);
     private static final long MAX_DIRECT_MEMORY = maxDirectMemory0();
 
     private static final int MPSC_CHUNK_SIZE =  1024;
@@ -124,7 +124,7 @@ public final class PlatformDependent {
             };
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("-Dio.netty.noPreferDirect: {}", !DIRECT_BUFFER_PREFERRED);
+            logger.debug("-Dcom.rnkrsoft.io.noPreferDirect: {}", !DIRECT_BUFFER_PREFERRED);
         }
 
         /*
@@ -145,7 +145,7 @@ public final class PlatformDependent {
         // * == 0  - Use cleaner, Netty will not enforce max memory, and instead will defer to JDK.
         // * >  0  - Don't use cleaner. This will limit Netty's total direct memory
         //           (note: that JDK's direct memory limit is independent of this).
-        long maxDirectMemory = SystemPropertyUtil.getLong("io.netty.maxDirectMemory", -1);
+        long maxDirectMemory = SystemPropertyUtil.getLong("com.rnkrsoft.io.maxDirectMemory", -1);
 
         if (maxDirectMemory == 0 || !hasUnsafe() || !PlatformDependent0.hasDirectBufferNoCleanerConstructor()) {
             USE_DIRECT_BUFFER_NO_CLEANER = false;
@@ -164,13 +164,13 @@ public final class PlatformDependent {
             }
         }
         DIRECT_MEMORY_LIMIT = maxDirectMemory;
-        logger.debug("-Dio.netty.maxDirectMemory: {} bytes", maxDirectMemory);
+        logger.debug("-Dcom.rnkrsoft.io.maxDirectMemory: {} bytes", maxDirectMemory);
 
         int tryAllocateUninitializedArray =
-                SystemPropertyUtil.getInt("io.netty.uninitializedArrayAllocationThreshold", 1024);
+                SystemPropertyUtil.getInt("com.rnkrsoft.io.uninitializedArrayAllocationThreshold", 1024);
         UNINITIALIZED_ARRAY_ALLOCATION_THRESHOLD = javaVersion() >= 9 && PlatformDependent0.hasAllocateArrayMethod() ?
                 tryAllocateUninitializedArray : -1;
-        logger.debug("-Dio.netty.uninitializedArrayAllocationThreshold: {}", UNINITIALIZED_ARRAY_ALLOCATION_THRESHOLD);
+        logger.debug("-Dcom.rnkrsoft.io.uninitializedArrayAllocationThreshold: {}", UNINITIALIZED_ARRAY_ALLOCATION_THRESHOLD);
 
         MAYBE_SUPER_USER = maybeSuperUser0();
 
@@ -265,7 +265,7 @@ public final class PlatformDependent {
 
     /**
      * Returns {@code true} if the platform has reliable low-level direct buffer access API and a user has not specified
-     * {@code -Dio.netty.noPreferDirect} option.
+     * {@code -Dcom.rnkrsoft.io.noPreferDirect} option.
      */
     public static boolean directBufferPreferred() {
         return DIRECT_BUFFER_PREFERRED;
@@ -806,15 +806,15 @@ public final class PlatformDependent {
     private static File tmpdir0() {
         File f;
         try {
-            f = toDirectory(SystemPropertyUtil.get("io.netty.tmpdir"));
+            f = toDirectory(SystemPropertyUtil.get("com.rnkrsoft.io.tmpdir"));
             if (f != null) {
-                logger.debug("-Dio.netty.tmpdir: {}", f);
+                logger.debug("-Dcom.rnkrsoft.io.tmpdir: {}", f);
                 return f;
             }
 
             f = toDirectory(SystemPropertyUtil.get("java.io.tmpdir"));
             if (f != null) {
-                logger.debug("-Dio.netty.tmpdir: {} (java.io.tmpdir)", f);
+                logger.debug("-Dcom.rnkrsoft.io.tmpdir: {} (java.io.tmpdir)", f);
                 return f;
             }
 
@@ -822,7 +822,7 @@ public final class PlatformDependent {
             if (isWindows()) {
                 f = toDirectory(System.getenv("TEMP"));
                 if (f != null) {
-                    logger.debug("-Dio.netty.tmpdir: {} (%TEMP%)", f);
+                    logger.debug("-Dcom.rnkrsoft.io.tmpdir: {} (%TEMP%)", f);
                     return f;
                 }
 
@@ -830,20 +830,20 @@ public final class PlatformDependent {
                 if (userprofile != null) {
                     f = toDirectory(userprofile + "\\AppData\\Local\\Temp");
                     if (f != null) {
-                        logger.debug("-Dio.netty.tmpdir: {} (%USERPROFILE%\\AppData\\Local\\Temp)", f);
+                        logger.debug("-Dcom.rnkrsoft.io.tmpdir: {} (%USERPROFILE%\\AppData\\Local\\Temp)", f);
                         return f;
                     }
 
                     f = toDirectory(userprofile + "\\Local Settings\\Temp");
                     if (f != null) {
-                        logger.debug("-Dio.netty.tmpdir: {} (%USERPROFILE%\\Local Settings\\Temp)", f);
+                        logger.debug("-Dcom.rnkrsoft.io.tmpdir: {} (%USERPROFILE%\\Local Settings\\Temp)", f);
                         return f;
                     }
                 }
             } else {
                 f = toDirectory(System.getenv("TMPDIR"));
                 if (f != null) {
-                    logger.debug("-Dio.netty.tmpdir: {} ($TMPDIR)", f);
+                    logger.debug("-Dcom.rnkrsoft.io.tmpdir: {} ($TMPDIR)", f);
                     return f;
                 }
             }
@@ -884,21 +884,21 @@ public final class PlatformDependent {
 
     private static int bitMode0() {
         // Check user-specified bit mode first.
-        int bitMode = SystemPropertyUtil.getInt("io.netty.bitMode", 0);
+        int bitMode = SystemPropertyUtil.getInt("com.rnkrsoft.io.bitMode", 0);
         if (bitMode > 0) {
-            logger.debug("-Dio.netty.bitMode: {}", bitMode);
+            logger.debug("-Dcom.rnkrsoft.io.bitMode: {}", bitMode);
             return bitMode;
         }
 
         // And then the vendor specific ones which is probably most reliable.
         bitMode = SystemPropertyUtil.getInt("sun.arch.data.model", 0);
         if (bitMode > 0) {
-            logger.debug("-Dio.netty.bitMode: {} (sun.arch.data.model)", bitMode);
+            logger.debug("-Dcom.rnkrsoft.io.bitMode: {} (sun.arch.data.model)", bitMode);
             return bitMode;
         }
         bitMode = SystemPropertyUtil.getInt("com.ibm.vm.bitmode", 0);
         if (bitMode > 0) {
-            logger.debug("-Dio.netty.bitMode: {} (com.ibm.vm.bitmode)", bitMode);
+            logger.debug("-Dcom.rnkrsoft.io.bitMode: {} (com.ibm.vm.bitmode)", bitMode);
             return bitMode;
         }
 
@@ -911,7 +911,7 @@ public final class PlatformDependent {
         }
 
         if (bitMode > 0) {
-            logger.debug("-Dio.netty.bitMode: {} (os.arch: {})", bitMode, arch);
+            logger.debug("-Dcom.rnkrsoft.io.bitMode: {} (os.arch: {})", bitMode, arch);
         }
 
         // Last resort: guess from VM name and then fall back to most common 64-bit mode.

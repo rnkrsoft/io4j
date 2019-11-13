@@ -39,11 +39,11 @@ import static com.rnkrsoft.io.buffer.util.internal.StringUtil.simpleClassName;
 
 public class ResourceLeakDetector<T> {
 
-    private static final String PROP_LEVEL_OLD = "io.netty.leakDetectionLevel";
-    private static final String PROP_LEVEL = "io.netty.leakDetection.level";
+    private static final String PROP_LEVEL_OLD = "com.rnkrsoft.io.leakDetectionLevel";
+    private static final String PROP_LEVEL = "com.rnkrsoft.io.leakDetection.level";
     private static final Level DEFAULT_LEVEL = Level.SIMPLE;
 
-    private static final String PROP_TARGET_RECORDS = "io.netty.leakDetection.targetRecords";
+    private static final String PROP_TARGET_RECORDS = "com.rnkrsoft.io.leakDetection.targetRecords";
     private static final int DEFAULT_TARGET_RECORDS = 4;
 
     private static final int TARGET_RECORDS;
@@ -95,12 +95,10 @@ public class ResourceLeakDetector<T> {
 
     static {
         final boolean disabled;
-        if (SystemPropertyUtil.get("io.netty.noResourceLeakDetection") != null) {
-            disabled = SystemPropertyUtil.getBoolean("io.netty.noResourceLeakDetection", false);
-            logger.debug("-Dio.netty.noResourceLeakDetection: {}", disabled);
-            logger.warn(
-                    "-Dio.netty.noResourceLeakDetection is deprecated. Use '-D{}={}' instead.",
-                    PROP_LEVEL, DEFAULT_LEVEL.name().toLowerCase());
+        if (SystemPropertyUtil.get("com.rnkrsoft.io.noResourceLeakDetection") != null) {
+            disabled = SystemPropertyUtil.getBoolean("com.rnkrsoft.io.noResourceLeakDetection", false);
+            logger.debug("-Dcom.rnkrsoft.io.noResourceLeakDetection: {}", disabled);
+            logger.warn( "-Dcom.rnkrsoft.io.noResourceLeakDetection is deprecated. Use '-D{}={}' instead.", PROP_LEVEL, DEFAULT_LEVEL.name().toLowerCase());
         } else {
             disabled = false;
         }

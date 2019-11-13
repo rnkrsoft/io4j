@@ -39,7 +39,7 @@ import static com.rnkrsoft.io.buffer.util.internal.ObjectUtil.checkNotNull;
  * {@link ByteBufferAllocator#compositeBuffer()} or {@link Unpooled#wrappedBuffer(ByteBuffer...)} instead of calling the
  * constructor explicitly.
  */
-public class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements Iterable<ByteBuffer> {
+class CompositeByteBuffer extends AbstractReferenceCountedByteBuffer implements Iterable<ByteBuffer> {
 
     private static final java.nio.ByteBuffer EMPTY_NIO_BUFFER = Unpooled.EMPTY_BUFFER.nioBuffer();
     private static final Iterator<ByteBuffer> EMPTY_ITERATOR = Collections.<ByteBuffer>emptyList().iterator();

@@ -32,7 +32,7 @@ import static com.rnkrsoft.io.buffer.util.internal.ObjectUtil.checkNotNull;
  * {@link UnpooledByteBufferAllocator#heapBuffer(int, int)}, {@link Unpooled#buffer(int)} and
  * {@link Unpooled#wrappedBuffer(byte[])} instead of calling the constructor explicitly.
  */
-public class UnpooledHeapByteBuffer extends AbstractReferenceCountedByteBuffer {
+class UnpooledHeapByteBuffer extends AbstractReferenceCountedByteBuffer {
 
     private final ByteBufferAllocator alloc;
     byte[] array;

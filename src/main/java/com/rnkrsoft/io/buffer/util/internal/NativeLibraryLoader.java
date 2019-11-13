@@ -49,7 +49,7 @@ public final class NativeLibraryLoader {
     private static final boolean DELETE_NATIVE_LIB_AFTER_LOADING;
 
     static {
-        String workdir = SystemPropertyUtil.get("io.netty.native.workdir");
+        String workdir = SystemPropertyUtil.get("com.rnkrsoft.io.native.workdir");
         if (workdir != null) {
             File f = new File(workdir);
             f.mkdirs();
@@ -61,14 +61,14 @@ public final class NativeLibraryLoader {
             }
 
             WORKDIR = f;
-            logger.debug("-Dio.netty.native.workdir: " + WORKDIR);
+            logger.debug("-Dcom.rnkrsoft.io.native.workdir: " + WORKDIR);
         } else {
             WORKDIR = PlatformDependent.tmpdir();
-            logger.debug("-Dio.netty.native.workdir: " + WORKDIR + " (io.netty.tmpdir)");
+            logger.debug("-Dcom.rnkrsoft.io.native.workdir: " + WORKDIR + " (com.rnkrsoft.io.tmpdir)");
         }
 
         DELETE_NATIVE_LIB_AFTER_LOADING = SystemPropertyUtil.getBoolean(
-                "io.netty.native.deleteLibAfterLoading", true);
+                "com.rnkrsoft.io.native.deleteLibAfterLoading", true);
     }
 
     /**
@@ -127,7 +127,7 @@ public final class NativeLibraryLoader {
             suppressed.add(ex);
             logger.debug(
                     "{} cannot be loaded from java.libary.path, "
-                    + "now trying export to -Dio.netty.native.workdir: {}", name, WORKDIR, ex);
+                    + "now trying export to -Dcom.rnkrsoft.io.native.workdir: {}", name, WORKDIR, ex);
         }
 
         String libname = System.mapLibraryName(name);
@@ -190,7 +190,7 @@ public final class NativeLibraryLoader {
                 if (tmpFile != null && tmpFile.isFile() && tmpFile.canRead() &&
                     !NoexecVolumeDetector.canExecuteExecutable(tmpFile)) {
                     logger.info("{} exists but cannot be executed even when execute permissions set; " +
-                                "check volume for \"noexec\" flag; use -Dio.netty.native.workdir=[path] " +
+                                "check volume for \"noexec\" flag; use -Dcom.rnkrsoft.io.native.workdir=[path] " +
                                 "to set native working directory separately.",
                                 tmpFile.getPath());
                 }

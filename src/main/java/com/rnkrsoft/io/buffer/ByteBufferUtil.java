@@ -63,26 +63,26 @@ public final class ByteBufferUtil {
     static final ByteBufferAllocator DEFAULT_ALLOCATOR;
 
     static {
-        String allocType = SystemPropertyUtil.get("io.netty.allocator.type", "unpooled").toLowerCase(Locale.US).trim();
+        String allocType = SystemPropertyUtil.get("com.rnkrsoft.io.allocator.type", "unpooled").toLowerCase(Locale.US).trim();
         ByteBufferAllocator alloc;
         if ("unpooled".equals(allocType)) {
             alloc = UnpooledByteBufferAllocator.DEFAULT;
-            logger.debug("-Dio.netty.allocator.type: {}", allocType);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.type: {}", allocType);
         } else if ("pooled".equals(allocType)) {
             alloc = PooledByteBufferAllocator.DEFAULT;
-            logger.debug("-Dio.netty.allocator.type: {}", allocType);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.type: {}", allocType);
         } else {
             alloc = UnpooledByteBufferAllocator.DEFAULT;
-            logger.debug("-Dio.netty.allocator.type: unpooled (unknown: {})", allocType);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.type: unpooled (unknown: {})", allocType);
         }
 
         DEFAULT_ALLOCATOR = alloc;
 
-        THREAD_LOCAL_BUFFER_SIZE = SystemPropertyUtil.getInt("io.netty.threadLocalDirectBufferSize", 64 * 1024);
-        logger.debug("-Dio.netty.threadLocalDirectBufferSize: {}", THREAD_LOCAL_BUFFER_SIZE);
+        THREAD_LOCAL_BUFFER_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.threadLocalDirectBufferSize", 64 * 1024);
+        logger.debug("-Dcom.rnkrsoft.io.threadLocalDirectBufferSize: {}", THREAD_LOCAL_BUFFER_SIZE);
 
-        MAX_CHAR_BUFFER_SIZE = SystemPropertyUtil.getInt("io.netty.maxThreadLocalCharBufferSize", 16 * 1024);
-        logger.debug("-Dio.netty.maxThreadLocalCharBufferSize: {}", MAX_CHAR_BUFFER_SIZE);
+        MAX_CHAR_BUFFER_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.maxThreadLocalCharBufferSize", 16 * 1024);
+        logger.debug("-Dcom.rnkrsoft.io.maxThreadLocalCharBufferSize: {}", MAX_CHAR_BUFFER_SIZE);
     }
 
     /**

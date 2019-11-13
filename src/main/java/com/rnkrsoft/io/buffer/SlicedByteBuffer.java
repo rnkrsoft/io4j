@@ -28,10 +28,8 @@ import java.nio.channels.ScatteringByteChannel;
  * {@link ByteBuffer#slice(int, int)} instead of calling the constructor
  * explicitly.
  *
- * @deprecated Do not use.
  */
-@Deprecated
-public class SlicedByteBuffer extends AbstractDerivedByteBuffer {
+class SlicedByteBuffer extends AbstractDerivedByteBuffer {
 
     private final ByteBuffer buffer;
     private final int adjustment;

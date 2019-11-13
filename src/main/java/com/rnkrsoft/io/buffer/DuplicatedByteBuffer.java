@@ -27,10 +27,8 @@ import java.nio.channels.ScatteringByteChannel;
  * parent.  It is recommended to use {@link ByteBuffer#duplicate()} instead
  * of calling the constructor explicitly.
  *
- * @deprecated Do not use.
  */
-@Deprecated
-public class DuplicatedByteBuffer extends AbstractDerivedByteBuffer {
+class DuplicatedByteBuffer extends AbstractDerivedByteBuffer {
 
     private final ByteBuffer buffer;
 

@@ -16,7 +16,7 @@
 
 package com.rnkrsoft.io.buffer;
 
-import com.rnkrsoft.io.buffer.util.NettyRuntime;
+import com.rnkrsoft.io.buffer.util.Runtime;
 import com.rnkrsoft.io.buffer.util.concurrent.FastThreadLocal;
 import com.rnkrsoft.io.buffer.util.concurrent.FastThreadLocalThread;
 import com.rnkrsoft.io.buffer.util.internal.PlatformDependent;
@@ -49,7 +49,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
     private static final int MAX_CHUNK_SIZE = (int) (((long) Integer.MAX_VALUE + 1) / 2);
 
     static {
-        int defaultPageSize = SystemPropertyUtil.getInt("io.netty.allocator.pageSize", 8192);
+        int defaultPageSize = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.pageSize", 8192);
         Throwable pageSizeFallbackCause = null;
         try {
             validateAndCalculatePageShifts(defaultPageSize);
@@ -59,7 +59,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
         }
         DEFAULT_PAGE_SIZE = defaultPageSize;
 
-        int defaultMaxOrder = SystemPropertyUtil.getInt("io.netty.allocator.maxOrder", 11);
+        int defaultMaxOrder = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.maxOrder", 11);
         Throwable maxOrderFallbackCause = null;
         try {
             validateAndCalculateChunkSize(DEFAULT_PAGE_SIZE, defaultMaxOrder);
@@ -71,7 +71,7 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
 
         // Determine reasonable default for nHeapArena and nDirectArena.
         // Assuming each arena has 3 chunks, the pool should not consume more than 50% of max memory.
-        final Runtime runtime = Runtime.getRuntime();
+        final java.lang.Runtime runtime = java.lang.Runtime.getRuntime();
 
         /*
          * We use 2 * available processors by default to reduce contention as we use 2 * available processors for the
@@ -80,61 +80,61 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
          *
          * See https://github.com/netty/netty/issues/3888.
          */
-        final int defaultMinNumArena = NettyRuntime.availableProcessors() * 2;
+        final int defaultMinNumArena = Runtime.availableProcessors() * 2;
         final int defaultChunkSize = DEFAULT_PAGE_SIZE << DEFAULT_MAX_ORDER;
         DEFAULT_NUM_HEAP_ARENA = Math.max(0,
                 SystemPropertyUtil.getInt(
-                        "io.netty.allocator.numHeapArenas",
+                        "com.rnkrsoft.io.allocator.numHeapArenas",
                         (int) Math.min(
                                 defaultMinNumArena,
                                 runtime.maxMemory() / defaultChunkSize / 2 / 3)));
         DEFAULT_NUM_DIRECT_ARENA = Math.max(0,
                 SystemPropertyUtil.getInt(
-                        "io.netty.allocator.numDirectArenas",
+                        "com.rnkrsoft.io.allocator.numDirectArenas",
                         (int) Math.min(
                                 defaultMinNumArena,
                                 PlatformDependent.maxDirectMemory() / defaultChunkSize / 2 / 3)));
 
         // cache sizes
-        DEFAULT_TINY_CACHE_SIZE = SystemPropertyUtil.getInt("io.netty.allocator.tinyCacheSize", 512);
-        DEFAULT_SMALL_CACHE_SIZE = SystemPropertyUtil.getInt("io.netty.allocator.smallCacheSize", 256);
-        DEFAULT_NORMAL_CACHE_SIZE = SystemPropertyUtil.getInt("io.netty.allocator.normalCacheSize", 64);
+        DEFAULT_TINY_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.tinyCacheSize", 512);
+        DEFAULT_SMALL_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.smallCacheSize", 256);
+        DEFAULT_NORMAL_CACHE_SIZE = SystemPropertyUtil.getInt("com.rnkrsoft.io.allocator.normalCacheSize", 64);
 
         // 32 kb is the default maximum capacity of the cached buffer. Similar to what is explained in
         // 'Scalable memory allocation using jemalloc'
         DEFAULT_MAX_CACHED_BUFFER_CAPACITY = SystemPropertyUtil.getInt(
-                "io.netty.allocator.maxCachedBufferCapacity", 32 * 1024);
+                "com.rnkrsoft.io.allocator.maxCachedBufferCapacity", 32 * 1024);
 
         // the number of threshold of allocations when cached entries will be freed up if not frequently used
         DEFAULT_CACHE_TRIM_INTERVAL = SystemPropertyUtil.getInt(
-                "io.netty.allocator.cacheTrimInterval", 8192);
+                "com.rnkrsoft.io.allocator.cacheTrimInterval", 8192);
 
         DEFAULT_USE_CACHE_FOR_ALL_THREADS = SystemPropertyUtil.getBoolean(
-                "io.netty.allocator.useCacheForAllThreads", true);
+                "com.rnkrsoft.io.allocator.useCacheForAllThreads", true);
 
         DEFAULT_DIRECT_MEMORY_CACHE_ALIGNMENT = SystemPropertyUtil.getInt(
-                "io.netty.allocator.directMemoryCacheAlignment", 0);
+                "com.rnkrsoft.io.allocator.directMemoryCacheAlignment", 0);
 
         if (logger.isDebugEnabled()) {
-            logger.debug("-Dio.netty.allocator.numHeapArenas: {}", DEFAULT_NUM_HEAP_ARENA);
-            logger.debug("-Dio.netty.allocator.numDirectArenas: {}", DEFAULT_NUM_DIRECT_ARENA);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.numHeapArenas: {}", DEFAULT_NUM_HEAP_ARENA);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.numDirectArenas: {}", DEFAULT_NUM_DIRECT_ARENA);
             if (pageSizeFallbackCause == null) {
-                logger.debug("-Dio.netty.allocator.pageSize: {}", DEFAULT_PAGE_SIZE);
+                logger.debug("-Dcom.rnkrsoft.io.allocator.pageSize: {}", DEFAULT_PAGE_SIZE);
             } else {
-                logger.debug("-Dio.netty.allocator.pageSize: {}", DEFAULT_PAGE_SIZE, pageSizeFallbackCause);
+                logger.debug("-Dcom.rnkrsoft.io.allocator.pageSize: {}", DEFAULT_PAGE_SIZE, pageSizeFallbackCause);
             }
             if (maxOrderFallbackCause == null) {
-                logger.debug("-Dio.netty.allocator.maxOrder: {}", DEFAULT_MAX_ORDER);
+                logger.debug("-Dcom.rnkrsoft.io.allocator.maxOrder: {}", DEFAULT_MAX_ORDER);
             } else {
-                logger.debug("-Dio.netty.allocator.maxOrder: {}", DEFAULT_MAX_ORDER, maxOrderFallbackCause);
+                logger.debug("-Dcom.rnkrsoft.io.allocator.maxOrder: {}", DEFAULT_MAX_ORDER, maxOrderFallbackCause);
             }
-            logger.debug("-Dio.netty.allocator.chunkSize: {}", DEFAULT_PAGE_SIZE << DEFAULT_MAX_ORDER);
-            logger.debug("-Dio.netty.allocator.tinyCacheSize: {}", DEFAULT_TINY_CACHE_SIZE);
-            logger.debug("-Dio.netty.allocator.smallCacheSize: {}", DEFAULT_SMALL_CACHE_SIZE);
-            logger.debug("-Dio.netty.allocator.normalCacheSize: {}", DEFAULT_NORMAL_CACHE_SIZE);
-            logger.debug("-Dio.netty.allocator.maxCachedBufferCapacity: {}", DEFAULT_MAX_CACHED_BUFFER_CAPACITY);
-            logger.debug("-Dio.netty.allocator.cacheTrimInterval: {}", DEFAULT_CACHE_TRIM_INTERVAL);
-            logger.debug("-Dio.netty.allocator.useCacheForAllThreads: {}", DEFAULT_USE_CACHE_FOR_ALL_THREADS);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.chunkSize: {}", DEFAULT_PAGE_SIZE << DEFAULT_MAX_ORDER);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.tinyCacheSize: {}", DEFAULT_TINY_CACHE_SIZE);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.smallCacheSize: {}", DEFAULT_SMALL_CACHE_SIZE);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.normalCacheSize: {}", DEFAULT_NORMAL_CACHE_SIZE);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.maxCachedBufferCapacity: {}", DEFAULT_MAX_CACHED_BUFFER_CAPACITY);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.cacheTrimInterval: {}", DEFAULT_CACHE_TRIM_INTERVAL);
+            logger.debug("-Dcom.rnkrsoft.io.allocator.useCacheForAllThreads: {}", DEFAULT_USE_CACHE_FOR_ALL_THREADS);
         }
     }
 
@@ -340,63 +340,63 @@ public class PooledByteBufferAllocator extends AbstractByteBufferAllocator imple
     }
 
     /**
-     * Default number of heap arenas - System Property: io.netty.allocator.numHeapArenas - default 2 * cores
+     * Default number of heap arenas - System Property: com.rnkrsoft.io.allocator.numHeapArenas - default 2 * cores
      */
     public static int defaultNumHeapArena() {
         return DEFAULT_NUM_HEAP_ARENA;
     }
 
     /**
-     * Default number of direct arenas - System Property: io.netty.allocator.numDirectArenas - default 2 * cores
+     * Default number of direct arenas - System Property: com.rnkrsoft.io.allocator.numDirectArenas - default 2 * cores
      */
     public static int defaultNumDirectArena() {
         return DEFAULT_NUM_DIRECT_ARENA;
     }
 
     /**
-     * Default buffer page size - System Property: io.netty.allocator.pageSize - default 8192
+     * Default buffer page size - System Property: com.rnkrsoft.io.allocator.pageSize - default 8192
      */
     public static int defaultPageSize() {
         return DEFAULT_PAGE_SIZE;
     }
 
     /**
-     * Default maximum order - System Property: io.netty.allocator.maxOrder - default 11
+     * Default maximum order - System Property: com.rnkrsoft.io.allocator.maxOrder - default 11
      */
     public static int defaultMaxOrder() {
         return DEFAULT_MAX_ORDER;
     }
 
     /**
-     * Default thread caching behavior - System Property: io.netty.allocator.useCacheForAllThreads - default true
+     * Default thread caching behavior - System Property: com.rnkrsoft.io.allocator.useCacheForAllThreads - default true
      */
     public static boolean defaultUseCacheForAllThreads() {
         return DEFAULT_USE_CACHE_FOR_ALL_THREADS;
     }
 
     /**
-     * Default prefer direct - System Property: io.netty.noPreferDirect - default false
+     * Default prefer direct - System Property: com.rnkrsoft.io.noPreferDirect - default false
      */
     public static boolean defaultPreferDirect() {
         return PlatformDependent.directBufferPreferred();
     }
 
     /**
-     * Default tiny cache size - System Property: io.netty.allocator.tinyCacheSize - default 512
+     * Default tiny cache size - System Property: com.rnkrsoft.io.allocator.tinyCacheSize - default 512
      */
     public static int defaultTinyCacheSize() {
         return DEFAULT_TINY_CACHE_SIZE;
     }
 
     /**
-     * Default small cache size - System Property: io.netty.allocator.smallCacheSize - default 256
+     * Default small cache size - System Property: com.rnkrsoft.io.allocator.smallCacheSize - default 256
      */
     public static int defaultSmallCacheSize() {
         return DEFAULT_SMALL_CACHE_SIZE;
     }
 
     /**
-     * Default normal cache size - System Property: io.netty.allocator.normalCacheSize - default 64
+     * Default normal cache size - System Property: com.rnkrsoft.io.allocator.normalCacheSize - default 64
      */
     public static int defaultNormalCacheSize() {
         return DEFAULT_NORMAL_CACHE_SIZE;

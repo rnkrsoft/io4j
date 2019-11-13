@@ -25,7 +25,7 @@ import static com.rnkrsoft.io.buffer.util.internal.ObjectUtil.checkPositive;
 /**
  * Abstract base class for {@link ByteBuffer} implementations that count references.
  */
-public abstract class AbstractReferenceCountedByteBuffer extends AbstractByteBuffer {
+abstract class AbstractReferenceCountedByteBuffer extends AbstractByteBuffer {
 
     private static final AtomicIntegerFieldUpdater<AbstractReferenceCountedByteBuffer> refCntUpdater =
             AtomicIntegerFieldUpdater.newUpdater(AbstractReferenceCountedByteBuffer.class, "refCnt");
