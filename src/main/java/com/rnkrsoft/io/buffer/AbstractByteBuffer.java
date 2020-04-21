@@ -1255,7 +1255,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer writelnStringUTF8(String string) {
-        return writelnString(string + "\n", CharsetUtil.UTF_8);
+        return writelnString(string, CharsetUtil.UTF_8);
     }
 
     @Override
