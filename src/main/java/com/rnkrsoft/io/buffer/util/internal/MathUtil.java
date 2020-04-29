@@ -24,7 +24,7 @@ public final class MathUtil {
 
     /**
      * Fast method of finding the next power of 2 greater than or equal to the supplied value.
-     * <p>If the value is {@code <= 0} then 1 will be returned.
+     * <p>If the value is {@code &lt;= 0} then 1 will be returned.
      * This method is not suitable for {@link Integer#MIN_VALUE} or numbers greater than 2^30.
      *
      * @param value from which to search for next power of 2
@@ -43,8 +43,8 @@ public final class MathUtil {
      * @return The next power of 2 or the value itself if it is a power of 2.
      * <p>Special cases for return values are as follows:
      * <ul>
-     *     <li>{@code <= 0} -> 1</li>
-     *     <li>{@code >= 2^30} -> 2^30</li>
+     *     <li>{@code <= 0} -&gt; 1</li>
+     *     <li>{@code >= 2^30} -&gt; 2^30</li>
      * </ul>
      */
     public static int safeFindNextPositivePowerOfTwo(final int value) {
@@ -70,8 +70,8 @@ public final class MathUtil {
      * @return
      * <ul>
      * <li>0 if {@code x == y}</li>
-     * <li>{@code > 0} if {@code x > y}</li>
-     * <li>{@code < 0} if {@code x < y}</li>
+     * <li>{@code > 0} if {@code x &gt; y}</li>
+     * <li>{@code < 0} if {@code x &lt; y}</li>
      * </ul>
      */
     public static int compare(long x, long y) {

@@ -67,7 +67,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *      |                   |     (CONTENT)    |                  |
  *      +-------------------+------------------+------------------+
  *      |                   |                  |                  |
- *      0      <=      readerIndex   <=   writerIndex    <=    capacity
+ *      0      &lt;=      readerIndex   &lt;=   writerIndex    &lt;=    capacity
  * </pre>
  * <p>
  * <h4>Readable bytes (the actual content)</h4>
@@ -109,7 +109,7 @@ import java.nio.charset.UnsupportedCharsetException;
  * <pre>
  * // Fills the writable bytes of a buffer with random integers.
  * {@link ByteBuffer} buffer = ...;
- * while (buffer.maxWritableBytesLength() >= 4) {
+ * while (buffer.maxWritableBytesLength() &gt;= 4) {
  *     buffer.writeInt(random.nextInt());
  * }
  * </pre>
@@ -129,7 +129,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *      | discardable bytes |  readable bytes  |  writable bytes  |
  *      +-------------------+------------------+------------------+
  *      |                   |                  |                  |
- *      0      <=      readerIndex   <=   writerIndex    <=    capacity
+ *      0      &lt;=      readerIndex   &lt;=   writerIndex    &lt;=    capacity
  *
  *
  *  AFTER discardReadBytes()
@@ -138,7 +138,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *      |  readable bytes  |    writable bytes (got more space)   |
  *      +------------------+--------------------------------------+
  *      |                  |                                      |
- * readerIndex (0) <= writerIndex (decreased)        <=        capacity
+ * readerIndex (0) &lt;= writerIndex (decreased)        &lt;=        capacity
  * </pre>
  * <p>
  * Please note that there is no guarantee about the content of writable bytes
@@ -161,7 +161,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *      | discardable bytes |  readable bytes  |  writable bytes  |
  *      +-------------------+------------------+------------------+
  *      |                   |                  |                  |
- *      0      <=      readerIndex   <=   writerIndex    <=    capacity
+ *      0      &lt;=      readerIndex    &lt;=   writerIndex    &lt;=    capacity
  *
  *
  *  AFTER clear()
@@ -170,7 +170,7 @@ import java.nio.charset.UnsupportedCharsetException;
  *      |             writable bytes (got more space)             |
  *      +---------------------------------------------------------+
  *      |                                                         |
- *      0 = readerIndex = writerIndex            <=            capacity
+ *      0 = readerIndex = writerIndex            &lt;=            capacity
  * </pre>
  * <p>
  * <h3>Search operations</h3>
@@ -344,7 +344,7 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     int maxWritableBytesLength();
 
     /**
-     * 是否可读，可读的条件为readIndex < writeIndex
+     * 是否可读，可读的条件为 {@code readIndex < writeIndex }
      *
      * @return 返回真则可以读取至少一个字节，具体可读取多少字节可{@code(readableBytesLength)}
      */
@@ -356,7 +356,7 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
     boolean isReadable(int size);
 
     /**
-     * 是否可写，可写的条件为maxCapacity > writeIndex
+     * 是否可写，可写的条件为{@code maxCapacity > writeIndex}
      *
      * @return 返回真则可以写入至少一个字节，具体可写入多少字节可{@code(writableBytesLength)}
      */
@@ -434,7 +434,7 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
      * Otherwise, it raises an {@link IllegalArgumentException}.
      *
      * @param minWritableBytes the expected minimum number of writable bytes
-     * @throws IndexOutOfBoundsException if {@link #writerIndex()} + {@code minWritableBytes} > {@link #maxCapacity()}
+     * @throws IndexOutOfBoundsException if writerIndex() + @code minWritableBytes &gt; maxCapacity()
      */
     ByteBuffer ensureWritable(int minWritableBytes);
 
@@ -444,7 +444,7 @@ public interface ByteBuffer extends ByteBufferGettable, ByteBufferSettable, Byte
      * this method does not raise an exception but returns a code.
      *
      * @param minWritableBytes the expected minimum number of writable bytes
-     * @param force            When {@link #writerIndex()} + {@code minWritableBytes} > {@link #maxCapacity()}:
+     * @param force            When {@link #writerIndex()} + {@code minWritableBytes} &gt; {@link #maxCapacity()}:
      *                         <ul>
      *                         <li>{@code true} - the capacity of the buffer is expanded to {@link #maxCapacity()}</li>
      *                         <li>{@code false} - the capacity of the buffer is unchanged</li>

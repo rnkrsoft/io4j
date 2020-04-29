@@ -151,7 +151,6 @@ public interface ByteBufferReadable {
      * {@code readerIndex} and increases the {@code readerIndex} by the size
      * of the new slice (= {@code length}).
      * <p>
-     * Also be aware that this method will NOT call {@link #retain()} and so the
      * reference count will NOT be increased.
      *
      * @param length the size of the new slice

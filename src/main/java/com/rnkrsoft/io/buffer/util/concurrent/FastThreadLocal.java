@@ -32,7 +32,7 @@ import java.util.Set;
  * table, and it is useful when accessed frequently.
  * </p><p>
  * To take advantage of this thread-local variable, your thread must be a {@link FastThreadLocalThread} or its subtype.
- * By default, all threads created by {@link DefaultThreadFactory} are {@link FastThreadLocalThread} due to this reason.
+ * By default, all threads created by DefaultThreadFactory are {@link FastThreadLocalThread} due to this reason.
  * </p><p>
  * Note that the fast path is only possible on threads that extend {@link FastThreadLocalThread}, because it requires
  * a special field to store the necessary state.  An access by any other kind of thread falls back to a regular

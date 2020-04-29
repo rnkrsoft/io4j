@@ -347,6 +347,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     /**
      * Creates a new {@link SwappedByteBuffer} for this {@link ByteBuffer} instance.
+     * @return 缓冲区
      */
     protected SwappedByteBuffer newSwappedByteBuf() {
         return new SwappedByteBuffer(this);
@@ -1139,6 +1140,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
      * Throws an {@link IndexOutOfBoundsException} if the current
      * {@linkplain ByteBuffer#readableBytesLength() readable bytes} of this buffer is less
      * than the specified value.
+     * @param minimumReadableBytes 最小已读字节数
      */
     protected final void checkReadableBytes(int minimumReadableBytes) {
         if (minimumReadableBytes < 0) {
@@ -1255,7 +1257,7 @@ public abstract class AbstractByteBuffer implements ByteBuffer {
 
     @Override
     public ByteBuffer writelnStringUTF8(String string) {
-        return writelnString(string + "\n", CharsetUtil.UTF_8);
+        return writelnString(string, CharsetUtil.UTF_8);
     }
 
     @Override
