@@ -17,16 +17,16 @@ package com.rnkrsoft.io.buffer.util.internal;
 
 import com.rnkrsoft.io.buffer.util.internal.logging.InternalLogger;
 import com.rnkrsoft.io.buffer.util.internal.logging.InternalLoggerFactory;
-import org.jctools.queues.MpscArrayQueue;
-import org.jctools.queues.MpscChunkedArrayQueue;
-import org.jctools.queues.MpscUnboundedArrayQueue;
-import org.jctools.queues.SpscLinkedQueue;
-import org.jctools.queues.atomic.MpscAtomicArrayQueue;
-import org.jctools.queues.atomic.MpscGrowableAtomicArrayQueue;
-import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
-import org.jctools.queues.atomic.SpscLinkedAtomicQueue;
-import org.jctools.util.Pow2;
-import org.jctools.util.UnsafeAccess;
+import com.rnkrsoft.io._3rd.org.jctools.queues.MpscArrayQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.MpscChunkedArrayQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.MpscUnboundedArrayQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.SpscLinkedQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.atomic.MpscAtomicArrayQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.atomic.MpscGrowableAtomicArrayQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue;
+import com.rnkrsoft.io._3rd.org.jctools.queues.atomic.SpscLinkedAtomicQueue;
+import com.rnkrsoft.io._3rd.org.jctools.util.Pow2;
+import com.rnkrsoft.io._3rd.org.jctools.util.UnsafeAccess;
 
 import java.io.File;
 import java.lang.reflect.Method;
